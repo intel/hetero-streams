@@ -1,0 +1,11 @@
+*.host.o
+*.dev.o
+*.source.o
+*.host-sink.o
+*.x100-sink.o
+*suo
+bin/
+build/
+doc/doxygen/
+doxygen.log
+rpmbuild/

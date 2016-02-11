@@ -1,0 +1,36 @@
+#                                                                            #
+# Hetero Streams Library - A streaming library for heterogeneous platforms   #
+# Copyright (c) 2014 - 2016, Intel Corporation.                              #
+#                                                                            #
+# This program is free software; you can redistribute it and/or modify it    #
+# under the terms and conditions of the GNU Lesser General Public License,   #
+# version 2.1, as published by the Free Software Foundation.                 #
+#                                                                            #
+# This program is distributed in the hope it will be useful, but WITHOUT ANY #
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS  #
+# FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for   #
+# more details.                                                              #
+#
+
+#"One True Brace Style" uses linux brackets and adds brackets to unbracketed one line conditional statements.
+--style=1tbs
+#Indent using 4 spaces per indent 
+--indent=spaces=4
+#Indent multi-line preprocessor definitions ending with a backslash. 
+--indent-preproc-define
+#Indent C++ comments beginning in column one. This option will allow the comments to be indented with the code.
+--indent-col1-comments
+#Insert space padding around operators.
+--pad-oper
+#Remove extra space padding around parenthesis on the inside and outside.
+--unpad-paren
+#nsert space padding between a header (e.g. 'if', 'for', 'while'...) and the following paren.
+--pad-header
+#Attach a pointer or reference operator (*, &, or ^) to variable name (right).
+--align-pointer=name
+#__This option will align references separate from pointers.
+--align-reference=name
+#Add brackets to unbracketed one line conditional statements
+--add-brackets
+#Converts tabs into spaces in the non-indentation part of the line.
+--convert-tabs

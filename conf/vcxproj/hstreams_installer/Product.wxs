@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="Intel Hetero Streams Library" Language="1033" Version="1.0.0.0" Manufacturer="Intel Corporation" UpgradeCode="8ea6de21-880f-403e-8cc3-1244d2392893">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes"/>
+
+		<Feature Id="ProductFeature" Title="hstreams_installer" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFiles64Folder">
+        <Directory Id="MANUFACTURERDIR" Name="Intel">
+          <Directory Id="INSTALLFOLDER" Name="HeteroStreamLibrary">
+            <Directory Id="REDISTDIR" Name="redist"/>
+            </Directory>
+          </Directory>
+       </Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="REDISTDIR">
+			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+      <Component Id="ProductComponent">
+				<!-- TODO: Insert files, registry keys, and other resources here. -->
+        <File Source="$(var.hs.TargetPath)"/>
+        <Environment Id="PATH" Name="Path" Value="[REDISTDIR]" Permanent="no" Part="last" Action="set" System="no"/>
+      </Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>

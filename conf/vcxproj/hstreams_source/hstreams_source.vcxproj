@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{72E01404-FF44-4F6F-99CE-829802092691}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>hstreams_source</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PlatformToolset>Intel C++ Compiler XE 15.0</PlatformToolset>
+    <UseIntelMKL>Parallel</UseIntelMKL>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PlatformToolset>Intel C++ Compiler XE 15.0</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseIntelMKL>Parallel</UseIntelMKL>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="property_sheets\General.props" />
+    <Import Project="property_sheets\Release.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="property_sheets\General.props" />
+    <Import Project="property_sheets\Debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetExt>.dll</TargetExt>
+    <OutDir>$(SolutionDir)bin\</OutDir>
+    <IntDir>$(SolutionDir)build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)bin\</OutDir>
+    <IntDir>$(SolutionDir)build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <CustomBuildAfterTargets>
+    </CustomBuildAfterTargets>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile />
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\src\include;$(INTEL_MPSS_HOST_SDK)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <OpenMP>GenerateParallelCode</OpenMP>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\src\include;$(INTEL_MPSS_HOST_SDK)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>del $(ProjectDir)\__tmp.cpp</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Message>Copy headers for tests</Message>
+      <Command>xcopy /q /Y ..\..\..\include\* $(OutDir)\include\</Command>
+    </PreBuildEvent>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>
+      </Message>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\hStreams_app_api.h" />
+    <ClInclude Include="..\..\..\include\hStreams_app_api_sink.h" />
+    <ClInclude Include="..\..\..\include\hStreams_sink.h" />
+    <ClInclude Include="..\..\..\include\hStreams_source.h" />
+    <ClInclude Include="..\..\..\include\hStreams_types.h" />
+    <ClInclude Include="..\..\..\include\hStreams_version.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_atomic.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_COIWrapper.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_COIWrapper_types.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_exceptions.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_helpers_common.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_helpers_source.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_HostSideSinkWorker.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_internal.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_internal_types_common.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_internal_vars_common.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_internal_vars_source.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_locks.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_LogBuffer.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_LogBufferCollection.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_LogDomain.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_LogDomainCollection.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_LogStream.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_LogStreamCollection.h" />
+    <ClInclude Include="..\..\..\include\hStreams_MKLWrapper.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_PhysBuffer.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_PhysBufferHost.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_PhysDomain.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_PhysDomainCOI.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_PhysDomainCollection.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_PhysDomainHost.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_PhysStream.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_PhysStreamCOI.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_PhysStreamHost.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_RefCountDestroyed.h" />
+    <ClInclude Include="..\..\..\src\include\hStreams_threading.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\hStreams_app_api.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_app_api_sink.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_COIWrapper.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_MKLWrapper.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_common.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_exceptions.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_helpers_common.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_helpers_source.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_HostSideSinkWorker.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_internal.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_internal_vars_common.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_internal_vars_source.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_locks.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_LogBuffer.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_LogBufferCollection.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_LogDomain.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_LogDomainCollection.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_Logger.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_LogStream.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_LogStreamCollection.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_PhysBuffer.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_PhysBufferHost.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_PhysDomain.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_PhysDomainCOI.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_PhysDomainCollection.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_PhysDomainHost.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_PhysStream.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_PhysStreamCOI.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_PhysStreamHost.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_RefCountDestroyed.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_sink.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_source.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_threading.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="__tmp.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

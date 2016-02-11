@@ -1,0 +1,147 @@
+/*
+ * Hetero Streams Library - A streaming library for heterogeneous platforms
+ * Copyright (c) 2014 - 2016, Intel Corporation.
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms and conditions of the GNU Lesser General Public License,
+ * version 2.1, as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for
+ * more details.
+ */
+
+/***
+* See http://sourceware.org/binutils/docs/ld/VERSION.html#VERSION for more info.
+***/
+
+HSTREAMS_1.0
+{
+    global:
+      /*Initialization/finalization*/
+       hStreams_Init;
+       hStreams_IsInitialized;
+       hStreams_Fini;
+
+      /*Domain and thread management*/
+       hStreams_EnumerateDomains;
+       hStreams_EnumerateDomain;
+       hStreams_GetAvailable;
+       hStreams_GetResources;
+       hStreams_GetNumPhysDomains;
+       hStreams_GetLogDomainDetails;
+       hStreams_GetPhysDomainDetails;
+       hStreams_AddLogDomain;
+       hStreams_RmLogDomains;
+       hStreams_GetNumLogDomains;
+       hStreams_GetLogDomainIDList;
+       hStreams_GetOversubscriptionLevel;
+
+      /*Stream management*/
+       hStreams_StreamCreate;
+       hStreams_StreamDestroy;
+       hStreams_GetNumLogStreams;
+       hStreams_GetLogStreamDetails;
+       hStreams_GetLogStreamIDList;
+       hStreams_GetLogStreamID;
+
+      /*Stream usage*/
+       hStreams_EnqueueCompute;
+       hStreams_EnqueueData1D;
+       hStreams_EnqueueDataXDomain1D;
+
+      /*Sync (some of these, like EventCreate/Wait, are not accessible from ISV APIs)*/
+       hStreams_StreamSynchronize;
+       hStreams_ThreadSynchronize;
+       hStreams_EventWait;
+       hStreams_EventStreamWait;
+
+      /*Memory management*/
+       hStreams_Alloc1D;
+       hStreams_Alloc1DEx;
+       hStreams_AddBufferLogDomains;
+       hStreams_RmBufferLogDomains;
+       hStreams_DeAlloc;
+       hStreams_GetBufferNumLogDomains;
+       hStreams_GetBufferLogDomains;
+       hStreams_GetBufferProps;
+
+      /*Those that pertain to error handling*/
+       hStreams_GetLastError;
+       hStreams_ClearLastError;
+
+      /*Common*/
+       hStreams_SetOptions;
+       hStreams_GetCurrentOptions;
+       hStreams_GetVerbose;
+       hStreams_SetVerbose;
+       hStreams_Version;
+       hStreams_GetVersionStringLen;
+       hStreams_ResultGetName;
+
+      /*Those that are part of the app API*/
+       hStreams_app_init;
+       hStreams_app_init_domains;
+       hStreams_app_fini;
+       hStreams_app_create_buf;
+       hStreams_app_xfer_memory;
+       hStreams_app_stream_sync;
+       hStreams_app_thread_sync;
+       hStreams_app_event_wait;
+       hStreams_app_event_wait_in_stream;
+       hStreams_app_invoke;
+       hStreams_app_memset;
+       hStreams_app_memcpy;
+       hStreams_app_sgemm;
+       hStreams_app_dgemm;
+       hStreams_app_cgemm;
+       hStreams_app_zgemm;
+
+    local:
+       *;
+};
+
+HSTREAMS_2.0
+{
+    global:
+      /*Stream usage*/
+       hStreams_EnqueueCompute;
+
+      /*Those that are part of the app API*/
+       hStreams_app_xfer_memory;
+       hStreams_app_invoke;
+       hStreams_app_memset;
+       hStreams_app_memcpy;
+       hStreams_app_sgemm;
+       hStreams_app_dgemm;
+       hStreams_app_cgemm;
+       hStreams_app_zgemm;
+
+       hStreams_Cfg_SetLogLevel;
+       hStreams_Cfg_SetLogInfoType;
+
+    local:
+       *;
+};
+
+HSTREAMS_3.0
+{
+    global:
+      /*Those that are part of the app API*/
+       hStreams_app_sgemm;
+       hStreams_app_dgemm;
+       hStreams_app_cgemm;
+       hStreams_app_zgemm;
+
+      /*Those are needed by hStreams_app_*gemm*/
+       hStreams_sgemm_sink;
+       hStreams_dgemm_sink;
+       hStreams_cgemm_sink;
+       hStreams_zgemm_sink;
+
+       hStreams_Cfg_SetMKLInterface;
+
+    local:
+       *;
+};
