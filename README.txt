@@ -1,67 +1,75 @@
-README.txt
+Hetero Streams Library - A streaming library for heterogeneous platforms.
 
-This file includes information on the source code distribution of mpss-hStreams:
-
-A. Brief explanation of directory tree of source code distribution of mpss-hStreams.
-B. Building host-side and card-side of hstreams
+A. Brief explanation of directory tree of source code distribution of the Hetero Streams Library.
+B. Building and installing the Hetero Streams Library
 C. Building and running reference code sample applications.
 
 ------------------------------------------------------------------------------------------------------------------
 
-A. Brief explanation of directory tree of source code distribution of mpss-hStreams.
+A. Brief explanation of directory tree of source code distribution of the Hetero Streams Library.
 
-./mpss-hstreams-<version>/include                               External API declarations for hStreams (header files).
-./mpss-hstreams-<version>/ref_code                              Root of tree of reference code samples.
-./mpss-hstreams-<version>/src                                   Root of source code directory of hStreams
-./mpss-hstreams-<version>/src/docs_config                       Root of directory tree used for generating PDF files.
-./mpss-hstreams-<version>/doc                                   Released documents
-./mpss-hstreams-<version>/doc/tools/ExtractManPages             Source code for generating man pages for hStreams.
+./include                           External API declarations for the library (header files).
+./ref_code                          Root of tree of reference code samples.
+./src                               Root of source code directory of hStreams
+./doc                               Documentation collateral
 
 ------------------------------------------------------------------------------------------------------------------
 
-B. Building host-side and card-side of hstreams:
+B. Building and installing the Hetero Streams Library
 
-1. To build: set up the composer xe environment using commands like this:
+St up the Intel (R) C++ Composer XE environment using commands like this:
 
-$ export INTEL_LICENSE_FILE=/path/to/your/composer/licenses/directory
-$ . /path/to/your/composer/directories/.../composer_xe_2013/bin/compilervars.sh intel64
+    $ source /path/to/your/composer/directories/bin/compilervars.sh intel64
 
-2. Build using the commands:
-$ cd ./mpss-hstreams-<version>/src
-$ make
+Build Hetero Streams Library using the command:
 
-The make should generate five files that can be verified using the commands:
+    $ make artifacts
 
-$ cd ./mpss-hstreams-<version>/
-$ find bin
-bin
-bin/dev
-bin/dev/libhstreams_sink.so
-bin/dev/libhstreams_sink.so.0
-bin/dev/libhstreams_mic
-bin/host
-bin/host/libhstreams_source.so.0
-bin/host/libhstreams_source.so
+The make should generate RPMs in the rpmbuild/ directory:
+
+    $ tree rpmbuild/*RPMS/
+    rpmbuild/RPMS/
+    └── x86_64
+        ├── hstreams-1.0.0.DEVBOX-1.x86_64.rpm
+        ├── hstreams-debuginfo-1.0.0.DEVBOX-1.x86_64.rpm
+        ├── hstreams-devel-1.0.0.DEVBOX-1.x86_64.rpm
+        └── hstreams-doc-1.0.0.DEVBOX-1.x86_64.rpm
+    rpmbuild/SRPMS/
+    └── hstreams-1.0.0.DEVBOX-1.src.rpm
+
+These RPMs can be installed using your favourite package manager, e.g. rpm:
+
+    $ sudo rpm -ihv rpmbuild/RPMS/x86_64/hstreams-*
+    Preparing...                          ################################# [100%]
+    Updating / installing...
+       1:hstreams-1.0.0.DEVBOX-1          ################################# [ 25%]
+       2:hstreams-devel-1.0.0.DEVBOX-1    ################################# [ 50%]
+       3:hstreams-doc-1.0.0.DEVBOX-1      ################################# [ 75%]
+       4:hstreams-debuginfo-1.0.0.DEVBOX-1################################# [100%]
 
 ------------------------------------------------------------------------------------------------------------------
 
 C. Building and running reference code sample applications.
 
 Before starting this procedure, first make sure that you have followed the above procedure:
-B. Building host-side and card-side of hstreams.
+B. Building and installing the Hetero Streams Library
 
-Next, there are a collection of reference code sample applications in this source code distribution.
-
-To build and run each, there are six separate README files that provide instructions on building them
+Next, there is a collection of reference code sample applications in this source code distribution.
+To build and run each, there are separate README files that provide instructions on building them
 and running them:
 
-$ cd ./mpss-hstreams-<version>/ref_code
-$ find . -iname '*README*'
-./basic_perf/README.txt
-./test_app/README.txt
-./lu/README.txt
-./io_perf/README.txt
-./matMult/README.txt
-./cholesky/README.txt
+    $ cd ref_code
+    $ find . -name README.txt
+    ./basic_perf/README.txt
+    ./cholesky/README.txt
+    ./io_perf/README.txt
+    ./lu/README.txt
+    ./matMult_host_multicard/README.txt
+    ./matMult/README.txt
+    ./windows/basic_perf/README.txt
+    ./windows/cholesky/README.txt
+    ./windows/io_perf/README.txt
+    ./windows/lu/README.txt
+    ./windows/matMult/README.txt
 
-Follow the instuctions in those files, after you have built hStreams following section B above.
+Follow the instructions in those files.
