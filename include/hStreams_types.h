@@ -478,12 +478,6 @@ typedef int32_t  HSTR_PHYS_DOM;
 /////////////////////////////////////////////////////////////////////
 // Begin public function decl types
 
-/* Prototype for hStreams emit message function. */
-typedef int hStreams_EmitMessage_Prototype(HSTR_SEVERITY, const char *, const char *, ...);
-
-/* Function pointer declaration pointing to a function that has same prototype for hStreams emit message function. */
-typedef hStreams_EmitMessage_Prototype(*hStreams_EmitMessage_Prototype_Fptr);
-
 /* Function pointer declaration pointing to a function that has same prototype for hStreams fatal error function. */
 typedef void (*hStreams_FatalError_Prototype_Fptr)(int);
 
@@ -502,12 +496,18 @@ typedef void (*hStreams_FatalError_Prototype_Fptr)(int);
 //  descriptions are kept up to date.
 typedef struct HSTR_OPTIONS {
     ///@cond internal_doc
-    hStreams_EmitMessage_Prototype_Fptr _hStreams_EmitMessage;
+    /// @deprecated _hStreams_EmitMessage has been deprecated in favor of
+    ///     a new logging mechanism. For details, consult the documentation of
+    ///     \c hStreams_Cfg_SetLogLevel() and \c hStreams_Cfg_SetLogInfoType().
+    HSTR_DEPRECATED("HSTR_OPTIONS::_hStreams_EmitMessage has been deprecated. "
+                    "It has been replaced by a new logging mechanism."
+                    "Please refer to hStreams_Cfg_SetLogLevel() and hStreams_Cfg_SetLogInfoType().")
+    int (*_hStreams_EmitMessage)(HSTR_SEVERITY, const char *, const char *, ...);
     /* Note that the _hStreams_FatalError has the same prototype as exit(). */
     hStreams_FatalError_Prototype_Fptr  _hStreams_FatalError;
     /// @endcond
     /// @deprecated This option has been deprecated in favor of
-    ///     hStreams_Cfg_SetLogLevel() and hStreams_Cfg_SetLogInfoType().
+    ///     \c hStreams_Cfg_SetLogLevel() and \c hStreams_Cfg_SetLogInfoType().
     HSTR_DEPRECATED("HSTR_OPTIONS::verbose has been deprecated. "
                     "Please refer to hStreams_Cfg_SetLogLevel() and hStreams_Cfg_SetLogInfoType().")
     uint32_t               verbose;

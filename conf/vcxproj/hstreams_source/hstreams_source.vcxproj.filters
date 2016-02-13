@@ -120,9 +120,6 @@
     <ClInclude Include="..\..\..\include\hStreams_version.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hStreams_MKLWrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -209,9 +206,6 @@
     <ClCompile Include="..\..\..\src\hStreams_sink.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hStreams_source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hStreams_threading.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -221,13 +215,22 @@
     <ClCompile Include="__tmp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hStreams_app_api.cpp">
+    <ClCompile Include="..\..\..\src\hStreams_app_api_sink.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\hStreams_MKLWrapper.cpp">
+    <ClCompile Include="..\..\..\src\hStreams_MKLWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\hStreams_app_api_sink.cpp">
+    <ClCompile Include="..\..\..\src\hStreams_app_api_source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hStreams_app_api_workers_source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hStreams_core_api_source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hStreams_core_api_workers_source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

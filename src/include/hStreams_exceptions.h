@@ -19,6 +19,10 @@
 #include <string>
 #include "hStreams_types.h"
 
+// A clunky way to handle optional parameters in hStreams_exception constructor
+#define HSTR_EXCEPTION_MACRO(...) \
+    hStreams_exception(__FILE__, __LINE__, __FUNCTION__, __VA_ARGS__)
+
 /// @brief A customized exception class
 ///
 /// The aim of this class is to carry more information than a simple
@@ -29,24 +33,44 @@
 class hStreams_exception : public std::exception
 {
 public:
-    /// @brief Basic constructor
-    /// @param error_code The error code associated with this exception
-    /// @note The error message will be a translation of the error code,
-    ///     obtained through \c hStreams_ResultGetName()
-    hStreams_exception(HSTR_RESULT error_code);
-    /// @brief Advanced constructor
+    /// @param file_name The name of the file in which the exception was originally thrown
+    /// @param line_number The line number at which the exception was originally thrown
+    /// @param function_name The line number at which the exception was originally thrown
     /// @param error_code The error code associated with this exception
     /// @param msg The custom message to be associated with this exception
-    hStreams_exception(HSTR_RESULT error_code, std::string const &msg);
+    hStreams_exception(
+            const char *file_name,
+            int line_number,
+            const char *function_name,
+            HSTR_RESULT error_code,
+            std::string const &msg = "",
+            HSTR_INFO_TYPE info_type = HSTR_INFO_TYPE_MISC
+        );
     ~hStreams_exception() throw() {};
     const char *what() const throw();
     /// @brief Get the error code associated with the exception
     HSTR_RESULT error_code() const;
+    /// @brief Get the name of the file in which the exception was thrown
+    const char *file_name() const;
+    /// @brief Get the line number at which the exception was thrown
+    int line_number() const;
+    /// @brief Get the name of the function in which the exception was thrown
+    const char *function_name() const;
+    /// @brief Get the information type
+    HSTR_INFO_TYPE info_type() const;
 private:
     /// @brief A private copy of the error code associated with this exception
     HSTR_RESULT error_code_;
     /// @brief The error message API can present to the user
     std::string msg_;
+    /// @brief The name of the file from which the exception originates
+    const char *file_name_;
+    /// @brief The number of the line in which the exception was thrown
+    int line_number_;
+    /// @brief The name of the function in which the exception was thrown
+    const char *function_name_;
+    /// @brief The information type
+    const HSTR_INFO_TYPE info_type_;
 };
 
 /// @brief A general-purpose exception handler for externally exposed APIs

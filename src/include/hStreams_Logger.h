@@ -50,18 +50,62 @@
 #define HSTR_FATAL_ERROR(info_type, exit_code) \
     HSTR_GET_LOGGER(HSTR_LOG_LEVEL_FATAL_ERROR, info_type, exit_code)
 
-#define HSTR_TRACE_FUN_ENTER() \
-    HSTR_DEBUG2(HSTR_INFO_TYPE_TRACE) \
+
+/**
+ * Used for recording when a public-facing API has been entered
+ * Logs a message with DEBUG1
+ */
+#define HSTR_TRACE_API_ENTER() \
+    HSTR_DEBUG1(HSTR_INFO_TYPE_TRACE) \
             << __FUNCTION__ \
             << ": entering function."
 
-#define HSTR_TRACE_FUN_ARG(arg)                         \
-    HSTR_DEBUG3(HSTR_INFO_TYPE_TRACE)                   \
+/**
+ * Used for recording value of public-facing API's arguments
+ * Logs a message with DEBUG2
+ */
+#define HSTR_TRACE_API_ARG(arg)                         \
+    HSTR_DEBUG2(HSTR_INFO_TYPE_TRACE)                   \
             << "args[" << hStreams_stringer(arg) << "]: " \
             << arg << "."
 
+/**
+ * Used for recording value of a public-facing function's char*-typed arguments
+ * This special-purpose macro could well be replaced with an enable_if and SFINAE
+ * but ...
+ * Logs a message with DEBUG2
+ */
+#define HSTR_TRACE_API_ARG_STR(arg)              \
+    HSTR_DEBUG2(HSTR_INFO_TYPE_TRACE)                   \
+            << "args[" << hStreams_stringer(arg) << "]: " \
+            << (arg == NULL ? "NULL" : arg) << "."
+
+/**
+ * Used for recording when an internal, not public-facing function has been entered
+ * Logs a message with DEBUG3
+ */
+#define HSTR_TRACE_FUN_ENTER() \
+    HSTR_DEBUG3(HSTR_INFO_TYPE_TRACE) \
+            << __FUNCTION__ \
+            << ": entering function."
+
+/**
+ * Used for recording value of not public-facing function's arguments
+ * Logs a message with DEBUG4
+ */
+#define HSTR_TRACE_FUN_ARG(arg)                         \
+    HSTR_DEBUG4(HSTR_INFO_TYPE_TRACE)                   \
+            << "args[" << hStreams_stringer(arg) << "]: " \
+            << arg << "."
+
+/**
+ * Used for recording value of not public-facing function's char*-typed arguments
+ * This special-purpose macro could well be replaced with an enable_if and SFINAE
+ * but ...
+ * Logs a message with DEBUG4
+ */
 #define HSTR_TRACE_FUN_ARG_STR(arg)              \
-    HSTR_DEBUG3(HSTR_INFO_TYPE_TRACE)                   \
+    HSTR_DEBUG4(HSTR_INFO_TYPE_TRACE)                   \
             << "args[" << hStreams_stringer(arg) << "]: " \
             << (arg == NULL ? "NULL" : arg) << "."
 

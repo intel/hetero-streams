@@ -21,6 +21,10 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#ifndef _WIN32
+#include <sched.h>
+#endif
 #include "hStreams_types.h"
 #include "hStreams_common.h"
 
@@ -76,6 +80,14 @@ extern "C" {
 /// @ingroup hStreams_Source
 // TODO: Description for this group
 //
+/// @defgroup hStreams_Utils hStreams Utilities
+/// @ingroup hStreams_Source
+// TODO: Description for this group
+//
+/// @defgroup hStreams_CPUMASK CPU_MASK manipulating
+/// @ingroup hStreams_Utils
+/// Functions used for manipulating HSTR_CPU_MASK.
+//
 /////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////
@@ -98,26 +110,33 @@ extern "C" {
 ///  they will be loaded, again searching the SINK_LD_LIBRARY_PATH for each of the
 ///  libraries specified there.
 ///
-/// @return HSTR_RESULT_DEVICE_NOT_INITIALIZED if can't initialize, e.g. if
-///         no MIC cards
 ///
-/// @return HSTR_RESULT_BAD_NAME if can't find dynamic-link dependences
+/// @return If successful, \c hStreams_InitInVersion() returns \c HSTR_RESULT_SUCCESS.
+///     Otherwise, it returns one of the following errors:
+/// @arg \c HSTR_RESULT_DEVICE_NOT_INITIALIZED if the library cannot be initialized properly,
+///     e.g. because no MICs are available
 ///
-/// @return HSTR_RESULT_SUCCESS if init is successful, or if at the time of the call
-///         the hStreams library was already found initialized.
+/// @arg \c HSTR_RESULT_OUT_OF_RANGE if the \c interface_version argument does not correspond
+///     to a valid interface version supported by the library
 ///
-// FIXME: may add configuration parameters here, e.g. for OpenMP pre-setup, KMP_AFFINITY
-//
-/// @thread_safety Concurrent calls to \c hStreams_Init() are serialized internally by the implementation.
-///     The first thread to acquire exclusivity will attempt to initialize the library. If the initialisation is
-///     successfull, the first thread will return \c HSTR_RESULT_SUCCESS as well as all of the other
-///     threads that were serialized. If the initialisation of the library by the first thread fails,
-///     the first thread shall return an error code and the second thread to acquire exclusivity will again
-///     try to initialize the library.
+/// @thread_safety Concurrent calls to \c hStreams_InitInVersion() are serialized internally by the
+///     implementation.  The first thread to acquire exclusivity will attempt to initialize the
+///     library. If the initialisation is successfull, the first thread will return \c
+///     HSTR_RESULT_SUCCESS as well as all of the other threads that were serialized. If the
+///     initialisation of the library by the first thread fails, the first thread shall return an
+///     error code and the second thread to acquire exclusivity will again try to initialize the
+///     library.
 ///
 /////////////////////////////////////////////////////////
 DllAccess HSTR_RESULT
-hStreams_Init();
+hStreams_InitInVersion(const char* interface_version);
+
+static
+DllAccess HSTR_RESULT
+hStreams_Init()
+{
+    return hStreams_InitInVersion(HSTR_VERSION_STRING);
+}
 
 /////////////////////////////////////////////////////////
 ///
@@ -367,6 +386,7 @@ hStreams_AddLogDomain(
 /// @arg \c HSTR_RESULT_NULL_PTR if \c in_pLogDomainIDs is NULL
 /// @arg \c HSTR_RESULT_NOT_FOUND if at least one of the logical domain IDs doesn't
 ///     correspond to a valid logical domain
+/// @arg \c HSTR_RESULT_OUT_OF_RANGE if \c in_NumLogDomains equals 0
 ///
 /// @thread_safety  Thread safe.
 ///
@@ -1507,7 +1527,7 @@ hStreams_Cfg_SetLogInfoType(
 /////////////////////////////////////////////////////////
 ///
 // hStreams_Cfg_SetMKLInterface
-/// @ingroup hStreams_Common
+/// @ingroup hStreams_Configuration
 /// @brief Choose used MKL interface version
 ///
 /// @return If successful, \c hStreams_Cfg_SetMKLInterface() returns \c HSTR_RESULT_SUCCESS.
@@ -1523,6 +1543,280 @@ hStreams_Cfg_SetLogInfoType(
 DllAccess HSTR_RESULT
 hStreams_Cfg_SetMKLInterface(
     HSTR_MKL_INTERFACE in_MKLInterface);
+
+/////////////////////////////////////////////////////////
+///
+// hStreams_SetOptions
+/// @ingroup hStreams_Configuration
+/// @brief Configure user parameters by setting hStreams Options
+///
+/// @param  in_options - see the definition of HSTR_OPTIONS
+///         [in] HSTR_OPTIONS
+///
+/// For more details about HSTR_OPTIONS please go directly
+///  to HSTR_OPTIONS documentation
+///
+/// @return HSTR_RESULT_SUCCESS if setting options is successful
+///
+/// @return HSTR_RESULT_NULL_PTR if in_options is NULL.
+///
+/// @return HSTR_RESULT_INCONSISTENT_ARGS if options are inconsistent.
+///
+/// @thread_safety Thread safe.
+///
+/////////////////////////////////////////////////////////
+DllAccess HSTR_RESULT
+hStreams_SetOptions(const HSTR_OPTIONS *in_options);
+
+/////////////////////////////////////////////////////////
+///
+// hStreams_GetCurrentOptions
+/// @ingroup hStreams_Configuration
+/// @brief Query user parameters by getting hStreams Options
+///
+/// hStreams_GetCurrentOptions() copies the current collection of hStreams options from the hStreams library
+/// to the buffer provided in a thread safe manner.
+///
+/// @param  pCurrentOptions
+///         [out] The buffer that will receive the current options from the hStreams library.  Must be non-NULL or
+///         hStreams_GetCurrentOptions() returns HSTR_RESULT_OUT_OF_RANGE.
+///
+/// @param  buffSize
+///         [in] Indicates the size of the buffer that pCurrentOptions points to.  Must be greater than or equal to
+///         sizeof(HSTR_OPTIONS) of hStreams_GetCurrentOptions() returns HSTR_RESULT_OUT_OF_RANGE.
+///
+/// For more details about HSTR_OPTIONS please go directly
+///  to HSTR_OPTIONS documentation
+///
+/// @return HSTR_RESULT_SUCCESS if getting options is successful
+///
+/// @return HSTR_RESULT_OUT_OF_RANGE if pCurrentOptions is NULL, or buffSize is less than sizeof(HSTR_OPTIONS)
+///
+/// @thread_safety Thread safe.
+///
+/////////////////////////////////////////////////////////
+DllAccess HSTR_RESULT
+hStreams_GetCurrentOptions(HSTR_OPTIONS *pCurrentOptions, uint64_t buffSize);
+
+/////////////////////////////////////////////////////////
+///
+// hStreams_VersionStringLen
+/// @ingroup hStreams_Utils
+/// @brief Report the length of the version string, including the null termination character
+///
+/// @param  out_pVersionStringLen
+///         [out] The length of the version string, including the null termination character
+///
+/// @return HSTR_RESULT_NULL_PTR if out_pVersionStringLen is NULL
+/// @return HSTR_RESULT_SUCCESS
+///
+/// @thread_safety Thread safe.
+///
+//////////////////////////////////////////////////////////
+DllAccess HSTR_RESULT
+hStreams_GetVersionStringLen(uint32_t *out_pVersionStringLen);
+
+/////////////////////////////////////////////////////////
+///
+// hStreams_Version
+/// @ingroup hStreams_Utils
+/// @brief Report hStreams version info to buffer
+///
+/// @param  buff
+///         [out] The buffer that will receive the version of the hStreams library.
+///
+/// @param  buffLength
+///         [in] The length of the buff parameter.  hStreamsVersion() copies version data
+///         upto buffLength bytes to buff.
+///
+/// @return HSTR_RESULT_SUCCESS
+///
+/// @return HSTR_RESULT_NULL_PTR if the buffer argument is a NULL pointer
+///
+/// @return HSTR_RESULT_BUFF_TOO_SMALL when the buffer is too small.
+///
+/// @thread_safety Thread safe for invocations with different buffer arguments.
+///
+/// The version string is in format MAJOR.MINOR[.MICRO]. The MICRO-part is ommited if
+/// MICRO == 0.
+///
+//////////////////////////////////////////////////////////
+DllAccess HSTR_RESULT
+hStreams_Version(char *buff, uint32_t buffLength);
+
+/////////////////////////////////////////////////////////
+/// @deprecated This function has been deprecated in favor of
+///     hStreams_Cfg_SetLogLevel() and hStreams_Cfg_SetLogInfoType().
+//////////////////////////////////////////////////////////
+HSTR_DEPRECATED("hStreams_GetVerbose() has been deprecated. "
+                "Please refer to hStreams_Cfg_SetLogLevel() and hStreams_Cfg_SetLogInfoType().")
+DllAccess uint32_t
+hStreams_GetVerbose();
+
+/////////////////////////////////////////////////////////
+/// @deprecated This function has been deprecated in favor of
+///     hStreams_Cfg_SetLogLevel() and hStreams_Cfg_SetLogInfoType().
+//////////////////////////////////////////////////////////
+HSTR_DEPRECATED("hStreams_SetVerbose() has been deprecated. "
+                "Please refer to hStreams_Cfg_SetLogLevel() and hStreams_Cfg_SetLogInfoType().")
+DllAccess HSTR_RESULT
+hStreams_SetVerbose(int target_verbosity);
+
+/////////////////////////////////////////////////////////
+///
+// hStreams_ResultGetName
+/// @ingroup hStreams_Utils
+/// @brief Get HSTR_RESULT name
+///
+/// @param  in_olr
+///         [in] HSTR_RESULT
+///
+/// @return Name string
+///
+/// @thread_safety Thread safe.
+///
+/////////////////////////////////////////////////////////
+DllAccess const char *hStreams_ResultGetName(
+    HSTR_RESULT in_olr);
+
+
+/// @ingroup hStreams_CPUMASK
+/// @brief Roughly equivalent to CPU_ISSET().
+static inline uint64_t HSTR_CPU_MASK_ISSET(int bitNumber, const HSTR_CPU_MASK cpu_mask)
+{
+    if ((size_t)bitNumber < sizeof(HSTR_CPU_MASK) * 8) {
+        return ((cpu_mask)[bitNumber / 64] & (((uint64_t)1) << (bitNumber % 64)));
+    }
+    return 0;
+}
+
+/// @ingroup hStreams_CPUMASK
+/// @brief Roughly equivalent to CPU_SET().
+static inline void HSTR_CPU_MASK_SET(int bitNumber, HSTR_CPU_MASK cpu_mask)
+{
+    if ((size_t)bitNumber < sizeof(HSTR_CPU_MASK) * 8) {
+        ((cpu_mask)[bitNumber / 64] |= (((uint64_t)1) << (bitNumber % 64)));
+    }
+}
+
+/// @ingroup hStreams_CPUMASK
+/// @brief Roughly equivalent to CPU_ZERO().
+static inline void HSTR_CPU_MASK_ZERO(HSTR_CPU_MASK cpu_mask)
+{
+    memset(cpu_mask, 0, sizeof(HSTR_CPU_MASK));
+}
+
+/// @ingroup hStreams_CPUMASK
+/// @brief Roughly equivalent to CPU_AND().
+static inline void HSTR_CPU_MASK_AND(HSTR_CPU_MASK dst, const HSTR_CPU_MASK src1, const HSTR_CPU_MASK src2)
+{
+    const unsigned int loopIterations = sizeof(HSTR_CPU_MASK) / sizeof(dst[0]);
+
+    for (unsigned int i = 0; i < loopIterations; ++i) {
+        dst[i] = src1[i] & src2[i];
+    }
+}
+
+/// @ingroup hStreams_CPUMASK
+/// @brief Roughly equivalent to CPU_XOR().
+static inline void HSTR_CPU_MASK_XOR(HSTR_CPU_MASK dst, const HSTR_CPU_MASK src1, const HSTR_CPU_MASK src2)
+{
+    const unsigned int loopIterations = sizeof(HSTR_CPU_MASK) / sizeof(dst[0]);
+
+    for (unsigned int i = 0; i < loopIterations; ++i) {
+        dst[i] = src1[i] ^ src2[i];
+    }
+}
+
+/// @ingroup hStreams_CPUMASK
+/// @brief Roughly equivalent to CPU_OR().
+static inline void HSTR_CPU_MASK_OR(HSTR_CPU_MASK dst, const HSTR_CPU_MASK src1, const HSTR_CPU_MASK src2)
+{
+    const unsigned int loopIterations = sizeof(HSTR_CPU_MASK) / sizeof(dst[0]);
+
+    for (unsigned int i = 0; i < loopIterations; ++i) {
+        dst[i] = src1[i] | src2[i];
+    }
+}
+
+/// @ingroup hStreams_CPUMASK
+/// @brief Roughly equivalent to CPU_COUNT().
+static inline int HSTR_CPU_MASK_COUNT(const HSTR_CPU_MASK cpu_mask)
+{
+    int cnt = 0;
+    const unsigned int loopIterations = sizeof(HSTR_CPU_MASK) / sizeof(cpu_mask[0]);
+
+    for (unsigned int i = 0; i < loopIterations; ++i) {
+        int cnt_i = 0;
+        uint64_t n = cpu_mask[i];
+
+        for (; n; n >>= 1) {
+            cnt_i += n & 1l;
+        }
+
+        cnt += cnt_i;
+    }
+    return cnt;
+}
+
+/// @ingroup hStreams_CPUMASK
+/// @brief Roughly equivalent to CPU_EQUAL().
+static inline int HSTR_CPU_MASK_EQUAL(const HSTR_CPU_MASK cpu_mask1, const HSTR_CPU_MASK cpu_mask2)
+{
+    const unsigned int loopIterations = sizeof(HSTR_CPU_MASK) / sizeof(cpu_mask1[0]);
+
+    for (unsigned int i = 0; i < loopIterations; ++i) {
+        if (cpu_mask1[i] != cpu_mask2[i]) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+#ifndef _WIN32
+/// @ingroup hStreams_CPUMASK
+/// @brief Utility function to translate from cpu_set* to COI_CPU_MASK.
+static inline void HSTR_CPU_MASK_XLATE(HSTR_CPU_MASK dest, const cpu_set_t *src)
+{
+    HSTR_CPU_MASK_ZERO(dest);
+    for (unsigned int i = 0; i < sizeof(HSTR_CPU_MASK) / sizeof(dest[0]); ++i) {
+        for (unsigned int j = 0; j < 64; ++j) {
+            if (CPU_ISSET(i * 64 + j, src)) {
+                dest[i] |= ((uint64_t)1) << j;
+            }
+        }
+    }
+}
+
+/// @ingroup hStreams_CPUMASK
+/// @brief  Utility function to translate from COI_CPU_MASK to cpu_set*.
+static inline void HSTR_CPU_MASK_XLATE_EX(cpu_set_t *dest, const HSTR_CPU_MASK src)
+{
+    CPU_ZERO(dest);
+    for (unsigned int i = 0; i < sizeof(HSTR_CPU_MASK) / sizeof(src[0]); ++i) {
+        const uint64_t cpu_mask = src[i];
+
+        for (unsigned int j = 0; j < 64; ++j) {
+            const uint64_t bit = ((uint64_t)1) << j;
+
+            if (bit & cpu_mask) {
+                CPU_SET(i * 64 + j, dest);
+            }
+        }
+    }
+}
+
+#endif //_WIN32
+
+#define CHECK_HSTR_RESULT(func)                                               \
+    {                                                                         \
+        HSTR_RESULT hret = HSTR_RESULT_SUCCESS;                               \
+        hret = func;                                                          \
+        if (hret != HSTR_RESULT_SUCCESS) {                                    \
+            printf("%s returned %s.\n", #func, hStreams_ResultGetName(hret)); \
+            return hret;                                                      \
+        }                                                                     \
+    }
 
 #ifdef __cplusplus
 }

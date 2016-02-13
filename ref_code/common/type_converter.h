@@ -5,7 +5,8 @@
  * of the Intel Sample Source Code License is included.
  */
 
-#include<mkl.h>
+#include <mkl.h>
+#include <string.h>
 
 #define STATIC_ASSERT( condition, name ) typedef char assert_failed_ ## name [ (condition) ? 1 : -1 ]
 

@@ -19,6 +19,7 @@
 // /////////////////////////////////////////////////////////////////
 
 #include "hStreams_internal_vars_source.h"
+#include "hStreams_internal.h"
 
 namespace globals
 {
@@ -28,15 +29,44 @@ namespace initial_values
 const HSTR_LOG_STR app_init_next_log_str_ID = 0;
 const HSTR_LOG_DOM next_log_dom_id = 1;
 const HSTR_MKL_INTERFACE mkl_interface = HSTR_MKL_LP64;
+const char* interface_version = "[unknown]";
+hStreams_Atomic_HSTR_STATE hStreamsState = HSTR_STATE_UNINITIALIZED;
+
+const HSTR_OPTIONS options = {
+        NULL,
+        exit,
+        0,
+        HSTR_KMP_AFFINITY_BALANCED,
+        HSTR_DEP_POLICY_BUFFERS,
+        32, // limit on physical domains
+        HSTR_OPENMP_PRE_SETUP,
+        -1, // infinite timeout
+        0,
+        NULL,
+        NULL,
+        0,
+        NULL
+    };
 } // namespace initial_values
 
 HSTR_LOG_STR app_init_next_log_str_ID = initial_values::app_init_next_log_str_ID;
 std::vector<HSTR_LOG_DOM> app_init_log_doms_IDs;
-
-#ifdef WIN32
-HMODULE hstreams_source_dll_handle;
+std::string interface_version = initial_values::interface_version;
+extern const std::array<const std::string, 2> supported_interface_versions = {
+    HSTR_MAGIC_PRE1_0_0_VERSION_STRING,
+    "1.0"
+};
+hStreams_Atomic_HSTR_STATE hStreamsState = initial_values::hStreamsState;
+HSTR_OPTIONS options = initial_values::options;
+hStreams_RW_Lock options_lock;
+#ifdef _WIN32
+#pragma warning( push )
+#pragma warning( disable : 4324 ) /* Disable warning for: 'lastError' : structure was padded due to __declspec(align()) */
 #endif
-
+HSTR_ALIGN(64) volatile int64_t next_log_dom_id = initial_values::next_log_dom_id;
+#ifdef _WIN32
+#pragma warning( pop )
+#endif
 } // namespace globals
 
 
@@ -60,7 +90,6 @@ hStreams_LogBufferCollection log_buffers;
 #pragma warning( push )
 #pragma warning( disable : 4324 ) /* Disable warning for: 'lastError' : structure was padded due to __declspec(align()) */
 #endif
-HSTR_ALIGN(64) volatile int64_t next_log_dom_id = globals::initial_values::next_log_dom_id;
 HSTR_ALIGN(64) volatile int64_t huge_page_usage_threshold = -1;
 #ifdef _WIN32
 #pragma warning( pop )

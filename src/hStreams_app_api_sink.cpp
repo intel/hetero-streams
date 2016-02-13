@@ -16,12 +16,11 @@
 #ifndef _WIN32
 #include <unistd.h>
 #endif
-
 #include <string.h>
 
 #include "hStreams_MKLWrapper.h"
 #include "hStreams_app_api_sink.h"
-#include <hStreams_internal.h>
+#include "hStreams_internal.h"
 #include "hStreams_Logger.h"
 
 HSTREAMS_EXPORT

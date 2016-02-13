@@ -6,6 +6,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <mkl.h>
 #include <hStreams_common.h>
 #include "hStreams_custom.h"

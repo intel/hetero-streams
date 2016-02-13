@@ -24,7 +24,11 @@ HSTR_RESULT hStreams_handle_exception()
     try {
         throw; // re-throw the active exception so that we can analyze it
     } catch (hStreams_exception const &e) {
-        HSTR_ERROR(HSTR_INFO_TYPE_MISC) << e.what();
+        Logger(e.file_name(), e.line_number(), e.function_name(), 0).get(
+            HSTR_LOG_LEVEL_ERROR, e.info_type())
+                << hStreams_ResultGetName(e.error_code())
+                << ": "
+                << e.what();
 
         return e.error_code();
     } catch (std::bad_alloc const &e) {
@@ -42,14 +46,20 @@ HSTR_RESULT hStreams_handle_exception()
     }
 }
 
-hStreams_exception::hStreams_exception(HSTR_RESULT error_code)
-    : error_code_(error_code), msg_(hStreams_ResultGetName(error_code))
-{
-
-}
-
-hStreams_exception::hStreams_exception(HSTR_RESULT error_code, std::string const &msg)
-    : error_code_(error_code), msg_(msg)
+hStreams_exception::hStreams_exception(
+    const char *file_name,
+    int line_number,
+    const char *function_name,
+    HSTR_RESULT error_code,
+    std::string const &msg,
+    HSTR_INFO_TYPE info_type
+) :
+    error_code_(error_code),
+    msg_(msg),
+    file_name_(file_name),
+    line_number_(line_number),
+    function_name_(function_name),
+    info_type_(info_type)
 {
 
 }
@@ -62,4 +72,24 @@ const char *hStreams_exception::what() const throw()
 HSTR_RESULT hStreams_exception::error_code() const
 {
     return error_code_;
+}
+
+const char *hStreams_exception::file_name() const
+{
+    return file_name_;
+}
+
+int hStreams_exception::line_number() const
+{
+    return line_number_;
+}
+
+const char *hStreams_exception::function_name() const
+{
+    return function_name_;
+}
+
+HSTR_INFO_TYPE hStreams_exception::info_type() const
+{
+    return info_type_;
 }

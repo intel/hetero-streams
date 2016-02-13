@@ -20,10 +20,6 @@
 #include <Windows.h>
 #endif
 
-// ////////////////////////////////////////////////////////////////////
-// Author: Paul Reger
-// Purpose: Declare hStreamsAtomicAdd and ScopedAtomicCounter class
-
 // Atomically, performs (in 32 bit):
 //
 // loc = loc + value;
@@ -108,6 +104,10 @@ class hStreams_AtomicEnum
 {
 public:
     hStreams_AtomicEnum() {};
+    hStreams_AtomicEnum(T v) {
+        SetValue(v);
+    }
+
     T GetValue(void)
     {
         return (T)mac.GetValue();
@@ -115,6 +115,11 @@ public:
     T SetValue(T v)
     {
         return (T)mac.SetValue((long) v);
+    }
+    hStreams_AtomicEnum<T>& operator= (T v)
+    {
+        mac.SetValue((long) v);
+        return *this;
     }
 private:
     hStreams_AtomicCounter mac;

@@ -16,9 +16,7 @@
 DEBUG_FLAGS:=-g -O0 -D_DEBUG -DHSTREAMS_BACKTRACE
 RELEASE_FLAGS:=-O3 -ggdb
 
-STRICT_COMPILATION_FLAGS:=
-# For better times, once EmitMessage has been removed
-#STRICT_COMPILATION_FLAGS:=-fno-elide-constructors -pedantic-errors -Wextra -Wall -Winit-self -Woverloaded-virtual -Wuninitialized -Werror -D_FORTIFY_SOURCE=2
+STRICT_COMPILATION_FLAGS:=-pedantic-errors -Wextra -Wall -Winit-self -Woverloaded-virtual -Wuninitialized -Werror -D_FORTIFY_SOURCE=2
 
 ifndef CFG
   CFG=RELEASE
@@ -55,7 +53,9 @@ RM_rf:=rm -rf
 # objects/targets through the following variables.
 
 # Here's where the sources reside.
-SRC_DIR:=$(TOP_DIR)src/
+# We actually don't expand those to absolute paths as we use __FILE__ in our
+# exception handling and absolute paths look terrible in the logs.
+SRC_DIR:=src/
 # Here's where the external headers reside.
 EXT_HEADERS_DIR:=$(TOP_DIR)include/
 # Where to put intermediate build artifacts
@@ -117,15 +117,6 @@ ifdef OUTPUT_DIR
 RPM_TOPDIR:=$(abspath $(OUTPUT_DIR))/hstreams/linux-rpm/
 $(info [INFO] Running with OUTPUT_DIR=$(OUTPUT_DIR))
 $(info [INFO] RPM's TOPDIR is $(RPM_TOPDIR))
-.PHONY : listmydirs
-listmydirs :
-	pwd
-	ls -alF .
-	ls -alF $(OUTPUT_DIR)
-	ls -alF $(OUTPUT_DIR)/
-	ls -alF $(OUTPUT_DIR)/../
-	ls -alF $(RPM_TOPDIR)
--include listmydirs
 else # def OUTPUT_DIR
 RPM_TOPDIR:=$(TOP_DIR)rpmbuild/
 endif # def OUTPUT_DIR
