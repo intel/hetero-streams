@@ -6,7 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>52943309-027e-4328-b819-fcaa89a5abbb</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>HeteroStreamsLibrary</OutputName>
+    <OutputName>HeteroStreamsLibrary-1.0.0</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
@@ -18,9 +18,14 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>$(SolutionDir)bin\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <WixVariables>
+    </WixVariables>
+    <DefineConstants>RefCodesDir=$(SolutionDir)\ref_code;IncludeDir=$(SolutionDir)\include;Version=1.0.0</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
+    <Compile Include="__Include.wxs" />
+    <Compile Include="__Tutorials.wxs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\hstreams_source\hstreams_source.vcxproj">
@@ -33,6 +38,13 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
+  <PropertyGroup>
+    <PreBuildEvent>CALL "$(WIX)\bin\heat.exe" dir "$(SolutionDir)\ref_code" -cg Tutorials -gg -scom -sreg -sfrag -srd -dr TUTORIALS_LOCATION -var var.RefCodesDir -out $(ProjectDir)\__Tutorials.wxs
+CALL "$(WIX)\bin\heat.exe" dir "$(SolutionDir)\include" -cg Include -gg -scom -sreg -sfrag -srd -dr INCLUDE_LOCATION -var var.IncludeDir -out $(ProjectDir)\__Include.wxs</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent />
+  </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
 	Other similar extension points exist, see Wix.targets.

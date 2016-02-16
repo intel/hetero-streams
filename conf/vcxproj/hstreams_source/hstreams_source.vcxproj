@@ -68,8 +68,10 @@
       <Command>del $(ProjectDir)\__tmp.cpp</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Message>Copy headers for tests</Message>
-      <Command>xcopy /q /Y ..\..\..\include\* $(OutDir)\include\</Command>
+      <Message>
+      </Message>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <CustomBuildStep>
       <Command>
