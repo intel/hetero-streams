@@ -43,9 +43,12 @@ HOST_SOURCE_FILES= \
 	hStreams_PhysStreamCOI.cpp \
 	hStreams_PhysStreamHost.cpp \
 	hStreams_RefCountDestroyed.cpp \
-	hStreams_app_api.cpp \
 	hStreams_app_api_sink.cpp \
+	hStreams_app_api_source.cpp \
+	hStreams_app_api_workers_source.cpp \
 	hStreams_common.cpp \
+	hStreams_core_api_source.cpp \
+	hStreams_core_api_workers_source.cpp \
 	hStreams_exceptions.cpp \
 	hStreams_helpers_common.cpp \
 	hStreams_helpers_source.cpp \
@@ -54,7 +57,6 @@ HOST_SOURCE_FILES= \
 	hStreams_internal_vars_source.cpp \
 	hStreams_locks.cpp \
 	hStreams_sink.cpp \
-	hStreams_source.cpp \
 	hStreams_threading.cpp
 
 HOST_SRCS=$(addprefix $(SRC_DIR), $(HOST_SOURCE_FILES))
@@ -83,7 +85,7 @@ HOST_COMPILE_FLAGS=$(CFLAGS) $(addprefix -I, $(HOST_INC_DIRS)) \
 
 HOST_LINK_FLAGS=$(LDFLAGS) -shared -fPIC -openmp -pthread \
   -Wl,-soname,$(HOST_LIBNAME)\
-  -Wl,--version-script=$(SRC_DIR)linker_script.map
+  -Wl,--version-script=$(SRC_DIR)linker_script_source.map
 
 HOST_INSTALL_DIR:=/usr/lib64/
 
@@ -99,7 +101,6 @@ $(HOST_BLD_DIR)%.host.o: $(HOST_ONTHEFLY_SRC_DIR)%.cpp
 	$(dir_create)
 	$(HOST_CC) -MMD -MP -c $< $(HOST_COMPILE_FLAGS) -o $@
 
-.PHONY: $(ABS_HOST_KNC_STARTUP_SERIALIZED)
 $(ABS_HOST_KNC_STARTUP_SERIALIZED): $(KNC_CARD_EXE_TARGET)
 	$(dir_create)
 	bash $(INCBIN) $< $@ KNC_startup

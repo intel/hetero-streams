@@ -24,8 +24,14 @@ endif
 
 version := $(version_major).$(version_minor).$(version_micro).$(version_build)
 
+# To not build the documentation, pass NODOC=1 to the make line
+ALL_TARGET := build-host build-knc-card
+ifneq "$(NODOC)" "1"
+ALL_TARGET += build-doc
+endif
+
 .PHONY: all
-all: build-host build-knc-card build-doc
+all: $(ALL_TARGET)
 .PHONY: install
 install: install-knc
 

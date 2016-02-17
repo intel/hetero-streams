@@ -22,7 +22,6 @@
 #include <hStreams_types.h>
 
 struct hStreams_InitSinkData {
-    HSTR_OPTIONS options;
     uint32_t phys_domain_id;
     HSTR_LOG_LEVEL logging_level;
     uint64_t logging_bitmask;

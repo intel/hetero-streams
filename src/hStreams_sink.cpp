@@ -260,8 +260,6 @@ void hStreams_init_sink(
             globals::logging_myphysdom = init_data->logging_myphysdom;
             globals::mkl_interface = init_data->mkl_interface;
 
-            hStreams_SetOptions(&(init_data->options));
-
             // fetch cblas_*gemm addresses if needed
             if (globals::mkl_interface != HSTR_MKL_NONE) {
                 MKLWrapper::cblas_sgemm_handler = (void *) hStreams_LibLoader::fetchExecFunctionAddress_nothrow("cblas_sgemm");

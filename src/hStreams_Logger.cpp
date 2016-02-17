@@ -17,8 +17,13 @@
 
 #include "hStreams_Logger.h"
 #include "hStreams_internal.h"
+#include "hStreams_common.h"
 #include "hStreams_internal_vars_common.h"
 #include "hStreams_helpers_common.h"
+#ifdef HSTR_SOURCE
+// For hStreams_GetOptions__hStreams_FatalError
+#include "hStreams_helpers_source.h"
+#endif
 
 Logger::Logger(const char *file_name, int line_number, const char *function_name, int exit_code) :
     null_os_(0),
@@ -40,7 +45,11 @@ Logger::~Logger()
     }
 
     if (exit_code_) {
+#ifdef HSTR_SOURCE
         hStreams_GetOptions__hStreams_FatalError()(exit_code_);
+#else
+        exit(exit_code_);
+#endif
     }
 }
 

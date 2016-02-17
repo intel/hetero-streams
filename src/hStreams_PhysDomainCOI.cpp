@@ -16,6 +16,7 @@
 #include "hStreams_PhysStreamCOI.h"
 #include "hStreams_LogDomain.h"
 #include "hStreams_internal.h"
+#include "hStreams_common.h"
 #include "hStreams_helpers_source.h"
 #include "hStreams_Logger.h"
 

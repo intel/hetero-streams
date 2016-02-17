@@ -162,16 +162,16 @@ void set_affinity(hStreams_CPUMask const &cpu_mask)
     case 0:
         break; // no error
     case EFAULT:
-        throw hStreams_exception(HSTR_RESULT_INTERNAL_ERROR,
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
                                  "Bad memory address used for pthread_setaffinity_np");
     case EINVAL:
-        throw hStreams_exception(HSTR_RESULT_INTERNAL_ERROR,
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
                                  "Bad affinity mask for the worker thread");
     case ESRCH:
-        throw hStreams_exception(HSTR_RESULT_INTERNAL_ERROR,
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
                                  "Bad thread handle in pthread_setaffinity_np");
     default:
-        throw hStreams_exception(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
                                  << "Unhandled error while calling pthread_setaffinity_np: "
                                  << pret);
     }
@@ -181,7 +181,7 @@ void set_affinity(hStreams_CPUMask const &cpu_mask)
     cpu_mask.computeNativeForm(cpu_set);
     DWORD_PTR ret = SetThreadAffinityMask(GetCurrentThread(), cpu_set);
     if (ret == 0) {
-        throw hStreams_exception(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
                                  << "SetThreadAffinityMask has failed. GetLastError return: "
                                  << StringBuilder::hex(GetLastError()));
     }

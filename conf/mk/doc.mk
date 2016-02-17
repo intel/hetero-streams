@@ -24,7 +24,6 @@ DOCS_INSTALL_DIR:=/usr/share/doc/hStreams/
 REF_CODE_INSTALL_DIR:=$(DOCS_INSTALL_DIR)/ref_code/
 
 # Last command will clean up some man links to class members
-.PHONY: build-doc
 build-doc:
 	mkdir -p $(BLD_DIR)doxygen
 	cd $(TOP_DIR) ; $(DOXYGEN) $(CFG_DIR)doxygen.rc

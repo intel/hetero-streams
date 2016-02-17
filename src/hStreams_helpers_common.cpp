@@ -15,8 +15,8 @@
 #include "hStreams_types.h"
 #include "hStreams_exceptions.h"
 #include "hStreams_helpers_common.h"
-#include "hStreams_internal_vars_source.h"
 #include "hStreams_Logger.h"
+#include "hStreams_internal_vars_common.h" // needed on Windows for the DLL handle
 
 #include <sstream>
 #include <iomanip>
@@ -92,7 +92,7 @@ void hStreams_LibLoader::load(std::string const &full_path, LIB_HANDLER::handle_
     handle = dlopen(full_path.c_str(), RTLD_NOW | RTLD_LOCAL);
     if (handle == NULL) {
         char *err = dlerror();
-        throw hStreams_exception(HSTR_RESULT_BAD_NAME, (err != NULL ? err : "Cannot load library " + full_path));
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, (err != NULL ? err : "Cannot load library " + full_path));
     }
 }
 
@@ -111,7 +111,7 @@ uint64_t hStreams_LibLoader::fetchFunctionAddress(LIB_HANDLER::handle_t lib_hand
     address = (uint64_t) dlsym(lib_handle, func_name.c_str());
     if (address == NULL) {
         char *err = dlerror();
-        throw hStreams_exception(HSTR_RESULT_BAD_NAME, (err != NULL ? err : "Cannot fetch function address " + func_name));
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, (err != NULL ? err : "Cannot fetch function address " + func_name));
     }
     return address;
 }
@@ -123,7 +123,7 @@ uint64_t hStreams_LibLoader::fetchVersionedFunctionAddress(LIB_HANDLER::handle_t
 
     if (address == NULL) {
         char *err = dlerror();
-        throw hStreams_exception(HSTR_RESULT_BAD_NAME, (err != NULL ? err : "Cannot fetch function address " + func_name));
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, (err != NULL ? err : "Cannot fetch function address " + func_name));
     }
     return address;
 }
@@ -154,7 +154,7 @@ void hStreams_LibLoader::load(std::string const &full_path, LIB_HANDLER::handle_
     handle = LoadLibrary(full_path.c_str());
 
     if (handle == NULL) {
-        throw hStreams_exception(HSTR_RESULT_BAD_NAME, "Cannot load library " + full_path);
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, "Cannot load library " + full_path);
     }
 }
 
@@ -171,7 +171,7 @@ uint64_t hStreams_LibLoader::fetchFunctionAddress(LIB_HANDLER::handle_t lib_hand
     uint64_t address = NULL;
     address = (uint64_t) GetProcAddress(lib_handle, func_name.c_str());
     if (address == NULL) {
-        throw hStreams_exception(HSTR_RESULT_BAD_NAME, "Cannot fetch function address " + func_name);
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, "Cannot fetch function address " + func_name);
     }
     return address;
 }

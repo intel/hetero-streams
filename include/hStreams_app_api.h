@@ -18,8 +18,11 @@
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #include <mkl.h>
 #include <stdint.h>
-#include "hStreams_version.h"
-#include "hStreams_common.h"
+// Other headers contain definitions which might be
+// of use to those including hStreams_app_api.h
+#include <hStreams_version.h>
+#include <hStreams_common.h>
+#include <hStreams_source.h>
 #endif //DOXYGEN_SHOULD_SKIP_THIS
 
 #ifdef __cplusplus
@@ -107,8 +110,20 @@ extern "C" {
 ///
 //////////////////////////////////////////////////////////////////
 DllAccess HSTR_RESULT
-hStreams_app_init(uint32_t in_StreamsPerDomain,
-                  uint32_t in_LogStreamOversubscription);
+hStreams_app_init_in_version(
+    uint32_t    in_StreamsPerDomain,
+    uint32_t    in_LogStreamOversubscription,
+    const char* interface_version);
+
+static
+DllAccess HSTR_RESULT
+hStreams_app_init(
+    uint32_t    in_StreamsPerDomain,
+    uint32_t    in_LogStreamOversubscription)
+{
+    return hStreams_app_init_in_version(in_StreamsPerDomain,
+        in_LogStreamOversubscription, HSTR_VERSION_STRING);
+}
 
 //////////////////////////////////////////////////////////////////
 ///
@@ -181,9 +196,22 @@ hStreams_app_init(uint32_t in_StreamsPerDomain,
 ///
 ///////////////////////////////////////////////////////////////////
 DllAccess HSTR_RESULT
-hStreams_app_init_domains(uint32_t      in_NumLogDomains,
-                          uint32_t    *in_pStreamsPerDomain,
-                          uint32_t     in_LogStreamOversubscription);
+hStreams_app_init_domains_in_version(
+    uint32_t    in_NumLogDomains,
+    uint32_t   *in_pStreamsPerDomain,
+    uint32_t    in_LogStreamOversubscription,
+    const char *interface_version);
+
+static
+DllAccess HSTR_RESULT
+hStreams_app_init_domains(
+    uint32_t    in_NumLogDomains,
+    uint32_t   *in_pStreamsPerDomain,
+    uint32_t    in_LogStreamOversubscription)
+{
+    return hStreams_app_init_domains_in_version( in_NumLogDomains, in_pStreamsPerDomain,
+            in_LogStreamOversubscription, HSTR_VERSION_STRING);
+}
 
 ///////////////////////////////////////////////////////////////////
 ///

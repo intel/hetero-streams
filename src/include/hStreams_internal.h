@@ -24,11 +24,6 @@
 /////////////////////////////////////////////////////////
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-#define HSTR_SECOND_PREVIEW_LIBRARY_VERSION  1
-
-// This is still used by some workers
-#define HSTR_LIBRARY_VERSION HSTR_SECOND_PREVIEW_LIBRARY_VERSION
-
 // This version of hStreams only tested with version 2 of the COI Library API
 #define COI_LIBRARY_VERSION 2
 
@@ -40,7 +35,6 @@
 #include <string>
 #ifndef _WIN32
 #include <unistd.h>
-#include "hStreams_version_asm.h"
 #include "hStreams_version.h"
 #include <unistd.h>
 /* Linux properly defines the PRI*64 macros in inttype.h when the following macro is defined: */
@@ -61,6 +55,58 @@ using namespace std;
 #include <mkl.h>
 
 #endif //DOXYGEN_SHOULD_SKIP_THIS
+
+// Only relevant on Linux but who cares
+#define HSTR_DEFAULT_SYMVER HSTREAMS_V
+
+#define HSTR_STRINGIZE(arg) HSTR_STRINGIZE2(arg)
+#define HSTR_STRINGIZE2(arg) #arg
+
+#define __HSTR_VERSIONED_NAME2(symbol, sep, suffix) symbol##sep##suffix
+#define __HSTR_VERSIONED_NAME(symbol, suffix) __HSTR_VERSIONED_NAME2(symbol, __, suffix)
+
+#ifndef _WIN32
+#define HSTR_EXPORT_IN_VERSION(ret_type, symbol, version)           \
+    __asm__(".symver "                                              \
+        HSTR_STRINGIZE(__HSTR_VERSIONED_NAME(symbol, __LINE__))     \
+        "," HSTR_STRINGIZE(symbol) "@" HSTR_STRINGIZE(version));    \
+    extern "C" ret_type __HSTR_VERSIONED_NAME(symbol, __LINE__)
+
+#define HSTR_EXPORT_IN_DEFAULT_VERSION(ret_type, symbol)            \
+    __asm__(".symver "                                              \
+        HSTR_STRINGIZE(__HSTR_VERSIONED_NAME(symbol, __LINE__))     \
+        "," HSTR_STRINGIZE(symbol) "@@"                             \
+        HSTR_STRINGIZE(HSTR_DEFAULT_SYMVER));                       \
+    extern "C" ret_type __HSTR_VERSIONED_NAME(symbol, __LINE__)
+#else // _WIN32
+// On windows we do NOT expose the non-default versions (we never did), so we
+// just mangle the name
+#define HSTR_EXPORT_IN_VERSION(ret_type, symbol, version)   \
+    ret_type __HSTR_VERSIONED_NAME(symbol, __LINE__)
+
+#define HSTR_EXPORT_IN_DEFAULT_VERSION(ret_type, symbol)   \
+    extern "C" ret_type symbol
+    // __pragma(comment(                                               \
+    //     linker,                                                     \
+    //     "/EXPORT:" HSTR_STRINGIZE(symbol)                           \
+    //     "=" HSTR_STRINGIZE(__HSTR_VERSIONED_NAME(symbol, __LINE__)) \
+    // ));                                                             \
+    // extern "C" ret_type __HSTR_VERSIONED_NAME(symbol, __LINE__)
+    // extern "C" ret_type symbol
+    // __pragma(comment(linker, "/EXPORT:" HSTR_STRINGIZE(symbol) "=" HSTR_STRINGIZE(__HSTR_VERSIONED_NAME(symbol, __LINE__)) )); \
+    // extern "C" ret_type __HSTR_VERSIONED_NAME(symbol, __LINE)
+#endif // _WIN32
+
+
+/**
+ * Magic string to be consumed by \c hStreams_InitInVersion() and similar
+ */
+#define HSTR_MAGIC_PRE1_0_0_VERSION_STRING "pre1.0.0"
+
+/**
+ * Helper macro to increase the call count (i.e. how many APIs are currently being invoked
+ */
+#define HSTR_CORE_API_CALLCOUNTER() hStreams_ScopedAtomicCounter sac(hstr_proc.callCounter)
 
 /* Linux follows the C99 standard and defines PRId64 and PRIx64 in inttypes.h (see above comments
    before #include <inttypes.h>).
@@ -169,26 +215,6 @@ typedef enum DEP_TYPE {
     NONE
 } DEP_TYPE;
 
-enum HSTR_STATE {
-    // HSTR_STATE_UNINITIALIZED means that hStreams_Init() has not been called yet,
-    // hStreams_Init() was called and then hStreams_Fini() was called and
-    // hStreams_Fini() completed.
-    HSTR_STATE_UNINITIALIZED = 0,
-    // HSTR_STATE_INITIALIZING means that exactly one thread is executing the
-    // hStreams_Init() code.
-    HSTR_STATE_INITIALIZING  = 1,
-    // HSTR_STATE_INITIALIZED means that hStreams_Init() succeeded, and the hStreams
-    // library is open for all calls.
-    HSTR_STATE_INITIALIZED   = 2,
-    // HSTR_STATE_FINALIZING means that exactly one thread is executing the
-    // hStreams_Fini() code, and it is taking down the internal data structures.
-    // After hStreams_Fini() completes, the next state is
-    // HSTR_STATE_UNINITIALIZED
-    HSTR_STATE_FINALIZING    = 3,
-};
-
-typedef hStreams_AtomicEnum<HSTR_STATE> hStreams_Atomic_HSTR_STATE;
-
 // Main data structure that spans streams
 typedef struct hStreamHostProcess {
     // callCounter gives a count of the number of calls into the core hStreams library
@@ -204,8 +230,6 @@ typedef struct hStreamHostProcess {
     // The hStreamsFiniLock ensures that hStreams_Fini is executed by only one thread
     // of execution at a time.  See hStreams_Fini implementation for more information.
     hStreams_Lock                  hStreamsFiniLock;
-    // Please see comments above at enum HSTR_STATE declaration.
-    hStreams_Atomic_HSTR_STATE     hStreamsState;
     /// Items that are associated with physical domains (cards)
     uint32_t                       myNumPhysDomains;      // 0 or more cards in the system
     uint32_t                       myActivePhysDomains;   // 0 or more active cards in the system,
@@ -287,25 +311,6 @@ typedef ConvertToUint64_t<MKL_Complex16, 2>  MKL_Complex16ToUint64_t;
 #define HSTR_TYPEOF decltype
 #endif
 
-// The DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION() macro declares a thread-safe function
-// for getting one member of the HSTR_OPTIONS struct.  These functions are defined in
-// hStreams_common.cpp
-#define DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(MEMBER_NAME) \
-    extern HSTR_TYPEOF(((HSTR_OPTIONS*)0)->MEMBER_NAME) hStreams_GetOptions_ ## MEMBER_NAME (void);
-
-// Declare each of the thread safe functions for getting the current value of
-// the members of the hstreams options structure:
-extern "C" {
-    DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(verbose)
-    DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(dep_policy)
-    DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(phys_domains_limit)
-    DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(openmp_policy)
-    DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(time_out_ms_val)
-    DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(_hStreams_FatalError)
-    DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(kmp_affinity)
-    DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(_hStreams_EmitMessage)
-}
-
 ///////////////////////////////////////////////////////////////////
 ///
 /// Fetch executable name that is currently running on the source.  Trims the directory path and
@@ -361,14 +366,6 @@ hStreams_LoadSinkSideLibrariesMIC(HSTR_COIPROCESS coi_process, std::vector<HSTR_
 ///////////////////////////////////////////////////////////////////////////////////////
 HSTR_RESULT
 hStreams_LoadSinkSideLibrariesHost(std::string const &in_ExecutableFileName, std::vector<LIB_HANDLER::handle_t> &loaded_libs_handles);
-
-/////////////////////////////////////////////////////////
-///
-// hStreams_ResetDefaultOptions
-/// @brief Reset the HSTREAM_OPTIONS to the defaults.
-///
-/////////////////////////////////////////////////////////
-extern "C" void hStreams_ResetDefaultOptions(void);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///

@@ -53,7 +53,11 @@
     <ClCompile />
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\src\include;$(INTEL_MPSS_HOST_SDK)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OpenMP>GenerateParallelCode</OpenMP>
     </ClCompile>
+    <Link>
+      <ModuleDefinitionFile>hstreams_source.def</ModuleDefinitionFile>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -75,6 +79,7 @@
       <Message>
       </Message>
     </CustomBuildStep>
+    <Link />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\hStreams_app_api.h" />
@@ -101,7 +106,6 @@
     <ClInclude Include="..\..\..\src\include\hStreams_LogDomainCollection.h" />
     <ClInclude Include="..\..\..\src\include\hStreams_LogStream.h" />
     <ClInclude Include="..\..\..\src\include\hStreams_LogStreamCollection.h" />
-    <ClInclude Include="..\..\..\include\hStreams_MKLWrapper.h" />
     <ClInclude Include="..\..\..\src\include\hStreams_PhysBuffer.h" />
     <ClInclude Include="..\..\..\src\include\hStreams_PhysBufferHost.h" />
     <ClInclude Include="..\..\..\src\include\hStreams_PhysDomain.h" />
@@ -115,9 +119,12 @@
     <ClInclude Include="..\..\..\src\include\hStreams_threading.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\hStreams_app_api.cpp" />
     <ClCompile Include="..\..\..\src\hStreams_app_api_sink.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_app_api_source.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_app_api_workers_source.cpp" />
     <ClCompile Include="..\..\..\src\hStreams_COIWrapper.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_core_api_source.cpp" />
+    <ClCompile Include="..\..\..\src\hStreams_core_api_workers_source.cpp" />
     <ClCompile Include="..\..\..\src\hStreams_MKLWrapper.cpp" />
     <ClCompile Include="..\..\..\src\hStreams_common.cpp" />
     <ClCompile Include="..\..\..\src\hStreams_exceptions.cpp" />
@@ -146,7 +153,6 @@
     <ClCompile Include="..\..\..\src\hStreams_PhysStreamHost.cpp" />
     <ClCompile Include="..\..\..\src\hStreams_RefCountDestroyed.cpp" />
     <ClCompile Include="..\..\..\src\hStreams_sink.cpp" />
-    <ClCompile Include="..\..\..\src\hStreams_source.cpp" />
     <ClCompile Include="..\..\..\src\hStreams_threading.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="__tmp.cpp" />

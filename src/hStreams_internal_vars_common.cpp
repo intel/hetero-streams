@@ -15,18 +15,18 @@
 #include "hStreams_internal_vars_common.h"
 #include "hStreams_helpers_common.h"
 #include "hStreams_common.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 #if HSTR_VERSION_MICRO
-const char *version_string = hStreams_stringer(HSTR_VERSION_MAJOR) "."
+const char *library_version_string = hStreams_stringer(HSTR_VERSION_MAJOR) "."
                              hStreams_stringer(HSTR_VERSION_MINOR) "."
                              hStreams_stringer(HSTR_VERSION_MICRO);
 #else
-const char *version_string = hStreams_stringer(HSTR_VERSION_MAJOR) "."
+const char *library_version_string = hStreams_stringer(HSTR_VERSION_MAJOR) "."
                              hStreams_stringer(HSTR_VERSION_MINOR);
 #endif
-
-HSTR_OPTIONS global_options = HSTR_OPTIONS_INITIAL_VALUES;
-hStreams_RW_Lock global_options_lock;
 
 namespace globals
 {
@@ -36,4 +36,7 @@ uint64_t logging_bitmask = (uint64_t) - 1;
 HSTR_PHYS_DOM logging_myphysdom = HSTR_SRC_PHYS_DOMAIN;
 HSTR_MKL_INTERFACE mkl_interface = HSTR_MKL_LP64;
 
+#ifdef _WIN32
+HMODULE hstreams_source_dll_handle;
+#endif
 } // namespace globals

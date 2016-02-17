@@ -73,7 +73,7 @@ hStreams_LoadSingleSinkSideLibraryHost(const char *lib_name)
 {
     const std::string full_path = findFileName(lib_name, host_sink_ld_library_path_env_name);
     if (full_path.empty()) {
-        throw hStreams_exception(HSTR_RESULT_BAD_NAME, StringBuilder()
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, StringBuilder()
                                  << "Cannot find host sink-side library " << std::string(lib_name)
                                  << " in paths specified by " << host_sink_ld_library_path_env_name << "\n");
     }
@@ -137,7 +137,7 @@ hStreams_LoadSinkSideLibrariesHost(std::string const &in_ExecutableFileName, std
     HSTR_RESULT hs_result;
 
     // First, load all of the explicitly specified libraries in the options.
-    HSTR_OPTIONS currentOptions = HSTR_OPTIONS_INITIAL_VALUES;
+    HSTR_OPTIONS currentOptions = globals::initial_values::options;
     CHECK_HSTR_RESULT(hStreams_GetCurrentOptions(&currentOptions, sizeof(currentOptions)));
 
     for (uint16_t i = 0; i < currentOptions.libNameCntHost; ++i) {
@@ -192,7 +192,7 @@ hStreams_LoadSingleSinkSideLibraryMIC(HSTR_COIPROCESS coi_process, const char *l
 {
     const std::string full_path = findFileName(lib_name, mic_sink_ld_library_path_env_name);
     if (full_path.empty()) {
-        throw hStreams_exception(HSTR_RESULT_BAD_NAME, StringBuilder()
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, StringBuilder()
                                  << "Cannot load MIC sink-side library " << std::string(lib_name)
                                  << " in paths specified by " << mic_sink_ld_library_path_env_name << "\n");
     }
@@ -207,7 +207,7 @@ hStreams_LoadSingleSinkSideLibraryMIC(HSTR_COIPROCESS coi_process, const char *l
     if (result == HSTR_COI_SUCCESS) {
         HSTR_LOG(HSTR_INFO_TYPE_MISC) << "Loaded MIC sink-side library " << full_path;
     } else {
-        throw hStreams_exception(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
                                  << "Cannot load MIC sink-side library " << std::string(lib_name)
                                  << ", COI returned: " << std::string(hStreams_COIWrapper::COIResultGetName(result)) << "\n");
     }
@@ -223,7 +223,7 @@ hStreams_LoadSinkSideLibrariesMIC(HSTR_COIPROCESS coi_process, std::vector<HSTR_
     out_loadedLibs.clear();
 
     // First, load all of the explicitly specified libraries in the options.
-    HSTR_OPTIONS currentOptions = HSTR_OPTIONS_INITIAL_VALUES;
+    HSTR_OPTIONS currentOptions = globals::initial_values::options;
     CHECK_HSTR_RESULT(hStreams_GetCurrentOptions(&currentOptions, sizeof(currentOptions)));
     out_loadedLibs.reserve(currentOptions.libNameCnt + 2);
 
@@ -354,6 +354,6 @@ std::string findFileName(const char *fileName, const char *env_variable_path)
 
 HSTR_LOG_DOM getNextLogDomID()
 {
-    return (HSTR_LOG_DOM) hStreams_AtomicAdd64(next_log_dom_id, 1);
+    return (HSTR_LOG_DOM) hStreams_AtomicAdd64(globals::next_log_dom_id, 1);
 }
 

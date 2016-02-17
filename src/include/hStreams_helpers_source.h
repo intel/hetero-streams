@@ -18,12 +18,14 @@
 #include "hStreams_types.h"
 #include "hStreams_common.h"
 #include "hStreams_source.h"
+#include "hStreams_internal.h"
 #include "hStreams_helpers_common.h"
-#include <limits>
 
+#include <limits>
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 
 #ifndef _WIN32
 #include <pthread.h>
@@ -149,44 +151,75 @@ public:
 // library should be still initialized after leaving current scope.
 //
 // hStreams_Init is call in constructor.
-// By default hStreams_Fini is not call on destroy an object of HSTRInitializer.
+// By default hStreams_Fini is called during destruction of HSTRInitializer's instance.
+// In order to prevent hStreams_Fini being called, call the member function dontFini()
 //
-// To undo hStreams initialization on leaving initializer scope call pleaseFini()
 // Finalization will be done only if hStreams was not already initialized when
 // object was created.
 
 
 class HSTRInitializer
 {
-    const bool alreadyInitializedOnCreate;
-    const HSTR_RESULT initResult;
-
-    bool shouldFini;
+    bool should_fini_;
+    const HSTR_RESULT init_result_;
 
 public:
-    HSTRInitializer() :
-        alreadyInitializedOnCreate(hStreams_IsInitialized() == HSTR_RESULT_SUCCESS),
-        initResult(hStreams_Init()),
-        shouldFini(false)
-    {}
+    HSTRInitializer(const char* interface_version) :
+        // We should only Fini if the library hasn't been intialized beforehand
+        should_fini_(hStreams_IsInitialized() != HSTR_RESULT_SUCCESS),
+        init_result_(hStreams_InitInVersion(interface_version))
+    {
+    }
 
     ~HSTRInitializer()
     {
-        if (shouldFini) {
+        if (should_fini_) {
             hStreams_Fini();
         }
     }
 
     HSTR_RESULT getInitResult()
     {
-        return initResult;
+        return init_result_;
     }
 
-    void pleaseFini()
+    void dontFini()
     {
-        shouldFini = !alreadyInitializedOnCreate;
+        should_fini_ = false;
     }
 };
+
+// The DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION() macro declares a thread-safe function
+// for getting one member of the HSTR_OPTIONS struct.  These functions are defined in
+// hStreams_common.cpp
+#define DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(MEMBER_NAME) \
+    HSTR_TYPEOF(((HSTR_OPTIONS*)0)->MEMBER_NAME) hStreams_GetOptions_ ## MEMBER_NAME (void);
+
+// Declare each of the thread safe functions for getting the current value of
+// the members of the hstreams options structure:
+DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(dep_policy)
+DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(phys_domains_limit)
+DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(openmp_policy)
+DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(time_out_ms_val)
+DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(_hStreams_FatalError)
+DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(kmp_affinity)
+
+namespace detail {
+/**
+ * Helper function to return whether an argument is present in a container with
+ * standard interfaces or not
+ */
+template <class C, class V>
+inline bool in_container(const C& container, const V& value)
+{
+    if (std::find(container.begin(), container.end(), value) == container.end()) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+} // namespace detail
 
 
 #endif /* HSTREAMS_HELPERS_SOURCE_H */

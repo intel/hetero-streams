@@ -51,7 +51,7 @@ ifdef COVFILE_RUNTIME_LOCATION
 KNC_CARD_COMPILE_FLAGS += $(PREPROC_DEFINE)COVFILE_RUNTIME_LOCATION="$(COVFILE_RUNTIME_LOCATION)"
 endif
 
-KNC_CARD_EXE_LINK_FLAGS:=$(LDFLAGS) -rdynamic -openmp -pthread -L$(KNC_CARD_BIN_DIR) -Wl,--build-id -shared-intel
+KNC_CARD_EXE_LINK_FLAGS:=$(LDFLAGS) -rdynamic -openmp -pthread -L$(KNC_CARD_BIN_DIR) -Wl,--build-id -shared-intel -Wl,--version-script=$(SRC_DIR)linker_script_KNC.map
 
 $(KNC_CARD_EXE_TARGET): $(KNC_CARD_EXE_OBJS)
 	$(dir_create)
