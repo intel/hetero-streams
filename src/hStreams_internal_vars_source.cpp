@@ -67,6 +67,9 @@ HSTR_ALIGN(64) volatile int64_t next_log_dom_id = initial_values::next_log_dom_i
 #ifdef _WIN32
 #pragma warning( pop )
 #endif
+
+std::string target_library_search_path;
+std::string host_library_search_path;
 } // namespace globals
 
 
@@ -96,4 +99,5 @@ HSTR_ALIGN(64) volatile int64_t huge_page_usage_threshold = -1;
 #endif
 
 const char *host_sink_ld_library_path_env_name = "HOST_SINK_LD_LIBRARY_PATH";
-const char *mic_sink_ld_library_path_env_name = "SINK_LD_LIBRARY_PATH";
+const char *sink_ld_library_path_env_name = "SINK_LD_LIBRARY_PATH";
+const char *mic_ld_library_path_env_name = "MIC_LD_LIBRARY_PATH";
