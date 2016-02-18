@@ -25,7 +25,8 @@
 #include "hStreams_PhysDomainCOI.h"
 #include "hStreams_LogBuffer.h"
 
-namespace {
+namespace
+{
 
 /**
  * Just a small helper class to guard the state of the hStreamsState atomic
@@ -64,7 +65,7 @@ public:
 } // anonymous namespace
 
 void
-detail::InitInVersion_impl_throw(const char* interface_version)
+detail::InitInVersion_impl_throw(const char *interface_version)
 {
     HSTR_TRACE_FUN_ENTER();
     HSTR_TRACE_FUN_ARG_STR(interface_version);
@@ -83,10 +84,10 @@ detail::InitInVersion_impl_throw(const char* interface_version)
 
     if (interface_version == NULL) {
         HSTR_DEBUG2(HSTR_INFO_TYPE_MISC)
-            << "Interface version argument in hStreams_InitInVersion()"
-            << " is NULL, will use the highest interface version available, "
-            << "i.e. the version of the library: "
-            << library_version_string;
+                << "Interface version argument in hStreams_InitInVersion()"
+                << " is NULL, will use the highest interface version available, "
+                << "i.e. the version of the library: "
+                << library_version_string;
         interface_version = library_version_string;
     }
 
@@ -94,10 +95,10 @@ detail::InitInVersion_impl_throw(const char* interface_version)
 
     if (!detail::in_container(globals::supported_interface_versions, interface_version_str)) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "Interface version "
-                << interface_version_str
-                << " is not a supported."
-            );
+                                   << "Interface version "
+                                   << interface_version_str
+                                   << " is not a supported."
+                                  );
     }
 
     globals::interface_version = interface_version_str;
@@ -107,7 +108,7 @@ detail::InitInVersion_impl_throw(const char* interface_version)
     new hStreams_COIWrapper;
 
     //Clear any error if previously set.
-	hStreams_ClearLastError();
+    hStreams_ClearLastError();
 
 
     assert(0 == (((uint64_t)&hstr_proc.dummy_buf) & 63));
@@ -136,9 +137,9 @@ detail::InitInVersion_impl_throw(const char* interface_version)
     // Result checking
     if (result != HSTR_COI_SUCCESS) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
-                << "Cannot initialize. COIEngineGetCount returned "
-                << hStreams_COIWrapper::COIResultGetName(result)
-            );
+                                   << "Cannot initialize. COIEngineGetCount returned "
+                                   << hStreams_COIWrapper::COIResultGetName(result)
+                                  );
     }
 
     // Artificially constrain the number of domains
@@ -154,10 +155,10 @@ detail::InitInVersion_impl_throw(const char* interface_version)
         coi_res = hStreams_COIWrapper::COIEngineGetHandle(HSTR_ISA_MIC, i, &coi_eng);
         if (HSTR_COI_SUCCESS != coi_res) {
             HSTR_DEBUG1(HSTR_INFO_TYPE_MISC)
-                << "Skipping physical domain no. "
-                << i
-                << " as COIEngineGetHandle returned "
-                << hStreams_COIWrapper::COIResultGetName(coi_res);
+                    << "Skipping physical domain no. "
+                    << i
+                    << " as COIEngineGetHandle returned "
+                    << hStreams_COIWrapper::COIResultGetName(coi_res);
             continue;
         }
 
@@ -165,10 +166,10 @@ detail::InitInVersion_impl_throw(const char* interface_version)
         coi_res = hStreams_COIWrapper::COIEngineGetInfo(coi_eng, sizeof(HSTR_COI_ENGINE_INFO), &coi_eng_info);
         if (HSTR_COI_SUCCESS != coi_res) {
             HSTR_DEBUG1(HSTR_INFO_TYPE_MISC)
-                << "Skipping physical domain no. "
-                << i
-                << " as COIEngineGetInfo returned "
-                << hStreams_COIWrapper::COIResultGetName(coi_res);
+                    << "Skipping physical domain no. "
+                    << i
+                    << " as COIEngineGetInfo returned "
+                    << hStreams_COIWrapper::COIResultGetName(coi_res);
             continue;
         }
 
@@ -179,17 +180,17 @@ detail::InitInVersion_impl_throw(const char* interface_version)
                   NULL, 0, &coi_process);
         if (HSTR_COI_SUCCESS != coi_res) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
-                    << "Could not create process on the device; "
-                    << "COIProcessCreateFromMemory returned "
-                    << hStreams_COIWrapper::COIResultGetName(coi_res)
-                );
+                                       << "Could not create process on the device; "
+                                       << "COIProcessCreateFromMemory returned "
+                                       << hStreams_COIWrapper::COIResultGetName(coi_res)
+                                      );
         }
         std::vector<HSTR_COILIBRARY> loaded_libs;
         HSTR_RESULT hstr_res = hStreams_LoadSinkSideLibrariesMIC(coi_process, loaded_libs, executableFileName);
         if (hstr_res != HSTR_RESULT_SUCCESS) {
             throw HSTR_EXCEPTION_MACRO(hstr_res, StringBuilder()
-                    << "An error occured while loading libraries on the MIC."
-                );
+                                       << "An error occured while loading libraries on the MIC."
+                                      );
         }
 
         // Get the handle for the thunk, thunk_func
@@ -202,11 +203,11 @@ detail::InitInVersion_impl_throw(const char* interface_version)
             // We're pushing for RAII in the implementation of the library, we should make
             // auto-destoying COIPROCESS classes and so on and so forth.
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, StringBuilder()
-                    << "Sink-side library does not contain a function named "
-                    << thunk_name
-                    << ", COIProcessGetFunctionHandles returned "
-                    << hStreams_COIWrapper::COIResultGetName(coi_res)
-                );
+                                       << "Sink-side library does not contain a function named "
+                                       << thunk_name
+                                       << ", COIProcessGetFunctionHandles returned "
+                                       << hStreams_COIWrapper::COIResultGetName(coi_res)
+                                      );
         }
 
         // Get the handle for the fetch sink func address function
@@ -215,11 +216,11 @@ detail::InitInVersion_impl_throw(const char* interface_version)
                   &fetch_addr_func);
         if (coi_res != HSTR_COI_SUCCESS) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, StringBuilder()
-                    << "Sink-side library does not contain a function named "
-                    << fetchSinkFuncAddress_name
-                    << ", COIProcessGetFunctionHandles returned "
-                    << hStreams_COIWrapper::COIResultGetName(coi_res)
-                );
+                                       << "Sink-side library does not contain a function named "
+                                       << fetchSinkFuncAddress_name
+                                       << ", COIProcessGetFunctionHandles returned "
+                                       << hStreams_COIWrapper::COIResultGetName(coi_res)
+                                      );
         }
         // The helper pipeline will be first used to initialize the sink side
         // of things by calling hStreams_init_sink.
@@ -231,10 +232,10 @@ detail::InitInVersion_impl_throw(const char* interface_version)
         // Result checking
         if (coi_res != HSTR_COI_SUCCESS) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
-                    << "A problem encountered while creating a helper pipeline "
-                    << "on the MIC, COIPipelineCreate returned "
-                    << hStreams_COIWrapper::COIResultGetName(coi_res)
-                );
+                                       << "A problem encountered while creating a helper pipeline "
+                                       << "on the MIC, COIPipelineCreate returned "
+                                       << hStreams_COIWrapper::COIResultGetName(coi_res)
+                                      );
         }
 
         HSTR_COIFUNCTION init_sink;
@@ -244,11 +245,11 @@ detail::InitInVersion_impl_throw(const char* interface_version)
                   &init_sink);
         if (HSTR_COI_SUCCESS != coi_res) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, StringBuilder()
-                    << "Sink-side library does not contain a function named "
-                    << func_name_init_sink
-                    << ", COIProcessGetFunctionHandles returned "
-                    << hStreams_COIWrapper::COIResultGetName(coi_res)
-                );
+                                       << "Sink-side library does not contain a function named "
+                                       << func_name_init_sink
+                                       << ", COIProcessGetFunctionHandles returned "
+                                       << hStreams_COIWrapper::COIResultGetName(coi_res)
+                                      );
         }
 
         hStreams_InitSinkData init_data;
@@ -266,19 +267,19 @@ detail::InitInVersion_impl_throw(const char* interface_version)
                   (void *)&error_code_buf, sizeof(error_code_buf), NULL);
         if (coi_res != HSTR_COI_SUCCESS) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
-                    << "A problem encountered while running a function in the pipeline: "
-                    << hStreams_COIWrapper::COIResultGetName(coi_res)
-                );
+                                       << "A problem encountered while running a function in the pipeline: "
+                                       << hStreams_COIWrapper::COIResultGetName(coi_res)
+                                      );
         }
 
         HSTR_RESULT error_code = (HSTR_RESULT)error_code_buf;
 
         if (error_code != HSTR_RESULT_SUCCESS) {
             throw HSTR_EXCEPTION_MACRO(error_code, StringBuilder()
-                    << "Could not initialize physical domain " << active_domains
-                    << ". Remote process indicated the error code to be: "
-                    << hStreams_ResultGetName(error_code)
-                );
+                                       << "Could not initialize physical domain " << active_domains
+                                       << ". Remote process indicated the error code to be: "
+                                       << hStreams_ResultGetName(error_code)
+                                      );
         }
 
         hStreams_PhysDomain *phys_dom = new hStreams_PhysDomainCOI(active_domains, coi_process,
@@ -308,8 +309,8 @@ detail::InitInVersion_impl_throw(const char* interface_version)
 
     if (active_domains == 0) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DEVICE_NOT_INITIALIZED, StringBuilder()
-                << "No active MIC cards in the system. Use of hStreams is not permitted"
-            );
+                                   << "No active MIC cards in the system. Use of hStreams is not permitted"
+                                  );
     }
 
     // Check that all physical domains have the same resources
@@ -325,9 +326,9 @@ detail::InitInVersion_impl_throw(const char* interface_version)
                  &hstr_proc.dummy_buf);        // Assign to pointer to COIBuffer
     if (result != HSTR_COI_SUCCESS) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DEVICE_NOT_INITIALIZED, StringBuilder()
-                << "A problem encountered while creating a helper buffer: "
-                << hStreams_COIWrapper::COIResultGetName(result)
-            );
+                                   << "A problem encountered while creating a helper buffer: "
+                                   << hStreams_COIWrapper::COIResultGetName(result)
+                                  );
     }
 
     // Check envirables for 2M buffer usage.  DMA is faster if host and device
@@ -385,7 +386,7 @@ detail::IsInitialized_impl_throw()
     HSTR_TRACE_FUN_ENTER();
     HSTR_RESULT res = IsInitialized_impl_nothrow();
     if (res != HSTR_RESULT_SUCCESS) {
-            throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_INITIALIZED);
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_INITIALIZED);
     }
 } // hStreams_IsInitialized_impl_throw
 
@@ -428,10 +429,10 @@ void detail::Fini_impl_throw()
     HSTR_COIRESULT result = hStreams_COIWrapper::COIBufferDestroy(hstr_proc.dummy_buf);
     if (result != HSTR_COI_SUCCESS) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "A problem encountered while destroying the helper buffer, "
-                << "COIBufferDestroy() returned "
-                << hStreams_COIWrapper::COIResultGetName(result)
-            );
+                                   << "A problem encountered while destroying the helper buffer, "
+                                   << "COIBufferDestroy() returned "
+                                   << hStreams_COIWrapper::COIResultGetName(result)
+                                  );
     }
 
     log_buffers.destroyAllBuffers();
@@ -466,8 +467,8 @@ detail::GetNumPhysDomains_impl_throw(
             out_pNumActivePhysDomains == NULL ||
             out_pHomogeneous          == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "An output pointer argument of hStreams_GetNumPhysDomains was NULL"
-            );
+                                   << "An output pointer argument of hStreams_GetNumPhysDomains was NULL"
+                                  );
     }
 
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
@@ -508,8 +509,8 @@ detail::GetPhysDomainDetails_impl_throw(
             out_pSupportedMemTypes         == NULL ||
             out_pPhysicalBytesPerMemType   == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "An output pointer argument of hStreams_GetPhysDomainDetails was NULL"
-            );
+                                   << "An output pointer argument of hStreams_GetPhysDomainDetails was NULL"
+                                  );
     }
 
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
@@ -518,10 +519,10 @@ detail::GetPhysDomainDetails_impl_throw(
     hStreams_PhysDomain *dom = phys_domains.lookupByPhysDomainID(in_PhysDomainID);
     if (NULL == dom) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
-                << "Physical domain (ID="
-                << in_PhysDomainID
-                << ") not found"
-            );
+                                   << "Physical domain (ID="
+                                   << in_PhysDomainID
+                                   << ") not found"
+                                  );
     }
 
     hStreams_CPUMask max_mask = dom->getMaxCPUMask();
@@ -556,8 +557,8 @@ detail::GetOversubscriptionLevel_impl_throw(
 
     if (out_pOversubscriptionArray == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "out_pOversubscriptionArray was NULL"
-            );
+                                   << "out_pOversubscriptionArray was NULL"
+                                  );
     }
 
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
@@ -570,20 +571,20 @@ detail::GetOversubscriptionLevel_impl_throw(
     hStreams_PhysDomain *phys_dom = phys_domains.lookupByPhysDomainID(in_PhysDomainID);
     if (NULL == phys_dom) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
-                << "Physical domain (ID="
-                << in_PhysDomainID
-                << ") not found"
-            );
+                                   << "Physical domain (ID="
+                                   << in_PhysDomainID
+                                   << ") not found"
+                                  );
     }
 
     if (phys_dom->getNumThreads() != in_NumThreads) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "The value of in_NumThreads doesn't match "
-                << phys_dom->getNumThreads()
-                << " which is how threads there are in physical domain (ID="
-                << in_PhysDomainID
-                << ")"
-            );
+                                   << "The value of in_NumThreads doesn't match "
+                                   << phys_dom->getNumThreads()
+                                   << " which is how threads there are in physical domain (ID="
+                                   << in_PhysDomainID
+                                   << ")"
+                                  );
     }
     phys_dom->getOversubscriptionLevel(out_pOversubscriptionArray);
 } // detail::GetOversubscriptionLevel_impl_throw(
@@ -608,10 +609,10 @@ detail::GetAvailable_impl_throw(
     hStreams_PhysDomain *dom = phys_domains.lookupByPhysDomainID(in_PhysDomainID);
     if (NULL == dom) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
-                << "Physical domain (ID="
-                << in_PhysDomainID
-                << ") not found"
-            );
+                                   << "Physical domain (ID="
+                                   << in_PhysDomainID
+                                   << ") not found"
+                                  );
     }
 
     hStreams_CPUMask ret = dom->getAvailableStreamCPUMask();
@@ -651,9 +652,9 @@ detail::AddLogDomain_impl_throw(
             PhysicalBytesPerMemType);
         if (NumThreads > 64) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_IMPLEMENTED, StringBuilder()
-                    << "Use of the Windows-based host physical domain which "
-                    << "contains more than 64 HW threads is not supported."
-                );
+                                       << "Use of the Windows-based host physical domain which "
+                                       << "contains more than 64 HW threads is not supported."
+                                      );
         }
     }
 #endif
@@ -661,14 +662,14 @@ detail::AddLogDomain_impl_throw(
     if (out_pLogDomainID  == NULL ||
             out_pOverlap  == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "An output pointer argument of hStreams_AddLogDomain was NULL"
-            );
+                                   << "An output pointer argument of hStreams_AddLogDomain was NULL"
+                                  );
     }
 
     if (0 == HSTR_CPU_MASK_COUNT(in_CPUmask)) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_CPU_MASK_OUT_OF_RANGE, StringBuilder()
-                << "The CPU mask of the logical domain to be created is empty."
-            );
+                                   << "The CPU mask of the logical domain to be created is empty."
+                                  );
     }
 
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
@@ -683,10 +684,10 @@ detail::AddLogDomain_impl_throw(
     hStreams_PhysDomain *phys_dom = phys_domains.lookupByPhysDomainID(in_PhysDomainID);
     if (NULL == phys_dom) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
-                << "Physical domain (ID="
-                << in_PhysDomainID
-                << ") not found"
-            );
+                                   << "Physical domain (ID="
+                                   << in_PhysDomainID
+                                   << ") not found"
+                                  );
     }
 
     // check the CPU mask - whether it fits in the physical domain's mask
@@ -696,9 +697,9 @@ detail::AddLogDomain_impl_throw(
 
     if (HSTR_CPU_MASK_COUNT(tmp_cpu_mask) < HSTR_CPU_MASK_COUNT(in_CPUmask)) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_CPU_MASK_OUT_OF_RANGE, StringBuilder()
-                << "The CPU mask of the logical domain to be created is not "
-                << "contained in the CPU mask of the physical domain."
-            );
+                                   << "The CPU mask of the logical domain to be created is not "
+                                   << "contained in the CPU mask of the physical domain."
+                                  );
     }
 
     // check the CPU mask - whether it partially overlaps with some other logical domain
@@ -707,16 +708,16 @@ detail::AddLogDomain_impl_throw(
     if (HSTR_PARTIAL_OVERLAP == overlap) {
         *out_pOverlap = overlap;
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OVERLAPPING_RESOURCES, StringBuilder()
-                << "The CPU mask of the logical domain to be created "
-                << "partially overlaps the CPU mask of another logical domain."
-            );
+                                   << "The CPU mask of the logical domain to be created "
+                                   << "partially overlaps the CPU mask of another logical domain."
+                                  );
     }
 
     const HSTR_LOG_DOM newID = getNextLogDomID();
     HSTR_DEBUG1(HSTR_INFO_TYPE_MISC)
-        << "Creating new logical domain (ID="
-        << newID
-        << ")";
+            << "Creating new logical domain (ID="
+            << newID
+            << ")";
     hStreams_LogDomain *log_dom = new hStreams_LogDomain(newID, in_CPUmask, *phys_dom);
 
     // create physical buffer for each incremental logical buffer
@@ -730,20 +731,20 @@ detail::AddLogDomain_impl_throw(
                 log_buffers.processDelLogDomain(*log_dom);
                 delete log_dom;
                 throw HSTR_EXCEPTION_MACRO(hret, StringBuilder()
-                        << "Could not instantiate incremental buffer "
+                                           << "Could not instantiate incremental buffer "
+                                           << log_buf->getStart()
+                                           << " for new logical domain (ID="
+                                           << log_dom->id()
+                                           << "): "
+                                           << hStreams_ResultGetName(hret)
+                                          );
+            } else {
+                HSTR_DEBUG2(HSTR_INFO_TYPE_MISC)
+                        << "Successfully created a new instantiation of incremental logical buffer "
                         << log_buf->getStart()
                         << " for new logical domain (ID="
                         << log_dom->id()
-                        << "): "
-                        << hStreams_ResultGetName(hret)
-                    );
-            } else {
-                HSTR_DEBUG2(HSTR_INFO_TYPE_MISC)
-                    << "Successfully created a new instantiation of incremental logical buffer "
-                    << log_buf->getStart()
-                    << " for new logical domain (ID="
-                    << log_dom->id()
-                    << ")";
+                        << ")";
             }
         }
     }
@@ -767,13 +768,13 @@ detail::RmLogDomains_impl_throw(
 
     if (in_pLogDomainIDs == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "in_pLogDomainIDs pointer argument of hStreams_RmLogDomains was NULL"
-            );
+                                   << "in_pLogDomainIDs pointer argument of hStreams_RmLogDomains was NULL"
+                                  );
     }
     if (in_NumLogDomains == 0) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "in_NumLogDomains argument of hStreams_RmLogDomains was equal to 0"
-            );
+                                   << "in_NumLogDomains argument of hStreams_RmLogDomains was equal to 0"
+                                  );
     }
 
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
@@ -789,12 +790,12 @@ detail::RmLogDomains_impl_throw(
         hStreams_LogDomain *log_dom = log_domains.lookupByLogDomainID(in_pLogDomainIDs[log_dom_idx]);
         if (NULL == log_dom) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                    << "Logical domain with ID in_pLogDomainIDs["
-                    << log_dom_idx
-                    << "] == "
-                    << in_pLogDomainIDs[log_dom_idx]
-                    << " doesn't exist."
-                );
+                                       << "Logical domain with ID in_pLogDomainIDs["
+                                       << log_dom_idx
+                                       << "] == "
+                                       << in_pLogDomainIDs[log_dom_idx]
+                                       << " doesn't exist."
+                                      );
         }
         log_streams.delFromCollectionByLogDomain(*log_dom);
         log_dom->destroyAllStreams();
@@ -818,8 +819,8 @@ detail::GetNumLogDomains_impl_throw(
 
     if (out_pNumLogDomains == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "out_pNumLogDomains pointer argument of hStreams_GetNumPhysDomains was NULL"
-            );
+                                   << "out_pNumLogDomains pointer argument of hStreams_GetNumPhysDomains was NULL"
+                                  );
     }
 
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
@@ -830,10 +831,10 @@ detail::GetNumLogDomains_impl_throw(
     hStreams_PhysDomain *phys_dom = phys_domains.lookupByPhysDomainID(in_PhysDomainID);
     if (NULL == phys_dom) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
-                << "Physical domain (ID="
-                << in_PhysDomainID
-                << ") doesn't exist"
-            );
+                                   << "Physical domain (ID="
+                                   << in_PhysDomainID
+                                   << ") doesn't exist"
+                                  );
     }
     *out_pNumLogDomains = phys_dom->getNumLogDomains();
 } // detail::GetNumLogDomains_impl_throw
@@ -851,8 +852,8 @@ detail::GetLogDomainIDList_impl_throw(
     IsInitialized_impl_throw();
     if (out_pLogDomainIDs == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "out_pLogDomainIDs pointer argument of hStreams_GetNumPhysDomains was NULL"
-            );
+                                   << "out_pLogDomainIDs pointer argument of hStreams_GetNumPhysDomains was NULL"
+                                  );
     }
 
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
@@ -863,10 +864,10 @@ detail::GetLogDomainIDList_impl_throw(
     hStreams_PhysDomain *phys_dom = phys_domains.lookupByPhysDomainID(in_PhysDomainID);
     if (NULL == phys_dom) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
-                << "Physical domain (ID="
-                << in_PhysDomainID
-                << ") doesn't exist"
-            );
+                                   << "Physical domain (ID="
+                                   << in_PhysDomainID
+                                   << ") doesn't exist"
+                                  );
     }
 
     uint32_t num_written, num_present;
@@ -874,20 +875,20 @@ detail::GetLogDomainIDList_impl_throw(
 
     if (num_written < in_NumLogDomains) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Found only "
-                << num_written
-                << " logical domains, instead of in_NumLogDomains == "
-                << in_NumLogDomains
-            );
+                                   << "Found only "
+                                   << num_written
+                                   << " logical domains, instead of in_NumLogDomains == "
+                                   << in_NumLogDomains
+                                  );
     }
 
     if (num_present > in_NumLogDomains) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "There are "
-                << num_present
-                << " logical domains, more than in_NumLogDomains == "
-                << in_NumLogDomains
-            );
+                                   << "There are "
+                                   << num_present
+                                   << " logical domains, more than in_NumLogDomains == "
+                                   << in_NumLogDomains
+                                  );
     }
 } // detail::GetLogDomainIDList_impl_throw
 
@@ -905,8 +906,8 @@ detail::GetLogDomainDetails_impl_throw(
 
     if (out_pPhysDomainID == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "out_pPhysDomainID pointer argument of hStreams_GetLogDomainDetails was NULL"
-            );
+                                   << "out_pPhysDomainID pointer argument of hStreams_GetLogDomainDetails was NULL"
+                                  );
     }
     // no point in checking out_CPUmask since it's an array, not a pointer
 
@@ -918,10 +919,10 @@ detail::GetLogDomainDetails_impl_throw(
     hStreams_LogDomain *log_dom = log_domains.lookupByLogDomainID(in_LogDomainID);
     if (NULL == log_dom) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Logical domain with ID "
-                << in_LogDomainID
-                << " not found"
-            );
+                                   << "Logical domain with ID "
+                                   << in_LogDomainID
+                                   << " not found"
+                                  );
     }
 
     memcpy(out_CPUmask, log_dom->getCPUMask().mask, sizeof(HSTR_CPU_MASK));
@@ -942,8 +943,8 @@ detail::StreamCreate_impl_throw(
 
     if (0 == HSTR_CPU_MASK_COUNT(in_CPUmask)) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_CPU_MASK_OUT_OF_RANGE, StringBuilder()
-                << "An empty CPU maks has been supplied to hStreams_StreamCreate."
-            );
+                                   << "An empty CPU maks has been supplied to hStreams_StreamCreate."
+                                  );
     }
 
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
@@ -956,19 +957,19 @@ detail::StreamCreate_impl_throw(
     hStreams_LogStream *lookup_str = log_streams.lookupByLogStreamID(in_LogStreamID);
     if (NULL != lookup_str) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_ALREADY_FOUND, StringBuilder()
-                << "Logical stream with ID "
-                << in_LogStreamID
-                << " already exists"
-            );
+                                   << "Logical stream with ID "
+                                   << in_LogStreamID
+                                   << " already exists"
+                                  );
     }
 
     hStreams_LogDomain *log_dom = log_domains.lookupByLogDomainID(in_LogDomainID);
     if (NULL == log_dom) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
-                << "Logical domain with ID in_LogDomainID == "
-                << in_LogDomainID
-                << " doesn't exist"
-            );
+                                   << "Logical domain with ID in_LogDomainID == "
+                                   << in_LogDomainID
+                                   << " doesn't exist"
+                                  );
     }
 
     // check the CPU mask - whether it fits in the logical domain's mask
@@ -976,9 +977,9 @@ detail::StreamCreate_impl_throw(
     HSTR_CPU_MASK_AND(tmp_cpu_mask, log_dom->getCPUMask().mask, in_CPUmask);
     if (HSTR_CPU_MASK_COUNT(tmp_cpu_mask) < HSTR_CPU_MASK_COUNT(in_CPUmask)) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_CPU_MASK_OUT_OF_RANGE, StringBuilder()
-                << "The CPU mask of the logical stream to be created is not "
-                << "contained within the CPU mask of the logical domain."
-            );
+                                   << "The CPU mask of the logical stream to be created is not "
+                                   << "contained within the CPU mask of the logical domain."
+                                  );
     }
 
     // Because for some reason, this special API, StreamCreate takes a const CPU mask... why?!
@@ -997,8 +998,8 @@ detail::StreamCreate_impl_throw(
         hStreams_PhysStream *new_phys_stream = log_dom->getPhysDomain().createNewPhysStream(*log_dom, non_const_cpu_mask);
         if (!new_phys_stream) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
-                    << "An error occured while trying to create a physical stream on the device"
-                );
+                                       << "An error occured while trying to create a physical stream on the device"
+                                      );
         }
         new_log_stream = new hStreams_LogStream(in_LogStreamID, non_const_cpu_mask, *log_dom, *new_phys_stream);
         // log stream has already attached to the physical stream by itself, we can detach now
@@ -1007,8 +1008,8 @@ detail::StreamCreate_impl_throw(
     }
     if (!new_log_stream) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                << "An internal error occured while trying to create the logical stream"
-            );
+                                   << "An internal error occured while trying to create the logical stream"
+                                  );
     }
 
     log_streams.addToCollection(new_log_stream);
@@ -1029,10 +1030,10 @@ detail::StreamDestroy_impl_throw(HSTR_LOG_STR in_LogStreamID)
     hStreams_LogStream *log_str = log_streams.lookupByLogStreamID(in_LogStreamID);
     if (NULL == log_str) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "The stream to be deleted (ID="
-                << in_LogStreamID
-                << ") was not found"
-            );
+                                   << "The stream to be deleted (ID="
+                                   << in_LogStreamID
+                                   << ") was not found"
+                                  );
     }
 
     log_streams.delFromCollection(*log_str);
@@ -1052,8 +1053,8 @@ detail::GetNumLogStreams_impl_throw(
 
     if (out_pNumLogStreams == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "out_pNumLogStreams pointer argument of hStreams_GetNumLogStreams was NULL"
-            );
+                                   << "out_pNumLogStreams pointer argument of hStreams_GetNumLogStreams was NULL"
+                                  );
     }
 
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
@@ -1066,10 +1067,10 @@ detail::GetNumLogStreams_impl_throw(
     hStreams_LogDomain *log_dom = log_domains.lookupByLogDomainID(in_LogDomainID);
     if (NULL == log_dom) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
-                << "Logical domain with id in_LogDomainID == "
-                << in_LogDomainID
-                << " was not found"
-            );
+                                   << "Logical domain with id in_LogDomainID == "
+                                   << in_LogDomainID
+                                   << " was not found"
+                                  );
     }
     *out_pNumLogStreams = log_dom->getNumLogStreams();
 } // detail::GetNumLogStreams_impl_throw
@@ -1088,8 +1089,8 @@ detail::GetLogStreamIDList_impl_throw(
 
     if (out_pLogStreamIDs == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "out_pLogStreamIDs pointer argument of hStreams_GetLogStreamIDList was NULL"
-            );
+                                   << "out_pLogStreamIDs pointer argument of hStreams_GetLogStreamIDList was NULL"
+                                  );
     }
 
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
@@ -1102,34 +1103,34 @@ detail::GetLogStreamIDList_impl_throw(
     hStreams_LogDomain *log_domain = log_domains.lookupByLogDomainID(in_LogDomainID);
     if (NULL == log_domain) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Logical domain with ID in_LogDomainID == "
-                << in_LogDomainID
-                << " wasn't found"
-            );
+                                   << "Logical domain with ID in_LogDomainID == "
+                                   << in_LogDomainID
+                                   << " wasn't found"
+                                  );
     }
 
     uint32_t num_written, num_present;
     log_domain->getLogStreamIDs(out_pLogStreamIDs, in_NumLogStreams, &num_written, &num_present);
     if (num_written < in_NumLogStreams) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Only "
-                << num_written
-                << " logical streams were found in logical domain "
-                << in_LogDomainID
-                << ", less than in_NumLogStreams == "
-                << in_NumLogStreams
-            );
+                                   << "Only "
+                                   << num_written
+                                   << " logical streams were found in logical domain "
+                                   << in_LogDomainID
+                                   << ", less than in_NumLogStreams == "
+                                   << in_NumLogStreams
+                                  );
     }
 
     if (num_present > in_NumLogStreams) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "There are  "
-                << num_present
-                << " logical streams in logical domain "
-                << in_LogDomainID
-                << ", more than in_NumLogStreams == "
-                << in_NumLogStreams
-            );
+                                   << "There are  "
+                                   << num_present
+                                   << " logical streams in logical domain "
+                                   << in_LogDomainID
+                                   << ", more than in_NumLogStreams == "
+                                   << in_NumLogStreams
+                                  );
     }
 } // detail::GetLogStreamIDList_impl_throw
 
@@ -1153,10 +1154,10 @@ detail::GetLogStreamDetails_impl_throw(
     hStreams_LogStream *log_stream = log_streams.lookupByLogStreamID(in_LogStreamID);
     if (NULL == log_stream) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Logical stream with ID "
-                << in_LogStreamID
-                << " doesn't exist "
-            );
+                                   << "Logical stream with ID "
+                                   << in_LogStreamID
+                                   << " doesn't exist "
+                                  );
     }
 
     memcpy(out_CPUmask, log_stream->getCPUMask().mask, sizeof(HSTR_CPU_MASK));
@@ -1186,33 +1187,33 @@ detail::EnqueueCompute_impl_throw(
 
     if (in_pFunctionName == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, StringBuilder()
-                << "Function name argument to hStreams_EnqueueCompute was NULL"
-            );
+                                   << "Function name argument to hStreams_EnqueueCompute was NULL"
+                                  );
     }
     if (in_ReturnValueSize > HSTR_RETURN_SIZE_LIMIT) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "in_ReturnValueSize was larger than HSTR_RETURN_SIZE_LIMIT, "
-                << HSTR_RETURN_SIZE_LIMIT
-            );
+                                   << "in_ReturnValueSize was larger than HSTR_RETURN_SIZE_LIMIT, "
+                                   << HSTR_RETURN_SIZE_LIMIT
+                                  );
     }
     if (in_numScalarArgs + in_numHeapArgs && !in_pArgs) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "in_pArgs cannot be NULL if in_NumScalarArgs != 0 && in_numHeapArgs != 0 "
-            );
+                                   << "in_pArgs cannot be NULL if in_NumScalarArgs != 0 && in_numHeapArgs != 0 "
+                                  );
     }
     if (((in_ReturnValueSize > 0)  && (out_ReturnValue == NULL)) ||
             ((in_ReturnValueSize == 0) && (out_ReturnValue != NULL))) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "in_ReturnValueSize must be 0 if out_ReturnValue is NULL and vice versa"
-            );
+                                   << "in_ReturnValueSize must be 0 if out_ReturnValue is NULL and vice versa"
+                                  );
     }
     if (strlen(in_pFunctionName) > HSTR_MAX_FUNC_NAME_SIZE - 1) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, StringBuilder()
-                << "Sorry, "
-                << in_pFunctionName
-                << " exceeds max called function name size of "
-                << HSTR_MAX_FUNC_NAME_SIZE - 1
-            );
+                                   << "Sorry, "
+                                   << in_pFunctionName
+                                   << " exceeds max called function name size of "
+                                   << HSTR_MAX_FUNC_NAME_SIZE - 1
+                                  );
     }
     uint64_t spt = HSTR_ARGS_SUPPORTED;
     if (spt > HSTR_ARGS_IMPLEMENTED) {
@@ -1221,10 +1222,10 @@ detail::EnqueueCompute_impl_throw(
     uint64_t requestedArgs = (uint64_t)3 + (uint64_t)in_numScalarArgs + (uint64_t)in_numHeapArgs;
     if (requestedArgs > spt) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_TOO_MANY_ARGS, StringBuilder()
-                << "Sorry, implementation only supports no more than (# scalar + # heap) = "
-                << spt
-                << " arguments to streamed functions."
-            );
+                                   << "Sorry, implementation only supports no more than (# scalar + # heap) = "
+                                   << spt
+                                   << " arguments to streamed functions."
+                                  );
     }
 
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
@@ -1239,10 +1240,10 @@ detail::EnqueueCompute_impl_throw(
     hStreams_LogStream *log_stream = log_streams.lookupByLogStreamID(in_LogStreamID);
     if (NULL == log_stream) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Logical stream with ID "
-                << in_LogStreamID
-                << " doesn't exist "
-            );
+                                   << "Logical stream with ID "
+                                   << in_LogStreamID
+                                   << " doesn't exist "
+                                  );
     }
 
     hStreams_LogDomain &log_domain = log_stream->getLogDomain();
@@ -1260,23 +1261,23 @@ detail::EnqueueCompute_impl_throw(
         hStreams_LogBuffer *log_buf = log_buffers.lookupLogBuffer(addr);
         if (!log_buf) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                    << "Did not find a corresponding buffer for in_pArgs["
-                    << i
-                    << "] == "
-                    << (void*)in_pArgs[i]
-                );
+                                       << "Did not find a corresponding buffer for in_pArgs["
+                                       << i
+                                       << "] == "
+                                       << (void *)in_pArgs[i]
+                                      );
         }
         hStreams_PhysBuffer *phys_buf = log_buf->getPhysBufferForLogDomain(log_domain);
         if (!phys_buf) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                    << "Did not find a buffer instantiation for in_pArgs["
-                    << i
-                    << "] == "
-                    << (void*)in_pArgs[i]
-                    << " on logical domain (ID="
-                    << log_domain.id()
-                    << ")"
-                );
+                                       << "Did not find a buffer instantiation for in_pArgs["
+                                       << i
+                                       << "] == "
+                                       << (void *)in_pArgs[i]
+                                       << " on logical domain (ID="
+                                       << log_domain.id()
+                                       << ")"
+                                      );
         }
         buffer_args.push_back(phys_buf);
         // NOTE Those are offsets into the source buffers.
@@ -1288,20 +1289,21 @@ detail::EnqueueCompute_impl_throw(
 
     hStreams_PhysStream &phys_stream = log_stream->getPhysStream();
     HSTR_RESULT hret = phys_stream.enqueueFunction(in_pFunctionName, scalar_args, buffer_args,
-                                       buffer_offsets, out_ReturnValue, (int16_t) in_ReturnValueSize, out_pEvent);
+                       buffer_offsets, out_ReturnValue, (int16_t) in_ReturnValueSize, out_pEvent);
     if (hret != HSTR_RESULT_SUCCESS) {
         throw HSTR_EXCEPTION_MACRO(hret, StringBuilder()
-                << "An error occured while attempting to enqueue function \""
-                << in_pFunctionName
-                << "\" in logical stream (ID="
-                << in_LogStreamID
-                << ")"
-            );
+                                   << "An error occured while attempting to enqueue function \""
+                                   << in_pFunctionName
+                                   << "\" in logical stream (ID="
+                                   << in_LogStreamID
+                                   << ")"
+                                  );
     }
 } // detail::EnqueueCompute_impl_throw
 
 
-namespace {
+namespace
+{
 // This just expects the logical stream and the logical domains to have been
 // looked up and the appropriate locks to have been grabbed. It is the common
 // part for EnqueueData1D and EnqueueDataXDomain1D
@@ -1326,20 +1328,20 @@ EnqueueDataXDomain1D_worker_locked_throw(
 
     if (in_pWriteAddr == NULL || in_pReadAddr == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "in_pWriteAddr or in_pReadAddr was NULL"
-            );
+                                   << "in_pWriteAddr or in_pReadAddr was NULL"
+                                  );
     }
     if (0 == in_size) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "in_size cannot be equal to 0"
-            );
+                                   << "in_size cannot be equal to 0"
+                                  );
     }
 
     if (in_LogStream.getLogDomain().id() != in_srcLogDomain.id() &&
             in_LogStream.getLogDomain().id() != in_dstLogDomain.id()) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "The logical stream does not belong in any of the specified domains."
-            );
+                                   << "The logical stream does not belong in any of the specified domains."
+                                  );
     }
 
     uint64_t src_u64 = (uint64_t)in_pReadAddr;
@@ -1350,8 +1352,8 @@ EnqueueDataXDomain1D_worker_locked_throw(
         // do arithmetic on a pointer to byte-sized type as the transfers are with that granularity
         if (add_gt(src_u64, in_size, dst_u64) || add_gt(dst_u64, in_size, src_u64)) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                    << "Overlapping transfers within the same logical domain are not permitted."
-                );
+                                       << "Overlapping transfers within the same logical domain are not permitted."
+                                      );
         }
     }
 
@@ -1363,41 +1365,41 @@ EnqueueDataXDomain1D_worker_locked_throw(
     hStreams_LogBuffer *dst_log_buf = log_buffers.lookupLogBuffer(in_pWriteAddr);
     if (NULL == dst_log_buf) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Did not find the destination buffer."
-            );
+                                   << "Did not find the destination buffer."
+                                  );
     }
     if (add_gt(dst_u64, in_size, dst_log_buf->getStartu64() + dst_log_buf->getLen())) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "Transfer range extends past the end of the destination buffer."
-            );
+                                   << "Transfer range extends past the end of the destination buffer."
+                                  );
     }
 
     hStreams_PhysBuffer *dst_phys_buf = dst_log_buf->getPhysBufferForLogDomain(in_dstLogDomain);
     if (NULL == dst_phys_buf) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Did not find an instantiation of the destination buffer for logical domain #"
-                << in_dstLogDomain.id()
-            );
+                                   << "Did not find an instantiation of the destination buffer for logical domain #"
+                                   << in_dstLogDomain.id()
+                                  );
     }
 
     hStreams_LogBuffer *src_log_buf = log_buffers.lookupLogBuffer(in_pReadAddr);
     if (NULL == src_log_buf) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Did not find the source buffer."
-            );
+                                   << "Did not find the source buffer."
+                                  );
     }
     if (add_gt(src_u64, in_size, src_log_buf->getStartu64() + src_log_buf->getLen())) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "Transfer range extends past the end of the source buffer."
-            );
+                                   << "Transfer range extends past the end of the source buffer."
+                                  );
     }
 
     hStreams_PhysBuffer *src_phys_buf = src_log_buf->getPhysBufferForLogDomain(in_srcLogDomain);
     if (NULL == src_phys_buf) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Did not find an instantiation of the source buffer for logical domain #"
-                << in_srcLogDomain.id()
-            );
+                                   << "Did not find an instantiation of the source buffer for logical domain #"
+                                   << in_srcLogDomain.id()
+                                  );
     }
 
     hStreams_PhysStream &phys_stream = in_LogStream.getPhysStream();
@@ -1406,13 +1408,13 @@ EnqueueDataXDomain1D_worker_locked_throw(
     uint64_t src_offset = (uint64_t)in_pReadAddr - src_log_buf->getStartu64();
 
     HSTR_RESULT hret = phys_stream.enqueueTransfer(*dst_phys_buf, *src_phys_buf, dst_offset,
-                                       src_offset, in_size, out_pEvent);
+                       src_offset, in_size, out_pEvent);
     if (hret != HSTR_RESULT_SUCCESS) {
         throw HSTR_EXCEPTION_MACRO(hret, StringBuilder()
-                << "An error occured while attempting to enqueue the transfer in logical stream (ID="
-                << in_LogStream.id()
-                << ")"
-            );
+                                   << "An error occured while attempting to enqueue the transfer in logical stream (ID="
+                                   << in_LogStream.id()
+                                   << ")"
+                                  );
     }
 } // EnqueueDataXDomain1D_worker_locked_throw
 } // anonymous namespace
@@ -1448,18 +1450,18 @@ detail::EnqueueData1D_impl_throw(
     hStreams_LogStream *log_stream = log_streams.lookupByLogStreamID(in_LogStreamID);
     if (NULL == log_stream) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Logical stream with ID "
-                << in_LogStreamID
-                << " doesn't exist"
-            );
+                                   << "Logical stream with ID "
+                                   << in_LogStreamID
+                                   << " doesn't exist"
+                                  );
     }
     hStreams_LogDomain &other_log_domain = log_stream->getLogDomain();
     hStreams_LogDomain *src_log_domain = log_domains.lookupByLogDomainID(HSTR_SRC_LOG_DOMAIN);
     // Let's be paranoid together
     if (NULL == src_log_domain) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                << "The logical domain of origin for the buffer's transfer doesn't exist"
-            );
+                                   << "The logical domain of origin for the buffer's transfer doesn't exist"
+                                  );
     }
 
     hStreams_LogDomain *xfer_src_log_domain;
@@ -1476,14 +1478,14 @@ detail::EnqueueData1D_impl_throw(
         break;
     default:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "Invalid value for in_XferDirection: "
-                << in_XferDirection
-                << ". Valid values are: HSTR_SRC_TO_SINK ("
-                << HSTR_SRC_TO_SINK
-                << ") and HSTR_SINK_TO_SRC ("
-                << HSTR_SINK_TO_SRC
-                << ")."
-            );
+                                   << "Invalid value for in_XferDirection: "
+                                   << in_XferDirection
+                                   << ". Valid values are: HSTR_SRC_TO_SINK ("
+                                   << HSTR_SRC_TO_SINK
+                                   << ") and HSTR_SINK_TO_SRC ("
+                                   << HSTR_SINK_TO_SRC
+                                   << ")."
+                                  );
     } // switch (in_XferDirection)
 
     EnqueueDataXDomain1D_worker_locked_throw(*log_stream, in_pWriteAddr, in_pReadAddr,
@@ -1522,28 +1524,28 @@ detail::EnqueueDataXDomain1D_impl_throw(
     hStreams_LogStream *log_stream = log_streams.lookupByLogStreamID(in_LogStreamID);
     if (NULL == log_stream) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Logical stream with ID "
-                << in_LogStreamID
-                << " doesn't exist"
-            );
+                                   << "Logical stream with ID "
+                                   << in_LogStreamID
+                                   << " doesn't exist"
+                                  );
     }
 
     hStreams_LogDomain *xfer_dst_log_domain = log_domains.lookupByLogDomainID(in_dstLogDomain);
     if (NULL == xfer_dst_log_domain) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Transfer destination logical domain (ID="
-                << in_dstLogDomain
-                << ") doesn't exist"
-            );
+                                   << "Transfer destination logical domain (ID="
+                                   << in_dstLogDomain
+                                   << ") doesn't exist"
+                                  );
     }
 
     hStreams_LogDomain *xfer_src_log_domain = log_domains.lookupByLogDomainID(in_srcLogDomain);
     if (NULL == xfer_src_log_domain) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Transfer source logical domain (ID="
-                << in_srcLogDomain
-                << ") doesn't exist"
-            );
+                                   << "Transfer source logical domain (ID="
+                                   << in_srcLogDomain
+                                   << ") doesn't exist"
+                                  );
     }
     EnqueueDataXDomain1D_worker_locked_throw(*log_stream, in_pWriteAddr, in_pReadAddr, in_size,
             *xfer_dst_log_domain, *xfer_src_log_domain, out_pEvent);
@@ -1577,10 +1579,10 @@ detail::StreamSynchronize_impl_throw(HSTR_LOG_STR in_LogStreamID)
     hStreams_LogStream *log_stream = log_streams.lookupByLogStreamID(in_LogStreamID);
     if (NULL == log_stream) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Logical stream with ID "
-                << in_LogStreamID
-                << " doesn't exist"
-            );
+                                   << "Logical stream with ID "
+                                   << in_LogStreamID
+                                   << " doesn't exist"
+                                  );
     }
 
     std::vector<HSTR_EVENT> the_events;
@@ -1599,24 +1601,24 @@ detail::StreamSynchronize_impl_throw(HSTR_LOG_STR in_LogStreamID)
         return;
     } else if (result == HSTR_COI_PROCESS_DIED) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
-                << "Sink-side process died."
-            );
+                                   << "Sink-side process died."
+                                  );
     } else if (result == HSTR_COI_EVENT_CANCELED) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_EVENT_CANCELED, StringBuilder()
-                << "At least one of the events has been cancelled."
-            );
+                                   << "At least one of the events has been cancelled."
+                                  );
     } else if (result == HSTR_COI_TIME_OUT_REACHED) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_TIME_OUT_REACHED, StringBuilder()
-                << "Timeout value of "
-                << timeout
-                << " was not large enough, you might wish to adjust the value of "
-                << "time_out_ms_val in HSTR_OPTIONS"
-            );
+                                   << "Timeout value of "
+                                   << timeout
+                                   << " was not large enough, you might wish to adjust the value of "
+                                   << "time_out_ms_val in HSTR_OPTIONS"
+                                  );
     } else {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                << "Internal error, COI returned an unexpected value: "
-                << hStreams_COIWrapper::COIResultGetName(result)
-            );
+                                   << "Internal error, COI returned an unexpected value: "
+                                   << hStreams_COIWrapper::COIResultGetName(result)
+                                  );
     }
 } // detail::StreamSynchronize_impl_throw(HSTR_LOG_STR in_LogStreamID)
 
@@ -1651,24 +1653,24 @@ detail::ThreadSynchronize_impl_throw()
         return;
     } else if (result == HSTR_COI_PROCESS_DIED) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
-                << "Sink-side process died."
-            );
+                                   << "Sink-side process died."
+                                  );
     } else if (result == HSTR_COI_EVENT_CANCELED) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_EVENT_CANCELED, StringBuilder()
-                << "At least one of the events has been cancelled."
-            );
+                                   << "At least one of the events has been cancelled."
+                                  );
     } else if (result == HSTR_COI_TIME_OUT_REACHED) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_TIME_OUT_REACHED, StringBuilder()
-                << "Timeout value of "
-                << timeout
-                << " was not large enough, you might wish to adjust the value of "
-                << "time_out_ms_val in HSTR_OPTIONS"
-            );
+                                   << "Timeout value of "
+                                   << timeout
+                                   << " was not large enough, you might wish to adjust the value of "
+                                   << "time_out_ms_val in HSTR_OPTIONS"
+                                  );
     } else {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "Internal error, COI returned an unexpected value: "
-                << hStreams_COIWrapper::COIResultGetName(result)
-            );
+                                   << "Internal error, COI returned an unexpected value: "
+                                   << hStreams_COIWrapper::COIResultGetName(result)
+                                  );
     }
 } // detail::ThreadSynchronize_impl_throw()
 
@@ -1697,40 +1699,40 @@ detail::EventWait_impl_throw(
 
     // Do a COIEventWait on it
     HSTR_COIRESULT result = hStreams_COIWrapper::COIEventWait(
-                 (uint16_t)in_NumEvents,
-                 in_pEvents,
-                 in_TimeOutMilliSeconds,
-                 in_WaitForAll,
-                 out_pNumSignaled,
-                 out_pSignaledIndices);
+                                (uint16_t)in_NumEvents,
+                                in_pEvents,
+                                in_TimeOutMilliSeconds,
+                                in_WaitForAll,
+                                out_pNumSignaled,
+                                out_pSignaledIndices);
 
     if (result == HSTR_COI_SUCCESS) {
         return;
     } else if (result == HSTR_COI_PROCESS_DIED) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
-                << "Sink-side process died."
-            );
+                                   << "Sink-side process died."
+                                  );
     } else if (result == HSTR_COI_EVENT_CANCELED) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_EVENT_CANCELED, StringBuilder()
-                << "At least one of the events has been cancelled."
-            );
+                                   << "At least one of the events has been cancelled."
+                                  );
     } else if (result == HSTR_COI_TIME_OUT_REACHED) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_TIME_OUT_REACHED, StringBuilder()
-                << "Waiting on events timeouted"
-            );
+                                   << "Waiting on events timeouted"
+                                  );
     } else if (result == HSTR_COI_OUT_OF_RANGE) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE);
     } else if (result == HSTR_COI_INVALID_POINTER) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "A required pointer was NULL in hStreams_EventWait"
-            );
+                                   << "A required pointer was NULL in hStreams_EventWait"
+                                  );
     } else if (result == HSTR_COI_ARGUMENT_MISMATCH) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS);
     } else {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                << "Internal error, COI returned an unexpected value: "
-                << hStreams_COIWrapper::COIResultGetName(result)
-            );
+                                   << "Internal error, COI returned an unexpected value: "
+                                   << hStreams_COIWrapper::COIResultGetName(result)
+                                  );
     }
 } // detail::EventWait_impl_throw
 
@@ -1756,8 +1758,8 @@ detail::EventStreamWait_impl_throw(
             ((in_NumAddresses <= 0) != (in_pAddresses == NULL)) || // can't be NULL if > 0
             ((in_NumAddresses == HSTR_WAIT_NONE) && (out_pEvent == NULL))) { // can't be NULL if no deps
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "Inconsistent arguments were provided to hStreams_EventStreamWait"
-            );
+                                   << "Inconsistent arguments were provided to hStreams_EventStreamWait"
+                                  );
     }
 
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
@@ -1772,10 +1774,10 @@ detail::EventStreamWait_impl_throw(
     hStreams_LogStream *log_stream = log_streams.lookupByLogStreamID(in_LogStreamID);
     if (NULL == log_stream) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Logical stream with ID "
-                << in_LogStreamID
-                << " doesn't exist."
-            );
+                                   << "Logical stream with ID "
+                                   << in_LogStreamID
+                                   << " doesn't exist."
+                                  );
     }
 
     hStreams_PhysStream &phys_stream = log_stream->getPhysStream();
@@ -1788,23 +1790,23 @@ detail::EventStreamWait_impl_throw(
             hStreams_LogBuffer *log_buf = log_buffers.lookupLogBuffer(in_pAddresses[i]);
             if (NULL == log_buf) {
                 throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                        << "Did not find a corresponding logical buffer for in_pAddresses["
-                        << i
-                        << "] == "
-                        << in_pAddresses[i]
-                    );
+                                           << "Did not find a corresponding logical buffer for in_pAddresses["
+                                           << i
+                                           << "] == "
+                                           << in_pAddresses[i]
+                                          );
             }
             hStreams_PhysBuffer *phys_buf = log_buf->getPhysBufferForLogDomain(log_domain);
             if (NULL == phys_buf) {
                 throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                        << "Did not find an instantiation of the logical buffer for in_pAddresses["
-                        << i
-                        << "] == "
-                        << in_pAddresses[i]
-                        << " in logical domain (ID="
-                        << log_domain.id()
-                        << ")"
-                    );
+                                           << "Did not find an instantiation of the logical buffer for in_pAddresses["
+                                           << i
+                                           << "] == "
+                                           << in_pAddresses[i]
+                                           << " in logical domain (ID="
+                                           << log_domain.id()
+                                           << ")"
+                                          );
             }
             phys_buffers.push_back(phys_buf);
         }
@@ -1823,8 +1825,8 @@ detail::EventStreamWait_impl_throw(
                          in_NumAddresses == HSTR_WAIT_CONTROL)
                         ? IS_BARRIER : IS_XFER;
     HSTR_DEBUG1(HSTR_INFO_TYPE_SYNC)
-        << "Input dependency type in hStreams_EventStreamWait: "
-        << (dep_type == IS_BARRIER) ? "barrier" : "transfer";
+            << "Input dependency type in hStreams_EventStreamWait: "
+            << (dep_type == IS_BARRIER) ? "barrier" : "transfer";
 
     std::vector<HSTR_EVENT> events;
     phys_stream.getInputDeps(dep_type, phys_buffers, events);
@@ -1844,22 +1846,22 @@ detail::EventStreamWait_impl_throw(
     // XXX Does using the same dummy_buf for all streams across all domains not
     // introduce some weird dependency between unrelated streams?
     HSTR_COIRESULT result = hStreams_COIWrapper::COIBufferWrite(
-                hstr_proc.dummy_buf,                    // in_DestBuffer
-                0,                                      // in_Offset
-                &hstr_proc.dummy_data,                  // in_pSourceData. Cannot be NULL
-                1,                                      // in_Length
-                HSTR_COI_COPY_USE_CPU,                  // in_Type
-                (uint32_t) events.size(),               // total number of dependencies
-                (events.empty()) ? NULL : &events[0],   // in_pDependencies
-                &completion);                           // out_pCompletion
+                                hstr_proc.dummy_buf,                    // in_DestBuffer
+                                0,                                      // in_Offset
+                                &hstr_proc.dummy_data,                  // in_pSourceData. Cannot be NULL
+                                1,                                      // in_Length
+                                HSTR_COI_COPY_USE_CPU,                  // in_Type
+                                (uint32_t) events.size(),               // total number of dependencies
+                                (events.empty()) ? NULL : &events[0],   // in_pDependencies
+                                &completion);                           // out_pCompletion
 
     // Result checking
     if (result != HSTR_COI_SUCCESS) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
-                << "A problem occured while gathering the dependencies in "
-                << "hStreams_EventStreamWait. COIBufferWrite returned: "
-                << hStreams_COIWrapper::COIResultGetName(result)
-            );
+                                   << "A problem occured while gathering the dependencies in "
+                                   << "hStreams_EventStreamWait. COIBufferWrite returned: "
+                                   << hStreams_COIWrapper::COIResultGetName(result)
+                                  );
     }
 
     // Iterate through addresses; there may be none
@@ -1874,15 +1876,15 @@ detail::EventStreamWait_impl_throw(
         log_buffers.getAllPhysBuffersForLogDomain(log_domain, phys_buffers);
         dep_type = IS_BARRIER;
         HSTR_DEBUG1(HSTR_INFO_TYPE_SYNC)
-            << "Output dependency type in hStreams_EventStreamWait: barrier";
+                << "Output dependency type in hStreams_EventStreamWait: barrier";
     } else if (in_NumAddresses == HSTR_WAIT_NONE) {
         dep_type = NONE;
         HSTR_DEBUG1(HSTR_INFO_TYPE_SYNC)
-            << "Output dependency type in hStreams_EventStreamWait: none";
+                << "Output dependency type in hStreams_EventStreamWait: none";
     } else {
         dep_type = IS_XFER;
         HSTR_DEBUG1(HSTR_INFO_TYPE_SYNC)
-            << "Output dependency type in hStreams_EventStreamWait: transfer";
+                << "Output dependency type in hStreams_EventStreamWait: transfer";
     }
 
     // Pass in the list of intersecting buffers, which is non-NULL if in_NumAddresses > 0
@@ -1919,43 +1921,43 @@ detail::Alloc1DEx_impl_throw(
     HSTR_BUFFER_PROPS default_props = HSTR_BUFFER_PROPS_INITIAL_VALUES_EX;
     if (in_pBufferProps == NULL) {
         HSTR_DEBUG1(HSTR_INFO_TYPE_MEM)
-            << "Using default buffer properties in hStreams_Alloc1DEx";
+                << "Using default buffer properties in hStreams_Alloc1DEx";
         in_pBufferProps = &default_props;
     } else if (in_pBufferProps->mem_type != HSTR_MEM_TYPE_NORMAL ||
-            (in_pBufferProps->flags & HSTR_BUF_PROP_AFFINITIZED) != 0) {
+               (in_pBufferProps->flags & HSTR_BUF_PROP_AFFINITIZED) != 0) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_IMPLEMENTED, StringBuilder()
-                << "Memory type other than normal or buffer affinitization "
-                << "was requested in hStreams_Alloc1DEx, both of which are "
-                << "not implemented yet"
-            );
+                                   << "Memory type other than normal or buffer affinitization "
+                                   << "was requested in hStreams_Alloc1DEx, both of which are "
+                                   << "not implemented yet"
+                                  );
     }
 
     if (in_Size == 0 || in_NumLogDomains < -1) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "in_Size was equal to 0 or in_NumLogDomains < -1"
-            );
+                                   << "in_Size was equal to 0 or in_NumLogDomains < -1"
+                                  );
     }
     if (addition_overflow((uint64_t)in_BaseAddress, in_Size)) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "in_Size value is too large"
-            );
+                                   << "in_Size value is too large"
+                                  );
     }
     if (in_BaseAddress == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "in_BaseAddress cannot be NULL"
-            );
+                                   << "in_BaseAddress cannot be NULL"
+                                  );
     }
     if (((in_NumLogDomains == -1 || in_NumLogDomains == 0) && (in_pLogDomainIDs != NULL))
             || (!(in_NumLogDomains == -1 || in_NumLogDomains == 0) && (in_pLogDomainIDs == NULL))) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "Inconsistent arguments were passed to the allocation API"
-            );
+                                   << "Inconsistent arguments were passed to the allocation API"
+                                  );
     }
     for (int64_t i = 0; i < in_NumLogDomains; i++) {
         if (in_pLogDomainIDs[i] == HSTR_SRC_LOG_DOMAIN) {
-        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
-                << "The in_pLogDomainIDs array must not include HSTR_SRC_LOG_DOMAIN"
-            );
+            throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
+                                       << "The in_pLogDomainIDs array must not include HSTR_SRC_LOG_DOMAIN"
+                                      );
         }
     }
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
@@ -1973,20 +1975,20 @@ detail::Alloc1DEx_impl_throw(
         hStreams_LogDomain *log_dom = log_domains.lookupByLogDomainID(in_pLogDomainIDs[i]);
         if (log_dom == NULL) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
-                    << "Logical domain with id in_pLogDomainIDs["
-                    << i
-                    << "] == "
-                    << in_pLogDomainIDs[i]
-                    << " doesn't exist"
-                );
+                                       << "Logical domain with id in_pLogDomainIDs["
+                                       << i
+                                       << "] == "
+                                       << in_pLogDomainIDs[i]
+                                       << " doesn't exist"
+                                      );
         }
 
         if (log_domains_set.find(log_dom) == log_domains_set.end()) {
             log_domains_set.insert(log_dom);
         } else {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                    << "Values in the in_pLogDomainIDs array must not repeat"
-                );
+                                       << "Values in the in_pLogDomainIDs array must not repeat"
+                                      );
         }
     }
 
@@ -1994,15 +1996,15 @@ detail::Alloc1DEx_impl_throw(
     log_buffers.lookupLogBuffer(in_BaseAddress, in_Size, &buf_overlap);
     if (HSTR_EXACT_OVERLAP == buf_overlap) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_ALREADY_FOUND, StringBuilder()
-                << "Buffer "
-                << in_BaseAddress
-                << " already exists"
-            );
+                                   << "Buffer "
+                                   << in_BaseAddress
+                                   << " already exists"
+                                  );
     }
     if (HSTR_PARTIAL_OVERLAP == buf_overlap) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OVERLAPPING_RESOURCES, StringBuilder()
-                << "Buffers must not overlap."
-            );
+                                   << "Buffers must not overlap."
+                                  );
     }
 
     hStreams_LogBuffer *log_buf = new hStreams_LogBuffer(in_BaseAddress, in_Size,
@@ -2011,12 +2013,12 @@ detail::Alloc1DEx_impl_throw(
     // Attach all selected logical domains
     if (in_NumLogDomains == -1) {
         HSTR_RESULT hret = log_buf->attachLogDomainFromRange(
-                log_domains.begin(), log_domains.end());
+                               log_domains.begin(), log_domains.end());
         if (hret != HSTR_RESULT_SUCCESS) {
             throw HSTR_EXCEPTION_MACRO(hret, StringBuilder()
-                    << "An error was encountered while instantiating buffer "
-                    << in_BaseAddress
-                );
+                                       << "An error was encountered while instantiating buffer "
+                                       << in_BaseAddress
+                                      );
         }
     } else {
         // Buffer will always be created for HSTR_SRC_LOG_DOMAIN, and it can't be in in_pLogDomainIDs
@@ -2024,12 +2026,12 @@ detail::Alloc1DEx_impl_throw(
         hStreams_LogDomain *src_log_dom = log_domains.lookupByLogDomainID(HSTR_SRC_LOG_DOMAIN);
         log_domains_set.insert(src_log_dom);
         HSTR_RESULT hret = log_buf->attachLogDomainFromRange(
-                log_domains_set.begin(), log_domains_set.end());
+                               log_domains_set.begin(), log_domains_set.end());
         if (hret != HSTR_RESULT_SUCCESS) {
             throw HSTR_EXCEPTION_MACRO(hret, StringBuilder()
-                    << "An error was encountered while instantiating buffer "
-                    << in_BaseAddress
-                );
+                                       << "An error was encountered while instantiating buffer "
+                                       << in_BaseAddress
+                                      );
         }
     }
 
@@ -2051,20 +2053,20 @@ detail::AddBufferLogDomains_impl_throw(
 
     if (in_NumLogDomains == 0) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "in_NumLogDomains cannot be equal to 0"
-            );
+                                   << "in_NumLogDomains cannot be equal to 0"
+                                  );
     }
     if ((in_Address == NULL) || (in_pLogDomainIDs == NULL)) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "Either the buffer address or logical domains array"
-                << "was NULL in hStreams_AddBufferLogdomains"
-            );
+                                   << "Either the buffer address or logical domains array"
+                                   << "was NULL in hStreams_AddBufferLogdomains"
+                                  );
     }
     for (uint64_t i = 0; i < in_NumLogDomains; i++) {
         if (in_pLogDomainIDs[i] == HSTR_SRC_LOG_DOMAIN) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
-                    << "The logical domains array must not contain HSTR_SRC_LOG_DOMAIN"
-                );
+                                       << "The logical domains array must not contain HSTR_SRC_LOG_DOMAIN"
+                                      );
         }
     }
 
@@ -2082,48 +2084,48 @@ detail::AddBufferLogDomains_impl_throw(
 
     if (log_buf == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Did not find a logical buffer for "
-                << in_Address
-            );
+                                   << "Did not find a logical buffer for "
+                                   << in_Address
+                                  );
     }
     for (uint64_t i = 0; i < in_NumLogDomains; i++) {
         hStreams_LogDomain *log_dom = log_domains.lookupByLogDomainID(in_pLogDomainIDs[i]);
         if (log_dom == NULL) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
-                    << "Did not find logical domain in_pLogDomainIDs["
-                    << i
-                    << "]: "
-                    << in_pLogDomainIDs[i]
-                );
+                                       << "Did not find logical domain in_pLogDomainIDs["
+                                       << i
+                                       << "]: "
+                                       << in_pLogDomainIDs[i]
+                                      );
         }
 
         if (log_domains_set.find(log_dom) == log_domains_set.end()) {
             log_domains_set.insert(log_dom);
         } else {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                    << "The in_pLogDomainIDs array must not contain duplicate entries"
-                );
+                                       << "The in_pLogDomainIDs array must not contain duplicate entries"
+                                      );
         }
 
         if (log_buf->getPhysBufferForLogDomain(*log_dom) != NULL) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_ALREADY_FOUND, StringBuilder()
-                    << "Logical buffer "
-                    << log_buf->getStart()
-                    << "already has an instantiation in logical domain #"
-                    << log_dom->id()
-                );
+                                       << "Logical buffer "
+                                       << log_buf->getStart()
+                                       << "already has an instantiation in logical domain #"
+                                       << log_dom->id()
+                                      );
         }
     }
 
     // Attach buffer for selected logical domains
     HSTR_RESULT hret = log_buf->attachLogDomainFromRange(
-            log_domains_set.begin(), log_domains_set.end());
+                           log_domains_set.begin(), log_domains_set.end());
     if (hret != HSTR_RESULT_SUCCESS) {
         throw HSTR_EXCEPTION_MACRO(hret, StringBuilder()
-                << "An error was encountered while instantiating buffer "
-                << log_buf->getStart()
-                << " in additional logical domains"
-            );
+                                   << "An error was encountered while instantiating buffer "
+                                   << log_buf->getStart()
+                                   << " in additional logical domains"
+                                  );
     }
 } // detail::AddBufferLogDomains_impl_throw
 
@@ -2141,25 +2143,25 @@ detail::RmBufferLogDomains_impl_throw(
 
     if (in_Address == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "in_Address cannot be equal NULL"
-            );
+                                   << "in_Address cannot be equal NULL"
+                                  );
     }
     if (in_NumLogDomains == 0 || in_NumLogDomains < -1) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "in_NumLogDomains cannot be < -1"
-            );
+                                   << "in_NumLogDomains cannot be < -1"
+                                  );
     }
     if (((in_NumLogDomains == - 1) && (in_pLogDomainIDs != NULL))
             || ((in_NumLogDomains != - 1) && (in_pLogDomainIDs == NULL))) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "The arguments of hStreams_RmBufferLogDomains were inconsistent"
-            );
+                                   << "The arguments of hStreams_RmBufferLogDomains were inconsistent"
+                                  );
     }
     for (int64_t i = 0; i < in_NumLogDomains; i++) {
         if (in_pLogDomainIDs[i] == HSTR_SRC_LOG_DOMAIN) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
-                    << "The logical domains array must not contain HSTR_SRC_LOG_DOMAIN"
-                );
+                                       << "The logical domains array must not contain HSTR_SRC_LOG_DOMAIN"
+                                      );
         }
     }
 
@@ -2177,36 +2179,36 @@ detail::RmBufferLogDomains_impl_throw(
 
     if (log_buf == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Did not find a logical buffer containing the address "
-                << in_Address
-            );
+                                   << "Did not find a logical buffer containing the address "
+                                   << in_Address
+                                  );
     }
     for (int64_t i = 0; i < in_NumLogDomains; i++) {
         hStreams_LogDomain *log_dom = log_domains.lookupByLogDomainID(in_pLogDomainIDs[i]);
         if (log_dom == NULL) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DOMAIN_OUT_OF_RANGE, StringBuilder()
-                    << "Did not find a logical domain with ID in_pLogDomainIDs["
-                    << i
-                    << "] == "
-                    << in_pLogDomainIDs[i]
-                );
+                                       << "Did not find a logical domain with ID in_pLogDomainIDs["
+                                       << i
+                                       << "] == "
+                                       << in_pLogDomainIDs[i]
+                                      );
         }
 
         if (log_domains_set.find(log_dom) == log_domains_set.end()) {
             log_domains_set.insert(log_dom);
         } else {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                    << "The in_pLogDomainIDs array must not contain duplicate entries"
-                );
+                                       << "The in_pLogDomainIDs array must not contain duplicate entries"
+                                      );
         }
 
         if (log_buf->getPhysBufferForLogDomain(*log_dom) == NULL) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                    << "Did not find an instantiation of the logical buffer "
-                    << log_buf->getStart()
-                    << "for logical domain #"
-                    << log_dom->id()
-                );
+                                       << "Did not find an instantiation of the logical buffer "
+                                       << log_buf->getStart()
+                                       << "for logical domain #"
+                                       << log_dom->id()
+                                      );
         }
     }
 
@@ -2230,9 +2232,9 @@ detail::GetBufferNumLogDomains_impl_throw(
 
     if (in_Address == NULL || out_NumLogDomains == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "Either the buffer address or output pointer operand "
-                << "was NULL in hStreams_GetBufferNumLogDomains"
-            );
+                                   << "Either the buffer address or output pointer operand "
+                                   << "was NULL in hStreams_GetBufferNumLogDomains"
+                                  );
     }
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
             hStreams_RW_Lock::HSTR_RW_LOCK_READ);
@@ -2246,9 +2248,9 @@ detail::GetBufferNumLogDomains_impl_throw(
     hStreams_LogBuffer *log_buf = log_buffers.lookupLogBuffer(in_Address);
     if (log_buf == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Did not find a logical buffer containing the address "
-                << in_Address
-            );
+                                   << "Did not find a logical buffer containing the address "
+                                   << in_Address
+                                  );
     }
     *out_NumLogDomains = log_buf->getNumAttachedLogDomains();
 } // detail::GetBufferNumLogDomains_impl_throw
@@ -2270,14 +2272,14 @@ detail::GetBufferLogDomains_impl_throw(
 
     if (in_Address == NULL || out_pNumLogDomains == NULL || out_pLogDomains == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "Either the buffer address or output pointer operand "
-                << "was NULL in hStreams_GetBufferLogDomains"
-            );
+                                   << "Either the buffer address or output pointer operand "
+                                   << "was NULL in hStreams_GetBufferLogDomains"
+                                  );
     }
     if (in_NumLogDomains == 0) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "in_NumLogDomains must be > 0"
-            );
+                                   << "in_NumLogDomains must be > 0"
+                                  );
     }
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
             hStreams_RW_Lock::HSTR_RW_LOCK_READ);
@@ -2291,20 +2293,20 @@ detail::GetBufferLogDomains_impl_throw(
     hStreams_LogBuffer *log_buf = log_buffers.lookupLogBuffer(in_Address);
     if (log_buf == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Did not find a logical buffer containing the address "
-                << in_Address
-            );
+                                   << "Did not find a logical buffer containing the address "
+                                   << in_Address
+                                  );
     }
 
     log_buf->getAttachedLogDomainIDs(in_NumLogDomains, out_pLogDomains, out_pNumLogDomains);
 
     if (in_NumLogDomains < *out_pNumLogDomains) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "The buffer is instantiated in "
-                << *out_pNumLogDomains
-                << " logical domains, which is more than in_NumLogDomains == "
-                << in_NumLogDomains
-            );
+                                   << "The buffer is instantiated in "
+                                   << *out_pNumLogDomains
+                                   << " logical domains, which is more than in_NumLogDomains == "
+                                   << in_NumLogDomains
+                                  );
     }
 } // detail::GetBufferLogDomains_worker
 
@@ -2320,9 +2322,9 @@ detail::GetBufferProps_impl_throw(
 
     if (in_Address == NULL || out_BufferProps == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "Either the buffer address or output pointer operand "
-                << "was NULL in hStreams_GetBufferLogDomains"
-            );
+                                   << "Either the buffer address or output pointer operand "
+                                   << "was NULL in hStreams_GetBufferLogDomains"
+                                  );
     }
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
             hStreams_RW_Lock::HSTR_RW_LOCK_READ);
@@ -2336,9 +2338,9 @@ detail::GetBufferProps_impl_throw(
     hStreams_LogBuffer *log_buf = log_buffers.lookupLogBuffer(in_Address);
     if (log_buf == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Did not find a logical buffer containing the address "
-                << in_Address
-            );
+                                   << "Did not find a logical buffer containing the address "
+                                   << in_Address
+                                  );
     }
     *out_BufferProps = log_buf->getProperties();
 } // detail::GetBufferProps_impl_throw
@@ -2352,8 +2354,8 @@ detail::DeAlloc_impl_throw(void *in_Address)
     IsInitialized_impl_throw();
     if (!in_Address) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "in_Address cannot be NULL for deallocating the buffer"
-            );
+                                   << "in_Address cannot be NULL for deallocating the buffer"
+                                  );
     }
     hStreams_RW_Scope_Locker_Unlocker phys_domains_scope_lock(phys_domains_lock,
             hStreams_RW_Lock::HSTR_RW_LOCK_READ);
@@ -2367,9 +2369,9 @@ detail::DeAlloc_impl_throw(void *in_Address)
     hStreams_LogBuffer *log_buf = log_buffers.lookupLogBuffer(in_Address);
     if (log_buf == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_FOUND, StringBuilder()
-                << "Did not find a logical buffer containing the address "
-                << in_Address
-            );
+                                   << "Did not find a logical buffer containing the address "
+                                   << in_Address
+                                  );
     }
     log_buffers.delFromCollection(*log_buf);
     delete log_buf;
@@ -2384,15 +2386,15 @@ detail::Cfg_SetLogLevel(HSTR_LOG_LEVEL in_loglevel)
 
     if (IsInitialized_impl_nothrow() == HSTR_RESULT_SUCCESS) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_PERMITTED, StringBuilder()
-                << "hStreams_Cfg_SetLogLevel() cannot "
-                << "be called if the library has been already initialized."
-            );
+                                   << "hStreams_Cfg_SetLogLevel() cannot "
+                                   << "be called if the library has been already initialized."
+                                  );
     }
     if (in_loglevel < HSTR_LOG_LEVEL_NO_LOGGING
             || in_loglevel > HSTR_LOG_LEVEL_DEBUG4) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "Invalid value for the logging level"
-            );
+                                   << "Invalid value for the logging level"
+                                  );
     }
     globals::logging_level = in_loglevel;
 } // detail::Cfg_SetLogLevel(HSTR_LOG_LEVEL in_loglevel)
@@ -2405,9 +2407,9 @@ detail::Cfg_SetLogInfoType(uint64_t in_info_type_mask)
 
     if (IsInitialized_impl_nothrow() == HSTR_RESULT_SUCCESS) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_PERMITTED, StringBuilder()
-                << "hStreams_Cfg_SetLogInfoType() cannot "
-                << "be called if the library has been already initialized."
-            );
+                                   << "hStreams_Cfg_SetLogInfoType() cannot "
+                                   << "be called if the library has been already initialized."
+                                  );
     }
     globals::logging_bitmask = in_info_type_mask;
 } // detail::Cfg_SetLogInfoType(uint64_t in_info_type_mask)
@@ -2419,14 +2421,14 @@ detail::Cfg_SetMKLInterface(HSTR_MKL_INTERFACE in_MKLInterface)
     HSTR_TRACE_FUN_ARG(in_MKLInterface);
     if ((in_MKLInterface < 0) || (HSTR_MKL_INTERFACE_SIZE <= in_MKLInterface)) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "Invalid value for the MKL interface"
-            );
+                                   << "Invalid value for the MKL interface"
+                                  );
     }
     if (IsInitialized_impl_nothrow() == HSTR_RESULT_SUCCESS) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_PERMITTED, StringBuilder()
-                << "hStreams_Cfg_SetMKLInterface() cannot "
-                << "be called if the library has been already initialized."
-            );
+                                   << "hStreams_Cfg_SetMKLInterface() cannot "
+                                   << "be called if the library has been already initialized."
+                                  );
     }
     globals::mkl_interface = in_MKLInterface;
 } // detail::Cfg_SetMKLInterface(HSTR_MKL_INTERFACE in_MKLInterface)
@@ -2439,9 +2441,9 @@ detail::GetCurrentOptions_impl_throw(HSTR_OPTIONS *pCurrentOptions, uint64_t buf
     HSTR_TRACE_FUN_ARG(buffSize);
     if (pCurrentOptions == NULL || buffSize < sizeof(HSTR_OPTIONS)) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "Bad arguments to hStreams_GetCurrentOptions, "
-                << "NULL output pointer or too small buffer"
-            );
+                                   << "Bad arguments to hStreams_GetCurrentOptions, "
+                                   << "NULL output pointer or too small buffer"
+                                  );
     }
     hStreams_RW_Scope_Locker_Unlocker hstreams_options_rw_lock(globals::options_lock,
             hStreams_RW_Lock::HSTR_RW_LOCK_READ);
@@ -2456,66 +2458,66 @@ detail::SetOptions_impl_throw(const HSTR_OPTIONS *in_options)
     HSTR_TRACE_FUN_ARG(in_options);
     if (in_options == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "Options cannot be NULL"
-            );
+                                   << "Options cannot be NULL"
+                                  );
     }
     if (in_options->_hStreams_FatalError == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "_hStreams_FatalError cannot be NULL"
-            );
+                                   << "_hStreams_FatalError cannot be NULL"
+                                  );
     }
     if (in_options->kmp_affinity < 0 || in_options->kmp_affinity >= HSTR_KMP_AFFINITY_SIZE) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "Incorrect value of kmp_affinity"
-            );
+                                   << "Incorrect value of kmp_affinity"
+                                  );
     }
     if (in_options->dep_policy < 0 || in_options->dep_policy >= HSTR_DEP_POLICY_SIZE) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "Incorrect value of dep_policy"
-            );
+                                   << "Incorrect value of dep_policy"
+                                  );
     }
     if (in_options->openmp_policy < 0 || in_options->openmp_policy >= HSTR_OPENMP_POLICY_SIZE) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "Incorrect value of openmp_policy"
-            );
+                                   << "Incorrect value of openmp_policy"
+                                  );
     }
     if (in_options->time_out_ms_val <= 0 && in_options->time_out_ms_val != HSTR_TIME_INFINITE) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "Incorrect value of time_out_ms_val"
-            );
+                                   << "Incorrect value of time_out_ms_val"
+                                  );
     }
     if (in_options->libNameCnt == 0 && in_options->libNames != NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "libNames must be NULL, if libNameCnt is zero."
-            );
+                                   << "libNames must be NULL, if libNameCnt is zero."
+                                  );
     }
     if (in_options->libNameCnt != 0 && in_options->libNames == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "libNames can't be NULL, if libNameCnt isn't zero."
-            );
+                                   << "libNames can't be NULL, if libNameCnt isn't zero."
+                                  );
     }
     for (int i = 0; i < in_options->libNameCnt; i++) {
         if (in_options->libNames[i] == NULL) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                    << "libNames can't contain NULL entries."
-                );
+                                       << "libNames can't contain NULL entries."
+                                      );
         }
     }
     if (in_options->libNameCntHost == 0 && in_options->libNamesHost != NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "libNamesHost must be NULL, if libNameCntHost is zero."
-            );
+                                   << "libNamesHost must be NULL, if libNameCntHost is zero."
+                                  );
     }
     if (in_options->libNameCntHost != 0 && in_options->libNamesHost == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                << "libNamesHost can't be NULL, if libNameCntHost isn't zero."
-            );
+                                   << "libNamesHost can't be NULL, if libNameCntHost isn't zero."
+                                  );
     }
     for (int i = 0; i < in_options->libNameCntHost; i++) {
         if (in_options->libNamesHost[i] == NULL) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                    << "libNamesHost can't contain NULL entries."
-                );
+                                       << "libNamesHost can't contain NULL entries."
+                                      );
         }
     }
     hStreams_RW_Scope_Locker_Unlocker hstreams_options_rw_lock(globals::options_lock, hStreams_RW_Lock::HSTR_RW_LOCK_WRITE);
@@ -2527,8 +2529,8 @@ detail::GetVersionStringLen_impl_throw(uint32_t *out_pVersionStringLen)
 {
     if (NULL == out_pVersionStringLen) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "An output pointer argument of hStreams_GetVersionStringLen was NULL"
-            );
+                                   << "An output pointer argument of hStreams_GetVersionStringLen was NULL"
+                                  );
     }
     *out_pVersionStringLen = (uint32_t)strlen(library_version_string) + 1; // include null termination
 } // detail::GetVersionStringLen_impl_throw(uint32_t *out_pVersionStringLen)
@@ -2538,14 +2540,14 @@ detail::Version_impl_throw(char *buff, uint32_t buffLength)
 {
     if (NULL == buff) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "An output pointer argument of hStreams_Version was NULL"
-            );
+                                   << "An output pointer argument of hStreams_Version was NULL"
+                                  );
     }
 
     if (buffLength < (uint32_t)strlen(library_version_string) + 1) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BUFF_TOO_SMALL, StringBuilder()
-                << "The output buffer in hStreams_Version was too small"
-            );
+                                   << "The output buffer in hStreams_Version was too small"
+                                  );
     }
     memcpy(buff, library_version_string, strlen(library_version_string) + 1);
 } // detail::Version_impl_throw(char *buff, uint32_t buffLength)

@@ -30,24 +30,24 @@ hStreams_Thread::hStreams_Thread(worker_return_type(*start_routine)(void *), voi
         break;
     case EAGAIN:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_RESOURCE_EXHAUSTED,
-                                 "Insufficient resources to create another thread");
+                                   "Insufficient resources to create another thread");
     case EINVAL:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                 "Wrong arguments supplied to thread creation");
+                                   "Wrong arguments supplied to thread creation");
     case EPERM:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                 "Insufficient permissions to create a thread with specified attributes");
+                                   "Insufficient permissions to create a thread with specified attributes");
     default:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                                 << "Unhandled error while calling pthread_create: "
-                                 << pret);
+                                   << "Unhandled error while calling pthread_create: "
+                                   << pret);
     }
 #else
     handle_ = CreateThread(NULL, 0, start_routine, arg, 0, NULL);
     if (handle_ == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                                 << "CreateThread has failed. GetLastError return: "
-                                 << StringBuilder::hex(GetLastError()));
+                                   << "CreateThread has failed. GetLastError return: "
+                                   << StringBuilder::hex(GetLastError()));
     }
 #endif
 }
@@ -61,18 +61,18 @@ void hStreams_Thread::join()
         break;
     case EDEADLK:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                 "A deadlock was detected while trying to join a thread");
+                                   "A deadlock was detected while trying to join a thread");
     case EINVAL:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                 "Tried to join a non-joinable thread or another thread"
-                                 "is already waiting to join with this thread");
+                                   "Tried to join a non-joinable thread or another thread"
+                                   "is already waiting to join with this thread");
     case ESRCH:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                 "Tried to join with a wrong thread handle");
+                                   "Tried to join with a wrong thread handle");
     default:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                                 << "Unhandled error while calling pthread_join: "
-                                 << pret);
+                                   << "Unhandled error while calling pthread_join: "
+                                   << pret);
     }
 #else
     DWORD ret = WaitForSingleObject(handle_, INFINITE);
@@ -81,18 +81,18 @@ void hStreams_Thread::join()
         break;
     case WAIT_ABANDONED:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                 "A deadlock was detected while calling WaitForSingleObject");
+                                   "A deadlock was detected while calling WaitForSingleObject");
     case WAIT_TIMEOUT:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                 "WaitForSingleObject time out reached.");
+                                   "WaitForSingleObject time out reached.");
     case WAIT_FAILED:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                                 << "WaitForSingleObject has failed. GetLastError return: "
-                                 << StringBuilder::hex(GetLastError()));
+                                   << "WaitForSingleObject has failed. GetLastError return: "
+                                   << StringBuilder::hex(GetLastError()));
     default:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                                 << "Unhandled error while calling WaitForSingleObject: "
-                                 << ret);
+                                   << "Unhandled error while calling WaitForSingleObject: "
+                                   << ret);
     }
 #endif
 }
@@ -106,15 +106,15 @@ hStreams_CondVar::hStreams_CondVar()
         break;
     case ENOMEM:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_MEMORY,
-                                 "Not enough resources to initialize the conditional variable");
+                                   "Not enough resources to initialize the conditional variable");
     case EAGAIN:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_RESOURCE_EXHAUSTED,
-                                 "The operating system ran out of resources while trying to"
-                                 "initialize the conditional variable");
+                                   "The operating system ran out of resources while trying to"
+                                   "initialize the conditional variable");
     default:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                                 << "Unhandled error while calling pthread_cond_init: "
-                                 << pret);
+                                   << "Unhandled error while calling pthread_cond_init: "
+                                   << pret);
     }
 #else
     InitializeConditionVariable(&cond_var_);
@@ -132,14 +132,14 @@ hStreams_CondVar::~hStreams_CondVar()
             break;
         case EBUSY:
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                     "Trying to destroy a conditional variable while it is being used");
+                                       "Trying to destroy a conditional variable while it is being used");
         case EINVAL:
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                     "Trying to destroy an invalid conditional variable");
+                                       "Trying to destroy an invalid conditional variable");
         default:
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                                     << "Unhandled error while calling pthread_cond_destroy: "
-                                     << pret);
+                                       << "Unhandled error while calling pthread_cond_destroy: "
+                                       << pret);
         }
     } catch (...) {
         hStreams_handle_exception();
@@ -156,11 +156,11 @@ void hStreams_CondVar::signal()
         break;
     case EINVAL:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                 "Trying to signal an unitialised condition variable");
+                                   "Trying to signal an unitialised condition variable");
     default:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                                 << "Unhandled error while calling pthread_cond_signal: "
-                                 << pret);
+                                   << "Unhandled error while calling pthread_cond_signal: "
+                                   << pret);
     }
 #else
     WakeConditionVariable(&cond_var_);
@@ -177,14 +177,14 @@ void hStreams_CondVar::wait(hStreams_Lock &mutex, std::function<bool()> const &p
             break;
         case EINVAL:
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                     "Invalid handle passed to pthread_cond_wait()");
+                                       "Invalid handle passed to pthread_cond_wait()");
         case EPERM:
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                     "Try to lock a mutex not owned by the current thread");
+                                       "Try to lock a mutex not owned by the current thread");
         default:
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                                     << "Unhandled error while calling pthread_cond_wait: "
-                                     << pret);
+                                       << "Unhandled error while calling pthread_cond_wait: "
+                                       << pret);
         }
     }
 #else
@@ -192,8 +192,8 @@ void hStreams_CondVar::wait(hStreams_Lock &mutex, std::function<bool()> const &p
         BOOL res = SleepConditionVariableCS(&cond_var_, (LPCRITICAL_SECTION) mutex.mPrivateData, INFINITE);
         if (!res) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                                     << "SleepConditionVariableCS has failed. GetLastError return: "
-                                     << StringBuilder::hex(GetLastError()));
+                                       << "SleepConditionVariableCS has failed. GetLastError return: "
+                                       << StringBuilder::hex(GetLastError()));
         }
     }
 #endif

@@ -15,7 +15,8 @@
 #include "hStreams_common.h"
 #include "hStreams_internal.h"
 
-namespace {
+namespace
+{
 const char *hStreamsResultNames[] = {
     "HSTR_RESULT_SUCCESS",
     "HSTR_RESULT_REMOTE_ERROR",
@@ -51,16 +52,16 @@ HSTR_STATIC_ASSERT(
 
 
 HSTR_EXPORT_IN_VERSION(
-        const char *,
-        hStreams_ResultGetName,
-        HSTREAMS_1.0)(HSTR_RESULT n)
+    const char *,
+    hStreams_ResultGetName,
+    HSTREAMS_1.0)(HSTR_RESULT n)
 {
     return hStreams_ResultGetName(n);
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        const char *,
-        hStreams_ResultGetName)(HSTR_RESULT n)
+    const char *,
+    hStreams_ResultGetName)(HSTR_RESULT n)
 {
     if (n >= 0 && n < HSTR_RESULT_SIZE) {
         return hStreamsResultNames[n];

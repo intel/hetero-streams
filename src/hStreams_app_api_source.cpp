@@ -25,12 +25,12 @@
 
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_init_domains_in_version)(
-    uint32_t     in_NumLogDomains,
-    uint32_t    *in_pStreamsPerDomain,
-    uint32_t     in_LogStreamOversubscription,
-    const char  *in_InterfaceVersion)
+    HSTR_RESULT,
+    hStreams_app_init_domains_in_version)(
+        uint32_t     in_NumLogDomains,
+        uint32_t    *in_pStreamsPerDomain,
+        uint32_t     in_LogStreamOversubscription,
+        const char  *in_InterfaceVersion)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -55,12 +55,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
  * hStreams_app_init_domains() is now an inline function in the header.
  */
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_init_domains,
-        HSTREAMS_1.0)(
-    uint32_t     in_NumLogDomains,
-    uint32_t    *in_pStreamsPerDomain,
-    uint32_t     in_LogStreamOversubscription)
+    HSTR_RESULT,
+    hStreams_app_init_domains,
+    HSTREAMS_1.0)(
+        uint32_t     in_NumLogDomains,
+        uint32_t    *in_pStreamsPerDomain,
+        uint32_t     in_LogStreamOversubscription)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -81,11 +81,11 @@ HSTR_EXPORT_IN_VERSION(
  * Implements the external symbol hStreams_app_init_in_version
  */
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_init_in_version)(
-    uint32_t     in_StreamsPerDomain,
-    uint32_t     in_LogStreamOversubscription,
-    const char  *in_InterfaceVersion)
+    HSTR_RESULT,
+    hStreams_app_init_in_version)(
+        uint32_t     in_StreamsPerDomain,
+        uint32_t     in_LogStreamOversubscription,
+        const char  *in_InterfaceVersion)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -94,7 +94,7 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG_STR(in_InterfaceVersion);
 
         detail::app_init_in_version_impl_throw(
-            in_StreamsPerDomain, in_LogStreamOversubscription,in_InterfaceVersion);
+            in_StreamsPerDomain, in_LogStreamOversubscription, in_InterfaceVersion);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -108,11 +108,11 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
  * hStreams_app_init() is now an inline function in the header.
  */
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_init,
-        HSTREAMS_1.0)(
-    uint32_t     in_StreamsPerDomain,
-    uint32_t     in_LogStreamOversubscription)
+    HSTR_RESULT,
+    hStreams_app_init,
+    HSTREAMS_1.0)(
+        uint32_t     in_StreamsPerDomain,
+        uint32_t     in_LogStreamOversubscription)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -129,9 +129,9 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_fini,
-        HSTREAMS_1.0)()
+    HSTR_RESULT,
+    hStreams_app_fini,
+    HSTREAMS_1.0)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -142,8 +142,8 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_fini)()
+    HSTR_RESULT,
+    hStreams_app_fini)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -154,11 +154,11 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_create_buf,
-        HSTREAMS_1.0)(
-    void *in_BufAddr,
-    const uint64_t in_NumBytes)
+    HSTR_RESULT,
+    hStreams_app_create_buf,
+    HSTREAMS_1.0)(
+        void *in_BufAddr,
+        const uint64_t in_NumBytes)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -166,19 +166,19 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(in_NumBytes);
 
         HSTR_RETURN(hStreams_Alloc1D(
-                in_BufAddr,
-                in_NumBytes
-            ));
+                        in_BufAddr,
+                        in_NumBytes
+                    ));
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
     }
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_create_buf)(
-    void *in_BufAddr,
-    const uint64_t in_NumBytes)
+    HSTR_RESULT,
+    hStreams_app_create_buf)(
+        void *in_BufAddr,
+        const uint64_t in_NumBytes)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -186,24 +186,24 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(in_NumBytes);
 
         HSTR_RETURN(hStreams_Alloc1D(
-                in_BufAddr,
-                in_NumBytes
-            ));
+                        in_BufAddr,
+                        in_NumBytes
+                    ));
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
     }
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_xfer_memory,
-        HSTREAMS_1.0)(
-    void               *in_pReadAddr,
-    void               *in_pWriteAddr,
-    uint64_t            in_NumBytes,
-    HSTR_LOG_STR        in_LogStreamID,
-    HSTR_XFER_DIRECTION in_XferDirection,
-    HSTR_EVENT         *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_xfer_memory,
+    HSTREAMS_1.0)(
+        void               *in_pReadAddr,
+        void               *in_pWriteAddr,
+        uint64_t            in_NumBytes,
+        HSTR_LOG_STR        in_LogStreamID,
+        HSTR_XFER_DIRECTION in_XferDirection,
+        HSTR_EVENT         *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -229,15 +229,15 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_xfer_memory,
-        HSTREAMS_2.0)(
-    HSTR_LOG_STR        in_LogStreamID,
-    void               *in_pWriteAddr,
-    void               *in_pReadAddr,
-    uint64_t            in_NumBytes,
-    HSTR_XFER_DIRECTION in_XferDirection,
-    HSTR_EVENT         *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_xfer_memory,
+    HSTREAMS_2.0)(
+        HSTR_LOG_STR        in_LogStreamID,
+        void               *in_pWriteAddr,
+        void               *in_pReadAddr,
+        uint64_t            in_NumBytes,
+        HSTR_XFER_DIRECTION in_XferDirection,
+        HSTR_EVENT         *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -263,14 +263,14 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_xfer_memory)(
-    HSTR_LOG_STR        in_LogStreamID,
-    void               *in_pWriteAddr,
-    void               *in_pReadAddr,
-    uint64_t            in_NumBytes,
-    HSTR_XFER_DIRECTION in_XferDirection,
-    HSTR_EVENT         *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_xfer_memory)(
+        HSTR_LOG_STR        in_LogStreamID,
+        void               *in_pWriteAddr,
+        void               *in_pReadAddr,
+        uint64_t            in_NumBytes,
+        HSTR_XFER_DIRECTION in_XferDirection,
+        HSTR_EVENT         *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -296,18 +296,18 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_invoke,
-        HSTREAMS_1.0)(
-    HSTR_LOG_STR   in_LogStreamID,
-    const char    *in_pFuncName,
-    uint32_t       in_NumScalarArgs,
-    uint32_t       in_NumHeapArgs,
-    uint64_t      *in_pArgs,
-    void          *out_pReturnValue,
-    uint32_t       in_ReturnValueSize,
-    HSTR_EVENT    *out_pEvent
-)
+    HSTR_RESULT,
+    hStreams_app_invoke,
+    HSTREAMS_1.0)(
+        HSTR_LOG_STR   in_LogStreamID,
+        const char    *in_pFuncName,
+        uint32_t       in_NumScalarArgs,
+        uint32_t       in_NumHeapArgs,
+        uint64_t      *in_pArgs,
+        void          *out_pReturnValue,
+        uint32_t       in_ReturnValueSize,
+        HSTR_EVENT    *out_pEvent
+    )
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -336,18 +336,18 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_invoke,
-        HSTREAMS_2.0)(
-    HSTR_LOG_STR   in_LogStreamID,
-    const char    *in_pFuncName,
-    uint32_t       in_NumScalarArgs,
-    uint32_t       in_NumHeapArgs,
-    uint64_t      *in_pArgs,
-    HSTR_EVENT    *out_pEvent,
-    void          *out_pReturnValue,
-    uint16_t       in_ReturnValueSize
-)
+    HSTR_RESULT,
+    hStreams_app_invoke,
+    HSTREAMS_2.0)(
+        HSTR_LOG_STR   in_LogStreamID,
+        const char    *in_pFuncName,
+        uint32_t       in_NumScalarArgs,
+        uint32_t       in_NumHeapArgs,
+        uint64_t      *in_pArgs,
+        HSTR_EVENT    *out_pEvent,
+        void          *out_pReturnValue,
+        uint16_t       in_ReturnValueSize
+    )
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -376,17 +376,17 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_invoke)(
-    HSTR_LOG_STR   in_LogStreamID,
-    const char    *in_pFuncName,
-    uint32_t       in_NumScalarArgs,
-    uint32_t       in_NumHeapArgs,
-    uint64_t      *in_pArgs,
-    HSTR_EVENT    *out_pEvent,
-    void          *out_pReturnValue,
-    uint16_t       in_ReturnValueSize
-)
+    HSTR_RESULT,
+    hStreams_app_invoke)(
+        HSTR_LOG_STR   in_LogStreamID,
+        const char    *in_pFuncName,
+        uint32_t       in_NumScalarArgs,
+        uint32_t       in_NumHeapArgs,
+        uint64_t      *in_pArgs,
+        HSTR_EVENT    *out_pEvent,
+        void          *out_pReturnValue,
+        uint16_t       in_ReturnValueSize
+    )
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -415,9 +415,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_stream_sync,
-        HSTREAMS_1.0)
+    HSTR_RESULT,
+    hStreams_app_stream_sync,
+    HSTREAMS_1.0)
 (HSTR_LOG_STR in_LogStreamID)
 {
     try {
@@ -430,8 +430,8 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_stream_sync)
+    HSTR_RESULT,
+    hStreams_app_stream_sync)
 (HSTR_LOG_STR in_LogStreamID)
 {
     try {
@@ -444,9 +444,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_thread_sync,
-        HSTREAMS_1.0)()
+    HSTR_RESULT,
+    hStreams_app_thread_sync,
+    HSTREAMS_1.0)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -457,8 +457,8 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_thread_sync)()
+    HSTR_RESULT,
+    hStreams_app_thread_sync)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -469,11 +469,11 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_event_wait,
-        HSTREAMS_1.0)(
-    uint32_t           in_NumEvents,
-    HSTR_EVENT        *in_pEvents)
+    HSTR_RESULT,
+    hStreams_app_event_wait,
+    HSTREAMS_1.0)(
+        uint32_t           in_NumEvents,
+        HSTR_EVENT        *in_pEvents)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -487,10 +487,10 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_event_wait)(
-    uint32_t           in_NumEvents,
-    HSTR_EVENT        *in_pEvents)
+    HSTR_RESULT,
+    hStreams_app_event_wait)(
+        uint32_t           in_NumEvents,
+        HSTR_EVENT        *in_pEvents)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -504,15 +504,15 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_event_wait_in_stream,
-        HSTREAMS_1.0)(
-    HSTR_LOG_STR       in_LogStreamID,
-    uint32_t           in_NumEvents,
-    HSTR_EVENT        *in_pEvents,
-    int32_t            in_NumAddresses,
-    void             **in_pAddresses,
-    HSTR_EVENT         *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_event_wait_in_stream,
+    HSTREAMS_1.0)(
+        HSTR_LOG_STR       in_LogStreamID,
+        uint32_t           in_NumEvents,
+        HSTR_EVENT        *in_pEvents,
+        int32_t            in_NumAddresses,
+        void             **in_pAddresses,
+        HSTR_EVENT         *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -524,25 +524,25 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
 
         HSTR_RETURN(hStreams_EventStreamWait(in_LogStreamID,
-            in_NumEvents,
-            in_pEvents,
-            in_NumAddresses,
-            in_pAddresses,
-            out_pEvent));
+                                             in_NumEvents,
+                                             in_pEvents,
+                                             in_NumAddresses,
+                                             in_pAddresses,
+                                             out_pEvent));
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
     }
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_event_wait_in_stream)(
-    HSTR_LOG_STR       in_LogStreamID,
-    uint32_t           in_NumEvents,
-    HSTR_EVENT        *in_pEvents,
-    int32_t            in_NumAddresses,
-    void             **in_pAddresses,
-    HSTR_EVENT         *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_event_wait_in_stream)(
+        HSTR_LOG_STR       in_LogStreamID,
+        uint32_t           in_NumEvents,
+        HSTR_EVENT        *in_pEvents,
+        int32_t            in_NumAddresses,
+        void             **in_pAddresses,
+        HSTR_EVENT         *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -554,25 +554,25 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
 
         HSTR_RETURN(hStreams_EventStreamWait(in_LogStreamID,
-            in_NumEvents,
-            in_pEvents,
-            in_NumAddresses,
-            in_pAddresses,
-            out_pEvent));
+                                             in_NumEvents,
+                                             in_pEvents,
+                                             in_NumAddresses,
+                                             in_pAddresses,
+                                             out_pEvent));
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
     }
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_memset,
-        HSTREAMS_1.0)(
-    void            *in_Dest,
-    int              in_Val,
-    uint64_t         in_NumBytes,
-    HSTR_LOG_STR     in_LogStreamID,
-    HSTR_EVENT      *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_memset,
+    HSTREAMS_1.0)(
+        void            *in_Dest,
+        int              in_Val,
+        uint64_t         in_NumBytes,
+        HSTR_LOG_STR     in_LogStreamID,
+        HSTR_EVENT      *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -582,7 +582,7 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(in_LogStreamID);
         HSTR_TRACE_API_ARG(out_pEvent);
         detail::app_memset_impl_throw(in_LogStreamID, in_Dest, in_Val, in_NumBytes,
-                out_pEvent);
+                                      out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -590,14 +590,14 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_memset,
-        HSTREAMS_2.0)(
-    HSTR_LOG_STR     in_LogStreamID,
-    void            *in_pWriteAddr,
-    int              in_Val,
-    uint64_t         in_NumBytes,
-    HSTR_EVENT      *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_memset,
+    HSTREAMS_2.0)(
+        HSTR_LOG_STR     in_LogStreamID,
+        void            *in_pWriteAddr,
+        int              in_Val,
+        uint64_t         in_NumBytes,
+        HSTR_EVENT      *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -607,7 +607,7 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(in_NumBytes);
         HSTR_TRACE_API_ARG(out_pEvent);
         detail::app_memset_impl_throw(in_LogStreamID, in_pWriteAddr, in_Val, in_NumBytes,
-                out_pEvent);
+                                      out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -615,13 +615,13 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_memset)(
-    HSTR_LOG_STR     in_LogStreamID,
-    void            *in_pWriteAddr,
-    int              in_Val,
-    uint64_t         in_NumBytes,
-    HSTR_EVENT      *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_memset)(
+        HSTR_LOG_STR     in_LogStreamID,
+        void            *in_pWriteAddr,
+        int              in_Val,
+        uint64_t         in_NumBytes,
+        HSTR_EVENT      *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -631,7 +631,7 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(in_NumBytes);
         HSTR_TRACE_API_ARG(out_pEvent);
         detail::app_memset_impl_throw(in_LogStreamID, in_pWriteAddr, in_Val, in_NumBytes,
-                out_pEvent);
+                                      out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -639,14 +639,14 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_memcpy,
-        HSTREAMS_1.0)(
-    void        *in_Src,
-    void        *in_Dest,
-    uint64_t     in_NumBytes,
-    HSTR_LOG_STR in_LogStreamID,
-    HSTR_EVENT  *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_memcpy,
+    HSTREAMS_1.0)(
+        void        *in_Src,
+        void        *in_Dest,
+        uint64_t     in_NumBytes,
+        HSTR_LOG_STR in_LogStreamID,
+        HSTR_EVENT  *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -656,7 +656,7 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(in_LogStreamID);
         HSTR_TRACE_API_ARG(out_pEvent);
         detail::app_memcpy_impl_throw(in_LogStreamID, in_Src, in_Dest, in_NumBytes,
-                out_pEvent);
+                                      out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -664,14 +664,14 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_memcpy,
-        HSTREAMS_2.0)(
-    HSTR_LOG_STR in_LogStreamID,
-    void        *in_pReadAddr,
-    void        *in_pWriteAddr,
-    uint64_t     in_NumBytes,
-    HSTR_EVENT  *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_memcpy,
+    HSTREAMS_2.0)(
+        HSTR_LOG_STR in_LogStreamID,
+        void        *in_pReadAddr,
+        void        *in_pWriteAddr,
+        uint64_t     in_NumBytes,
+        HSTR_EVENT  *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -681,7 +681,7 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(in_NumBytes);
         HSTR_TRACE_API_ARG(out_pEvent);
         detail::app_memcpy_impl_throw(in_LogStreamID, in_pReadAddr, in_pWriteAddr, in_NumBytes,
-                out_pEvent);
+                                      out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -689,13 +689,13 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_memcpy)(
-    HSTR_LOG_STR in_LogStreamID,
-    void        *in_pReadAddr,
-    void        *in_pWriteAddr,
-    uint64_t     in_NumBytes,
-    HSTR_EVENT  *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_memcpy)(
+        HSTR_LOG_STR in_LogStreamID,
+        void        *in_pReadAddr,
+        void        *in_pWriteAddr,
+        uint64_t     in_NumBytes,
+        HSTR_EVENT  *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -705,7 +705,7 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(in_NumBytes);
         HSTR_TRACE_API_ARG(out_pEvent);
         detail::app_memcpy_impl_throw(in_LogStreamID, in_pReadAddr, in_pWriteAddr, in_NumBytes,
-                out_pEvent);
+                                      out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -713,14 +713,14 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_sgemm,
-        HSTREAMS_1.0)(
-    const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
-    const int32_t M, const int32_t N, const int32_t K, const float alpha,
-    const float *A, const int32_t lda,
-    const float *B, const int32_t ldb, const float beta,
-    float *C, const int32_t ldc, const HSTR_LOG_STR LogStream, HSTR_EVENT    *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_sgemm,
+    HSTREAMS_1.0)(
+        const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
+        const int32_t M, const int32_t N, const int32_t K, const float alpha,
+        const float *A, const int32_t lda,
+        const float *B, const int32_t ldb, const float beta,
+        float *C, const int32_t ldc, const HSTR_LOG_STR LogStream, HSTR_EVENT    *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -742,12 +742,12 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
 
         detail::app_sgemm_impl_throw(
-                   LogStream,
-                   Order, TransA, TransB,
-                   M, N, K, alpha,
-                   A, lda,
-                   B, ldb, beta,
-                   C, ldc, out_pEvent);
+            LogStream,
+            Order, TransA, TransB,
+            M, N, K, alpha,
+            A, lda,
+            B, ldb, beta,
+            C, ldc, out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -755,15 +755,15 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_sgemm,
-        HSTREAMS_2.0)(
-    HSTR_LOG_STR LogStream,
-    const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
-    const int32_t M, const int32_t N, const int32_t K, const float alpha,
-    const float *A, const int32_t lda,
-    const float *B, const int32_t ldb, const float beta,
-    float *C, const int32_t ldc, HSTR_EVENT    *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_sgemm,
+    HSTREAMS_2.0)(
+        HSTR_LOG_STR LogStream,
+        const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
+        const int32_t M, const int32_t N, const int32_t K, const float alpha,
+        const float *A, const int32_t lda,
+        const float *B, const int32_t ldb, const float beta,
+        float *C, const int32_t ldc, HSTR_EVENT    *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -785,12 +785,12 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
 
         detail::app_sgemm_impl_throw(
-                   LogStream,
-                   Order, TransA, TransB,
-                   M, N, K, alpha,
-                   A, lda,
-                   B, ldb, beta,
-                   C, ldc, out_pEvent);
+            LogStream,
+            Order, TransA, TransB,
+            M, N, K, alpha,
+            A, lda,
+            B, ldb, beta,
+            C, ldc, out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -798,14 +798,14 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_sgemm)(
-    HSTR_LOG_STR LogStream,
-    const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
-    const int64_t M, const int64_t N, const int64_t K, const float alpha,
-    const float *A, const int64_t lda,
-    const float *B, const int64_t ldb, const float beta,
-    float *C, const int64_t ldc, HSTR_EVENT    *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_sgemm)(
+        HSTR_LOG_STR LogStream,
+        const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
+        const int64_t M, const int64_t N, const int64_t K, const float alpha,
+        const float *A, const int64_t lda,
+        const float *B, const int64_t ldb, const float beta,
+        float *C, const int64_t ldc, HSTR_EVENT    *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -827,12 +827,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
 
         detail::app_sgemm_impl_throw(
-                   LogStream,
-                   Order, TransA, TransB,
-                   M, N, K, alpha,
-                   A, lda,
-                   B, ldb, beta,
-                   C, ldc, out_pEvent);
+            LogStream,
+            Order, TransA, TransB,
+            M, N, K, alpha,
+            A, lda,
+            B, ldb, beta,
+            C, ldc, out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -840,14 +840,14 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_dgemm,
-        HSTREAMS_1.0)(
-    const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
-    const int32_t M, const int32_t N, const int32_t K, const double alpha,
-    const double *A, const int32_t lda,
-    const double *B, const int32_t ldb, const double beta,
-    double *C, const int32_t ldc, const HSTR_LOG_STR LogStream, HSTR_EVENT    *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_dgemm,
+    HSTREAMS_1.0)(
+        const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
+        const int32_t M, const int32_t N, const int32_t K, const double alpha,
+        const double *A, const int32_t lda,
+        const double *B, const int32_t ldb, const double beta,
+        double *C, const int32_t ldc, const HSTR_LOG_STR LogStream, HSTR_EVENT    *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -869,12 +869,12 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
 
         detail::app_dgemm_impl_throw(
-                   LogStream,
-                   Order, TransA, TransB,
-                   M, N, K, alpha,
-                   A, lda,
-                   B, ldb, beta,
-                   C, ldc, out_pEvent);
+            LogStream,
+            Order, TransA, TransB,
+            M, N, K, alpha,
+            A, lda,
+            B, ldb, beta,
+            C, ldc, out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -882,15 +882,15 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_dgemm,
-        HSTREAMS_2.0)(
-    HSTR_LOG_STR LogStream,
-    const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
-    const int32_t M, const int32_t N, const int32_t K, const double alpha,
-    const double *A, const int32_t lda,
-    const double *B, const int32_t ldb, const double beta,
-    double *C, const int32_t ldc, HSTR_EVENT    *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_dgemm,
+    HSTREAMS_2.0)(
+        HSTR_LOG_STR LogStream,
+        const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
+        const int32_t M, const int32_t N, const int32_t K, const double alpha,
+        const double *A, const int32_t lda,
+        const double *B, const int32_t ldb, const double beta,
+        double *C, const int32_t ldc, HSTR_EVENT    *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -912,12 +912,12 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
 
         detail::app_dgemm_impl_throw(
-                   LogStream,
-                   Order, TransA, TransB,
-                   M, N, K, alpha,
-                   A, lda,
-                   B, ldb, beta,
-                   C, ldc, out_pEvent);
+            LogStream,
+            Order, TransA, TransB,
+            M, N, K, alpha,
+            A, lda,
+            B, ldb, beta,
+            C, ldc, out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -925,14 +925,14 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_dgemm)(
-    HSTR_LOG_STR LogStream,
-    const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
-    const int64_t M, const int64_t N, const int64_t K, const double alpha,
-    const double *A, const int64_t lda,
-    const double *B, const int64_t ldb, const double beta,
-    double *C, const int64_t ldc, HSTR_EVENT    *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_dgemm)(
+        HSTR_LOG_STR LogStream,
+        const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
+        const int64_t M, const int64_t N, const int64_t K, const double alpha,
+        const double *A, const int64_t lda,
+        const double *B, const int64_t ldb, const double beta,
+        double *C, const int64_t ldc, HSTR_EVENT    *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -954,12 +954,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
 
         detail::app_dgemm_impl_throw(
-                   LogStream,
-                   Order, TransA, TransB,
-                   M, N, K, alpha,
-                   A, lda,
-                   B, ldb, beta,
-                   C, ldc, out_pEvent);
+            LogStream,
+            Order, TransA, TransB,
+            M, N, K, alpha,
+            A, lda,
+            B, ldb, beta,
+            C, ldc, out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -967,14 +967,14 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_cgemm,
-        HSTREAMS_1.0)(
-    const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
-    const int32_t M, const int32_t N, const int32_t K, const void *alpha,
-    const void *A, const int32_t lda,
-    const void *B, const int32_t ldb, const void *beta,
-    void *C, const int32_t ldc, const HSTR_LOG_STR LogStream, HSTR_EVENT    *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_cgemm,
+    HSTREAMS_1.0)(
+        const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
+        const int32_t M, const int32_t N, const int32_t K, const void *alpha,
+        const void *A, const int32_t lda,
+        const void *B, const int32_t ldb, const void *beta,
+        void *C, const int32_t ldc, const HSTR_LOG_STR LogStream, HSTR_EVENT    *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -996,12 +996,12 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
 
         detail::app_cgemm_impl_throw(
-                   LogStream,
-                   Order, TransA, TransB,
-                   M, N, K, alpha,
-                   A, lda,
-                   B, ldb, beta,
-                   C, ldc, out_pEvent);
+            LogStream,
+            Order, TransA, TransB,
+            M, N, K, alpha,
+            A, lda,
+            B, ldb, beta,
+            C, ldc, out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1009,15 +1009,15 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_cgemm,
-        HSTREAMS_2.0)(
-    HSTR_LOG_STR LogStream,
-    const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
-    const int32_t M, const int32_t N, const int32_t K, const void *alpha,
-    const void *A, const int32_t lda,
-    const void *B, const int32_t ldb, const void *beta,
-    void *C, const int32_t ldc, HSTR_EVENT    *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_cgemm,
+    HSTREAMS_2.0)(
+        HSTR_LOG_STR LogStream,
+        const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
+        const int32_t M, const int32_t N, const int32_t K, const void *alpha,
+        const void *A, const int32_t lda,
+        const void *B, const int32_t ldb, const void *beta,
+        void *C, const int32_t ldc, HSTR_EVENT    *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1039,12 +1039,12 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
 
         detail::app_cgemm_impl_throw(
-                   LogStream,
-                   Order, TransA, TransB,
-                   M, N, K, alpha,
-                   A, lda,
-                   B, ldb, beta,
-                   C, ldc, out_pEvent);
+            LogStream,
+            Order, TransA, TransB,
+            M, N, K, alpha,
+            A, lda,
+            B, ldb, beta,
+            C, ldc, out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1052,14 +1052,14 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_cgemm)(
-    HSTR_LOG_STR LogStream,
-    const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
-    const int64_t M, const int64_t N, const int64_t K, const void *alpha,
-    const void *A, const int64_t lda,
-    const void *B, const int64_t ldb, const void *beta,
-    void *C, const int64_t ldc, HSTR_EVENT    *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_cgemm)(
+        HSTR_LOG_STR LogStream,
+        const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
+        const int64_t M, const int64_t N, const int64_t K, const void *alpha,
+        const void *A, const int64_t lda,
+        const void *B, const int64_t ldb, const void *beta,
+        void *C, const int64_t ldc, HSTR_EVENT    *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1081,12 +1081,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
 
         detail::app_cgemm_impl_throw(
-                   LogStream,
-                   Order, TransA, TransB,
-                   M, N, K, alpha,
-                   A, lda,
-                   B, ldb, beta,
-                   C, ldc, out_pEvent);
+            LogStream,
+            Order, TransA, TransB,
+            M, N, K, alpha,
+            A, lda,
+            B, ldb, beta,
+            C, ldc, out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1095,14 +1095,14 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_zgemm,
-        HSTREAMS_1.0)(
-    const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
-    const int32_t M, const int32_t N, const int32_t K, const void *alpha,
-    const void *A, const int32_t lda,
-    const void *B, const int32_t ldb, const void *beta,
-    void *C, const int32_t ldc, const HSTR_LOG_STR LogStream, HSTR_EVENT    *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_zgemm,
+    HSTREAMS_1.0)(
+        const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
+        const int32_t M, const int32_t N, const int32_t K, const void *alpha,
+        const void *A, const int32_t lda,
+        const void *B, const int32_t ldb, const void *beta,
+        void *C, const int32_t ldc, const HSTR_LOG_STR LogStream, HSTR_EVENT    *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1124,12 +1124,12 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
 
         detail::app_zgemm_impl_throw(
-                   LogStream,
-                   Order, TransA, TransB,
-                   M, N, K, alpha,
-                   A, lda,
-                   B, ldb, beta,
-                   C, ldc, out_pEvent);
+            LogStream,
+            Order, TransA, TransB,
+            M, N, K, alpha,
+            A, lda,
+            B, ldb, beta,
+            C, ldc, out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1137,15 +1137,15 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_app_zgemm,
-        HSTREAMS_2.0)(
-    HSTR_LOG_STR LogStream,
-    const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
-    const int32_t M, const int32_t N, const int32_t K, const void *alpha,
-    const void *A, const int32_t lda,
-    const void *B, const int32_t ldb, const void *beta,
-    void *C, const int32_t ldc, HSTR_EVENT    *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_zgemm,
+    HSTREAMS_2.0)(
+        HSTR_LOG_STR LogStream,
+        const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
+        const int32_t M, const int32_t N, const int32_t K, const void *alpha,
+        const void *A, const int32_t lda,
+        const void *B, const int32_t ldb, const void *beta,
+        void *C, const int32_t ldc, HSTR_EVENT    *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1167,12 +1167,12 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
 
         detail::app_zgemm_impl_throw(
-                   LogStream,
-                   Order, TransA, TransB,
-                   M, N, K, alpha,
-                   A, lda,
-                   B, ldb, beta,
-                   C, ldc, out_pEvent);
+            LogStream,
+            Order, TransA, TransB,
+            M, N, K, alpha,
+            A, lda,
+            B, ldb, beta,
+            C, ldc, out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1180,14 +1180,14 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_app_zgemm)(
-    HSTR_LOG_STR LogStream,
-    const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
-    const int64_t M, const int64_t N, const int64_t K, const void *alpha,
-    const void *A, const int64_t lda,
-    const void *B, const int64_t ldb, const void *beta,
-    void *C, const int64_t ldc, HSTR_EVENT    *out_pEvent)
+    HSTR_RESULT,
+    hStreams_app_zgemm)(
+        HSTR_LOG_STR LogStream,
+        const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA, const CBLAS_TRANSPOSE TransB,
+        const int64_t M, const int64_t N, const int64_t K, const void *alpha,
+        const void *A, const int64_t lda,
+        const void *B, const int64_t ldb, const void *beta,
+        void *C, const int64_t ldc, HSTR_EVENT    *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1209,12 +1209,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
 
         detail::app_zgemm_impl_throw(
-                   LogStream,
-                   Order, TransA, TransB,
-                   M, N, K, alpha,
-                   A, lda,
-                   B, ldb, beta,
-                   C, ldc, out_pEvent);
+            LogStream,
+            Order, TransA, TransB,
+            M, N, K, alpha,
+            A, lda,
+            B, ldb, beta,
+            C, ldc, out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());

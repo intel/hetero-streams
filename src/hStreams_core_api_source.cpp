@@ -26,9 +26,9 @@
 #include "hStreams_Logger.h"
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_Init,
-        HSTREAMS_1.0)()
+    HSTR_RESULT,
+    hStreams_Init,
+    HSTREAMS_1.0)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -41,9 +41,9 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_InitInVersion)(
-    const char* interface_version)
+    HSTR_RESULT,
+    hStreams_InitInVersion)(
+        const char *interface_version)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -57,9 +57,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_IsInitialized,
-        HSTREAMS_1.0)()
+    HSTR_RESULT,
+    hStreams_IsInitialized,
+    HSTREAMS_1.0)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -71,8 +71,8 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_IsInitialized)()
+    HSTR_RESULT,
+    hStreams_IsInitialized)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -84,9 +84,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_Fini,
-        HSTREAMS_1.0)()
+    HSTR_RESULT,
+    hStreams_Fini,
+    HSTREAMS_1.0)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -98,8 +98,8 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_Fini)()
+    HSTR_RESULT,
+    hStreams_Fini)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -111,12 +111,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetNumPhysDomains,
-        HSTREAMS_1.0)(
-    uint32_t          *out_pNumPhysDomains,
-    uint32_t          *out_pNumActivePhysDomains,
-    bool              *out_pHomogeneous)
+    HSTR_RESULT,
+    hStreams_GetNumPhysDomains,
+    HSTREAMS_1.0)(
+        uint32_t          *out_pNumPhysDomains,
+        uint32_t          *out_pNumActivePhysDomains,
+        bool              *out_pHomogeneous)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -126,7 +126,7 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::GetNumPhysDomains_impl_throw(out_pNumPhysDomains,
-                out_pNumActivePhysDomains, out_pHomogeneous);
+                                             out_pNumActivePhysDomains, out_pHomogeneous);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -134,11 +134,11 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetNumPhysDomains)(
-    uint32_t          *out_pNumPhysDomains,
-    uint32_t          *out_pNumActivePhysDomains,
-    bool              *out_pHomogeneous)
+    HSTR_RESULT,
+    hStreams_GetNumPhysDomains)(
+        uint32_t          *out_pNumPhysDomains,
+        uint32_t          *out_pNumActivePhysDomains,
+        bool              *out_pHomogeneous)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -148,7 +148,7 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::GetNumPhysDomains_impl_throw(out_pNumPhysDomains,
-                out_pNumActivePhysDomains, out_pHomogeneous);
+                                             out_pNumActivePhysDomains, out_pHomogeneous);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -156,17 +156,17 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetPhysDomainDetails,
-        HSTREAMS_1.0)(
-    HSTR_PHYS_DOM       in_PhysDomain,
-    uint32_t           *out_pNumThreads,
-    HSTR_ISA_TYPE      *out_pISA,
-    uint32_t           *out_pCoreMaxMHz,
-    HSTR_CPU_MASK       out_MaxCPUmask,
-    HSTR_CPU_MASK       out_AvoidCPUmask,
-    uint64_t           *out_pSupportedMemTypes,
-    uint64_t            out_pPhysicalBytesPerMemType[HSTR_MEM_TYPE_SIZE])
+    HSTR_RESULT,
+    hStreams_GetPhysDomainDetails,
+    HSTREAMS_1.0)(
+        HSTR_PHYS_DOM       in_PhysDomain,
+        uint32_t           *out_pNumThreads,
+        HSTR_ISA_TYPE      *out_pISA,
+        uint32_t           *out_pCoreMaxMHz,
+        HSTR_CPU_MASK       out_MaxCPUmask,
+        HSTR_CPU_MASK       out_AvoidCPUmask,
+        uint64_t           *out_pSupportedMemTypes,
+        uint64_t            out_pPhysicalBytesPerMemType[HSTR_MEM_TYPE_SIZE])
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -181,14 +181,14 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::GetPhysDomainDetails_impl_throw(
-                        in_PhysDomain,
-                        out_pNumThreads,
-                        out_pISA,
-                        out_pCoreMaxMHz,
-                        out_MaxCPUmask,
-                        out_AvoidCPUmask,
-                        out_pSupportedMemTypes,
-                        out_pPhysicalBytesPerMemType);
+            in_PhysDomain,
+            out_pNumThreads,
+            out_pISA,
+            out_pCoreMaxMHz,
+            out_MaxCPUmask,
+            out_AvoidCPUmask,
+            out_pSupportedMemTypes,
+            out_pPhysicalBytesPerMemType);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -196,16 +196,16 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetPhysDomainDetails)(
-    HSTR_PHYS_DOM       in_PhysDomain,
-    uint32_t           *out_pNumThreads,
-    HSTR_ISA_TYPE      *out_pISA,
-    uint32_t           *out_pCoreMaxMHz,
-    HSTR_CPU_MASK       out_MaxCPUmask,
-    HSTR_CPU_MASK       out_AvoidCPUmask,
-    uint64_t           *out_pSupportedMemTypes,
-    uint64_t            out_pPhysicalBytesPerMemType[HSTR_MEM_TYPE_SIZE])
+    HSTR_RESULT,
+    hStreams_GetPhysDomainDetails)(
+        HSTR_PHYS_DOM       in_PhysDomain,
+        uint32_t           *out_pNumThreads,
+        HSTR_ISA_TYPE      *out_pISA,
+        uint32_t           *out_pCoreMaxMHz,
+        HSTR_CPU_MASK       out_MaxCPUmask,
+        HSTR_CPU_MASK       out_AvoidCPUmask,
+        uint64_t           *out_pSupportedMemTypes,
+        uint64_t            out_pPhysicalBytesPerMemType[HSTR_MEM_TYPE_SIZE])
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -220,14 +220,14 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::GetPhysDomainDetails_impl_throw(
-                        in_PhysDomain,
-                        out_pNumThreads,
-                        out_pISA,
-                        out_pCoreMaxMHz,
-                        out_MaxCPUmask,
-                        out_AvoidCPUmask,
-                        out_pSupportedMemTypes,
-                        out_pPhysicalBytesPerMemType);
+            in_PhysDomain,
+            out_pNumThreads,
+            out_pISA,
+            out_pCoreMaxMHz,
+            out_MaxCPUmask,
+            out_AvoidCPUmask,
+            out_pSupportedMemTypes,
+            out_pPhysicalBytesPerMemType);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -236,12 +236,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetOversubscriptionLevel,
-        HSTREAMS_1.0)(
-    HSTR_PHYS_DOM   in_PhysDomainID,
-    uint32_t        in_NumThreads,
-    uint32_t       *out_pOversubscriptionArray)
+    HSTR_RESULT,
+    hStreams_GetOversubscriptionLevel,
+    HSTREAMS_1.0)(
+        HSTR_PHYS_DOM   in_PhysDomainID,
+        uint32_t        in_NumThreads,
+        uint32_t       *out_pOversubscriptionArray)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -259,11 +259,11 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetOversubscriptionLevel)(
-    HSTR_PHYS_DOM   in_PhysDomainID,
-    uint32_t        in_NumThreads,
-    uint32_t       *out_pOversubscriptionArray)
+    HSTR_RESULT,
+    hStreams_GetOversubscriptionLevel)(
+        HSTR_PHYS_DOM   in_PhysDomainID,
+        uint32_t        in_NumThreads,
+        uint32_t       *out_pOversubscriptionArray)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -281,11 +281,11 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetAvailable,
-        HSTREAMS_1.0)(
-    HSTR_PHYS_DOM       in_PhysDomainID,
-    HSTR_CPU_MASK       out_AvailableCPUmask)
+    HSTR_RESULT,
+    hStreams_GetAvailable,
+    HSTREAMS_1.0)(
+        HSTR_PHYS_DOM       in_PhysDomainID,
+        HSTR_CPU_MASK       out_AvailableCPUmask)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -294,7 +294,7 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::GetAvailable_impl_throw(in_PhysDomainID,
-                out_AvailableCPUmask);
+                                        out_AvailableCPUmask);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -302,10 +302,10 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetAvailable)(
-    HSTR_PHYS_DOM       in_PhysDomainID,
-    HSTR_CPU_MASK       out_AvailableCPUmask)
+    HSTR_RESULT,
+    hStreams_GetAvailable)(
+        HSTR_PHYS_DOM       in_PhysDomainID,
+        HSTR_CPU_MASK       out_AvailableCPUmask)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -314,7 +314,7 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::GetAvailable_impl_throw(in_PhysDomainID,
-                out_AvailableCPUmask);
+                                        out_AvailableCPUmask);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -322,13 +322,13 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_AddLogDomain,
-        HSTREAMS_1.0)(
-    HSTR_PHYS_DOM      in_PhysDomainID,
-    HSTR_CPU_MASK      in_CPUmask,
-    HSTR_LOG_DOM      *out_pLogDomainID,
-    HSTR_OVERLAP_TYPE *out_pOverlap)
+    HSTR_RESULT,
+    hStreams_AddLogDomain,
+    HSTREAMS_1.0)(
+        HSTR_PHYS_DOM      in_PhysDomainID,
+        HSTR_CPU_MASK      in_CPUmask,
+        HSTR_LOG_DOM      *out_pLogDomainID,
+        HSTR_OVERLAP_TYPE *out_pOverlap)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -339,7 +339,7 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::AddLogDomain_impl_throw(in_PhysDomainID,
-                in_CPUmask, out_pLogDomainID, out_pOverlap);
+                                        in_CPUmask, out_pLogDomainID, out_pOverlap);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -347,12 +347,12 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_AddLogDomain)(
-    HSTR_PHYS_DOM      in_PhysDomainID,
-    HSTR_CPU_MASK      in_CPUmask,
-    HSTR_LOG_DOM      *out_pLogDomainID,
-    HSTR_OVERLAP_TYPE *out_pOverlap)
+    HSTR_RESULT,
+    hStreams_AddLogDomain)(
+        HSTR_PHYS_DOM      in_PhysDomainID,
+        HSTR_CPU_MASK      in_CPUmask,
+        HSTR_LOG_DOM      *out_pLogDomainID,
+        HSTR_OVERLAP_TYPE *out_pOverlap)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -363,7 +363,7 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::AddLogDomain_impl_throw(in_PhysDomainID,
-                in_CPUmask, out_pLogDomainID, out_pOverlap);
+                                        in_CPUmask, out_pLogDomainID, out_pOverlap);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -371,11 +371,11 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_RmLogDomains,
-        HSTREAMS_1.0)(
-    uint32_t       in_NumLogDomains,
-    HSTR_LOG_DOM  *in_pLogDomainIDs)
+    HSTR_RESULT,
+    hStreams_RmLogDomains,
+    HSTREAMS_1.0)(
+        uint32_t       in_NumLogDomains,
+        HSTR_LOG_DOM  *in_pLogDomainIDs)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -390,10 +390,10 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_RmLogDomains)(
-    uint32_t       in_NumLogDomains,
-    HSTR_LOG_DOM  *in_pLogDomainIDs)
+    HSTR_RESULT,
+    hStreams_RmLogDomains)(
+        uint32_t       in_NumLogDomains,
+        HSTR_LOG_DOM  *in_pLogDomainIDs)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -408,11 +408,11 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetNumLogDomains,
-        HSTREAMS_1.0)(
-    HSTR_PHYS_DOM   in_PhysDomainID,
-    uint32_t       *out_pNumLogDomains)
+    HSTR_RESULT,
+    hStreams_GetNumLogDomains,
+    HSTREAMS_1.0)(
+        HSTR_PHYS_DOM   in_PhysDomainID,
+        uint32_t       *out_pNumLogDomains)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -427,10 +427,10 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetNumLogDomains)(
-    HSTR_PHYS_DOM   in_PhysDomainID,
-    uint32_t       *out_pNumLogDomains)
+    HSTR_RESULT,
+    hStreams_GetNumLogDomains)(
+        HSTR_PHYS_DOM   in_PhysDomainID,
+        uint32_t       *out_pNumLogDomains)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -445,12 +445,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetLogDomainIDList,
-        HSTREAMS_1.0)(
-    HSTR_PHYS_DOM   in_PhysDomainID,
-    uint32_t        in_NumLogDomains,
-    HSTR_LOG_DOM   *out_pLogDomainIDs)
+    HSTR_RESULT,
+    hStreams_GetLogDomainIDList,
+    HSTREAMS_1.0)(
+        HSTR_PHYS_DOM   in_PhysDomainID,
+        uint32_t        in_NumLogDomains,
+        HSTR_LOG_DOM   *out_pLogDomainIDs)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -459,7 +459,7 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_pLogDomainIDs);
         HSTR_CORE_API_CALLCOUNTER();
         detail::GetLogDomainIDList_impl_throw(in_PhysDomainID, in_NumLogDomains,
-                out_pLogDomainIDs);
+                                              out_pLogDomainIDs);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -467,11 +467,11 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetLogDomainIDList)(
-    HSTR_PHYS_DOM   in_PhysDomainID,
-    uint32_t        in_NumLogDomains,
-    HSTR_LOG_DOM   *out_pLogDomainIDs)
+    HSTR_RESULT,
+    hStreams_GetLogDomainIDList)(
+        HSTR_PHYS_DOM   in_PhysDomainID,
+        uint32_t        in_NumLogDomains,
+        HSTR_LOG_DOM   *out_pLogDomainIDs)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -480,7 +480,7 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(out_pLogDomainIDs);
         HSTR_CORE_API_CALLCOUNTER();
         detail::GetLogDomainIDList_impl_throw(in_PhysDomainID, in_NumLogDomains,
-                out_pLogDomainIDs);
+                                              out_pLogDomainIDs);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -488,12 +488,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetLogDomainDetails,
-        HSTREAMS_1.0)(
-    HSTR_LOG_DOM   in_LogDomainID,
-    HSTR_PHYS_DOM *out_pPhysDomainID,
-    HSTR_CPU_MASK  out_CPUmask)
+    HSTR_RESULT,
+    hStreams_GetLogDomainDetails,
+    HSTREAMS_1.0)(
+        HSTR_LOG_DOM   in_LogDomainID,
+        HSTR_PHYS_DOM *out_pPhysDomainID,
+        HSTR_CPU_MASK  out_CPUmask)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -503,7 +503,7 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::GetLogDomainDetails_impl_throw(in_LogDomainID, out_pPhysDomainID,
-                out_CPUmask);
+                                               out_CPUmask);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -511,11 +511,11 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetLogDomainDetails)(
-    HSTR_LOG_DOM   in_LogDomainID,
-    HSTR_PHYS_DOM *out_pPhysDomainID,
-    HSTR_CPU_MASK  out_CPUmask)
+    HSTR_RESULT,
+    hStreams_GetLogDomainDetails)(
+        HSTR_LOG_DOM   in_LogDomainID,
+        HSTR_PHYS_DOM *out_pPhysDomainID,
+        HSTR_CPU_MASK  out_CPUmask)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -525,7 +525,7 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::GetLogDomainDetails_impl_throw(in_LogDomainID, out_pPhysDomainID,
-                out_CPUmask);
+                                               out_CPUmask);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -533,12 +533,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_StreamCreate,
-        HSTREAMS_1.0)(
-    HSTR_LOG_STR        in_LogStreamID,
-    HSTR_LOG_DOM        in_LogDomainID,
-    const HSTR_CPU_MASK in_CPUmask)
+    HSTR_RESULT,
+    hStreams_StreamCreate,
+    HSTREAMS_1.0)(
+        HSTR_LOG_STR        in_LogStreamID,
+        HSTR_LOG_DOM        in_LogDomainID,
+        const HSTR_CPU_MASK in_CPUmask)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -548,7 +548,7 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::StreamCreate_impl_throw(in_LogStreamID, in_LogDomainID,
-                in_CPUmask);
+                                        in_CPUmask);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -556,11 +556,11 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_StreamCreate)(
-    HSTR_LOG_STR        in_LogStreamID,
-    HSTR_LOG_DOM        in_LogDomainID,
-    const HSTR_CPU_MASK in_CPUmask)
+    HSTR_RESULT,
+    hStreams_StreamCreate)(
+        HSTR_LOG_STR        in_LogStreamID,
+        HSTR_LOG_DOM        in_LogDomainID,
+        const HSTR_CPU_MASK in_CPUmask)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -570,7 +570,7 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::StreamCreate_impl_throw(in_LogStreamID, in_LogDomainID,
-                in_CPUmask);
+                                        in_CPUmask);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -578,10 +578,10 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_StreamDestroy,
-        HSTREAMS_1.0)(
-    HSTR_LOG_STR    in_LogStreamID)
+    HSTR_RESULT,
+    hStreams_StreamDestroy,
+    HSTREAMS_1.0)(
+        HSTR_LOG_STR    in_LogStreamID)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -595,9 +595,9 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_StreamDestroy)(
-    HSTR_LOG_STR    in_LogStreamID)
+    HSTR_RESULT,
+    hStreams_StreamDestroy)(
+        HSTR_LOG_STR    in_LogStreamID)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -611,11 +611,11 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetNumLogStreams,
-        HSTREAMS_1.0)(
-    HSTR_LOG_DOM   in_LogDomainID,
-    uint32_t      *out_pNumLogStreams)
+    HSTR_RESULT,
+    hStreams_GetNumLogStreams,
+    HSTREAMS_1.0)(
+        HSTR_LOG_DOM   in_LogDomainID,
+        uint32_t      *out_pNumLogStreams)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -630,10 +630,10 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetNumLogStreams)(
-    HSTR_LOG_DOM   in_LogDomainID,
-    uint32_t      *out_pNumLogStreams)
+    HSTR_RESULT,
+    hStreams_GetNumLogStreams)(
+        HSTR_LOG_DOM   in_LogDomainID,
+        uint32_t      *out_pNumLogStreams)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -648,12 +648,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetLogStreamIDList,
-        HSTREAMS_1.0)(
-    HSTR_LOG_DOM  in_LogDomainID,
-    uint32_t      in_NumLogStreams,
-    HSTR_LOG_STR *out_pLogStreamIDs)
+    HSTR_RESULT,
+    hStreams_GetLogStreamIDList,
+    HSTREAMS_1.0)(
+        HSTR_LOG_DOM  in_LogDomainID,
+        uint32_t      in_NumLogStreams,
+        HSTR_LOG_STR *out_pLogStreamIDs)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -662,7 +662,7 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_pLogStreamIDs);
         HSTR_CORE_API_CALLCOUNTER();
         detail::GetLogStreamIDList_impl_throw(in_LogDomainID, in_NumLogStreams,
-                out_pLogStreamIDs);
+                                              out_pLogStreamIDs);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -670,11 +670,11 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetLogStreamIDList)(
-    HSTR_LOG_DOM  in_LogDomainID,
-    uint32_t      in_NumLogStreams,
-    HSTR_LOG_STR *out_pLogStreamIDs)
+    HSTR_RESULT,
+    hStreams_GetLogStreamIDList)(
+        HSTR_LOG_DOM  in_LogDomainID,
+        uint32_t      in_NumLogStreams,
+        HSTR_LOG_STR *out_pLogStreamIDs)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -683,7 +683,7 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(out_pLogStreamIDs);
         HSTR_CORE_API_CALLCOUNTER();
         detail::GetLogStreamIDList_impl_throw(in_LogDomainID, in_NumLogStreams,
-                out_pLogStreamIDs);
+                                              out_pLogStreamIDs);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -691,12 +691,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetLogStreamDetails,
-        HSTREAMS_1.0)(
-    HSTR_LOG_STR      in_LogStreamID,
-    HSTR_LOG_DOM      /*in_LogDomainID*/,
-    HSTR_CPU_MASK     out_CPUmask)
+    HSTR_RESULT,
+    hStreams_GetLogStreamDetails,
+    HSTREAMS_1.0)(
+        HSTR_LOG_STR      in_LogStreamID,
+        HSTR_LOG_DOM      /*in_LogDomainID*/,
+        HSTR_CPU_MASK     out_CPUmask)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -711,11 +711,11 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetLogStreamDetails)(
-    HSTR_LOG_STR      in_LogStreamID,
-    HSTR_LOG_DOM      /*in_LogDomainID*/,
-    HSTR_CPU_MASK     out_CPUmask)
+    HSTR_RESULT,
+    hStreams_GetLogStreamDetails)(
+        HSTR_LOG_STR      in_LogStreamID,
+        HSTR_LOG_DOM      /*in_LogDomainID*/,
+        HSTR_CPU_MASK     out_CPUmask)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -730,17 +730,17 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_EnqueueCompute,
-        HSTREAMS_1.0)(
-    HSTR_LOG_STR        in_LogStreamID,
-    const char         *in_pFunctionName,
-    uint32_t            in_numScalarArgs,
-    uint32_t            in_numHeapArgs,
-    uint64_t           *in_pArgs,
-    HSTR_EVENT         *out_pEvent,
-    void               *out_ReturnValue,
-    uint32_t            in_ReturnValueSize)
+    HSTR_RESULT,
+    hStreams_EnqueueCompute,
+    HSTREAMS_1.0)(
+        HSTR_LOG_STR        in_LogStreamID,
+        const char         *in_pFunctionName,
+        uint32_t            in_numScalarArgs,
+        uint32_t            in_numHeapArgs,
+        uint64_t           *in_pArgs,
+        HSTR_EVENT         *out_pEvent,
+        void               *out_ReturnValue,
+        uint32_t            in_ReturnValueSize)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -755,13 +755,13 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::EnqueueCompute_impl_throw(in_LogStreamID,
-                    in_pFunctionName,
-                    in_numScalarArgs,
-                    in_numHeapArgs,
-                    in_pArgs,
-                    out_pEvent,
-                    out_ReturnValue,
-                    in_ReturnValueSize);
+                                          in_pFunctionName,
+                                          in_numScalarArgs,
+                                          in_numHeapArgs,
+                                          in_pArgs,
+                                          out_pEvent,
+                                          out_ReturnValue,
+                                          in_ReturnValueSize);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -769,17 +769,17 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_EnqueueCompute,
-        HSTREAMS_2.0)(
-    HSTR_LOG_STR        in_LogStreamID,
-    const char         *in_pFunctionName,
-    uint32_t            in_numScalarArgs,
-    uint32_t            in_numHeapArgs,
-    uint64_t           *in_pArgs,
-    HSTR_EVENT         *out_pEvent,
-    void               *out_ReturnValue,
-    uint16_t            in_ReturnValueSize)
+    HSTR_RESULT,
+    hStreams_EnqueueCompute,
+    HSTREAMS_2.0)(
+        HSTR_LOG_STR        in_LogStreamID,
+        const char         *in_pFunctionName,
+        uint32_t            in_numScalarArgs,
+        uint32_t            in_numHeapArgs,
+        uint64_t           *in_pArgs,
+        HSTR_EVENT         *out_pEvent,
+        void               *out_ReturnValue,
+        uint16_t            in_ReturnValueSize)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -794,13 +794,13 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::EnqueueCompute_impl_throw(in_LogStreamID,
-                    in_pFunctionName,
-                    in_numScalarArgs,
-                    in_numHeapArgs,
-                    in_pArgs,
-                    out_pEvent,
-                    out_ReturnValue,
-                    in_ReturnValueSize);
+                                          in_pFunctionName,
+                                          in_numScalarArgs,
+                                          in_numHeapArgs,
+                                          in_pArgs,
+                                          out_pEvent,
+                                          out_ReturnValue,
+                                          in_ReturnValueSize);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -808,16 +808,16 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_EnqueueCompute)(
-    HSTR_LOG_STR        in_LogStreamID,
-    const char         *in_pFunctionName,
-    uint32_t            in_numScalarArgs,
-    uint32_t            in_numHeapArgs,
-    uint64_t           *in_pArgs,
-    HSTR_EVENT         *out_pEvent,
-    void               *out_ReturnValue,
-    uint16_t            in_ReturnValueSize)
+    HSTR_RESULT,
+    hStreams_EnqueueCompute)(
+        HSTR_LOG_STR        in_LogStreamID,
+        const char         *in_pFunctionName,
+        uint32_t            in_numScalarArgs,
+        uint32_t            in_numHeapArgs,
+        uint64_t           *in_pArgs,
+        HSTR_EVENT         *out_pEvent,
+        void               *out_ReturnValue,
+        uint16_t            in_ReturnValueSize)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -832,13 +832,13 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::EnqueueCompute_impl_throw(in_LogStreamID,
-                    in_pFunctionName,
-                    in_numScalarArgs,
-                    in_numHeapArgs,
-                    in_pArgs,
-                    out_pEvent,
-                    out_ReturnValue,
-                    in_ReturnValueSize);
+                                          in_pFunctionName,
+                                          in_numScalarArgs,
+                                          in_numHeapArgs,
+                                          in_pArgs,
+                                          out_pEvent,
+                                          out_ReturnValue,
+                                          in_ReturnValueSize);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -846,15 +846,15 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_EnqueueData1D,
-        HSTREAMS_1.0)(
-    HSTR_LOG_STR        in_LogStreamID,
-    void               *in_pWriteAddr,
-    void               *in_pReadAddr,
-    uint64_t            in_size,
-    HSTR_XFER_DIRECTION in_XferDirection,
-    HSTR_EVENT         *out_pEvent)
+    HSTR_RESULT,
+    hStreams_EnqueueData1D,
+    HSTREAMS_1.0)(
+        HSTR_LOG_STR        in_LogStreamID,
+        void               *in_pWriteAddr,
+        void               *in_pReadAddr,
+        uint64_t            in_size,
+        HSTR_XFER_DIRECTION in_XferDirection,
+        HSTR_EVENT         *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -867,11 +867,11 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::EnqueueData1D_impl_throw(in_LogStreamID,
-                    in_pWriteAddr,
-                    in_pReadAddr,
-                    in_size,
-                    in_XferDirection,
-                    out_pEvent);
+                                         in_pWriteAddr,
+                                         in_pReadAddr,
+                                         in_size,
+                                         in_XferDirection,
+                                         out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -879,14 +879,14 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_EnqueueData1D)(
-    HSTR_LOG_STR        in_LogStreamID,
-    void               *in_pWriteAddr,
-    void               *in_pReadAddr,
-    uint64_t            in_size,
-    HSTR_XFER_DIRECTION in_XferDirection,
-    HSTR_EVENT         *out_pEvent)
+    HSTR_RESULT,
+    hStreams_EnqueueData1D)(
+        HSTR_LOG_STR        in_LogStreamID,
+        void               *in_pWriteAddr,
+        void               *in_pReadAddr,
+        uint64_t            in_size,
+        HSTR_XFER_DIRECTION in_XferDirection,
+        HSTR_EVENT         *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -899,11 +899,11 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::EnqueueData1D_impl_throw(in_LogStreamID,
-                    in_pWriteAddr,
-                    in_pReadAddr,
-                    in_size,
-                    in_XferDirection,
-                    out_pEvent);
+                                         in_pWriteAddr,
+                                         in_pReadAddr,
+                                         in_size,
+                                         in_XferDirection,
+                                         out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -911,16 +911,16 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_EnqueueDataXDomain1D,
-        HSTREAMS_1.0)(
-    HSTR_LOG_STR        in_LogStreamID,
-    void               *in_pWriteAddr,
-    void               *in_pReadAddr,
-    uint64_t            in_size,
-    HSTR_LOG_DOM        in_dstLogDomain,
-    HSTR_LOG_DOM        in_srcLogDomain,
-    HSTR_EVENT         *out_pEvent)
+    HSTR_RESULT,
+    hStreams_EnqueueDataXDomain1D,
+    HSTREAMS_1.0)(
+        HSTR_LOG_STR        in_LogStreamID,
+        void               *in_pWriteAddr,
+        void               *in_pReadAddr,
+        uint64_t            in_size,
+        HSTR_LOG_DOM        in_dstLogDomain,
+        HSTR_LOG_DOM        in_srcLogDomain,
+        HSTR_EVENT         *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -934,12 +934,12 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::EnqueueDataXDomain1D_impl_throw(in_LogStreamID,
-                    in_pWriteAddr,
-                    in_pReadAddr,
-                    in_size,
-                    in_dstLogDomain,
-                    in_srcLogDomain,
-                    out_pEvent);
+                                                in_pWriteAddr,
+                                                in_pReadAddr,
+                                                in_size,
+                                                in_dstLogDomain,
+                                                in_srcLogDomain,
+                                                out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -947,15 +947,15 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_EnqueueDataXDomain1D)(
-    HSTR_LOG_STR        in_LogStreamID,
-    void               *in_pWriteAddr,
-    void               *in_pReadAddr,
-    uint64_t            in_size,
-    HSTR_LOG_DOM        in_dstLogDomain,
-    HSTR_LOG_DOM        in_srcLogDomain,
-    HSTR_EVENT         *out_pEvent)
+    HSTR_RESULT,
+    hStreams_EnqueueDataXDomain1D)(
+        HSTR_LOG_STR        in_LogStreamID,
+        void               *in_pWriteAddr,
+        void               *in_pReadAddr,
+        uint64_t            in_size,
+        HSTR_LOG_DOM        in_dstLogDomain,
+        HSTR_LOG_DOM        in_srcLogDomain,
+        HSTR_EVENT         *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -969,12 +969,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::EnqueueDataXDomain1D_impl_throw(in_LogStreamID,
-                    in_pWriteAddr,
-                    in_pReadAddr,
-                    in_size,
-                    in_dstLogDomain,
-                    in_srcLogDomain,
-                    out_pEvent);
+                                                in_pWriteAddr,
+                                                in_pReadAddr,
+                                                in_size,
+                                                in_dstLogDomain,
+                                                in_srcLogDomain,
+                                                out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -983,10 +983,10 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_StreamSynchronize,
-        HSTREAMS_1.0)(
-    HSTR_LOG_STR      in_LogStreamID)
+    HSTR_RESULT,
+    hStreams_StreamSynchronize,
+    HSTREAMS_1.0)(
+        HSTR_LOG_STR      in_LogStreamID)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1000,9 +1000,9 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_StreamSynchronize)(
-    HSTR_LOG_STR      in_LogStreamID)
+    HSTR_RESULT,
+    hStreams_StreamSynchronize)(
+        HSTR_LOG_STR      in_LogStreamID)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1016,9 +1016,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_ThreadSynchronize,
-        HSTREAMS_1.0)()
+    HSTR_RESULT,
+    hStreams_ThreadSynchronize,
+    HSTREAMS_1.0)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1031,8 +1031,8 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_ThreadSynchronize)()
+    HSTR_RESULT,
+    hStreams_ThreadSynchronize)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1045,15 +1045,15 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_EventWait,
-        HSTREAMS_1.0)(
-    uint32_t           in_NumEvents,
-    HSTR_EVENT        *in_pEvents,
-    bool               in_WaitForAll,
-    int32_t            in_TimeOutMilliSeconds,
-    uint32_t          *out_pNumSignaled,
-    uint32_t          *out_pSignaledIndices)
+    HSTR_RESULT,
+    hStreams_EventWait,
+    HSTREAMS_1.0)(
+        uint32_t           in_NumEvents,
+        HSTR_EVENT        *in_pEvents,
+        bool               in_WaitForAll,
+        int32_t            in_TimeOutMilliSeconds,
+        uint32_t          *out_pNumSignaled,
+        uint32_t          *out_pSignaledIndices)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1065,7 +1065,7 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_pSignaledIndices);
         HSTR_CORE_API_CALLCOUNTER();
         detail::EventWait_impl_throw(in_NumEvents, in_pEvents, in_WaitForAll,
-                in_TimeOutMilliSeconds, out_pNumSignaled, out_pSignaledIndices);
+                                     in_TimeOutMilliSeconds, out_pNumSignaled, out_pSignaledIndices);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1073,14 +1073,14 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_EventWait)(
-    uint32_t           in_NumEvents,
-    HSTR_EVENT        *in_pEvents,
-    bool               in_WaitForAll,
-    int32_t            in_TimeOutMilliSeconds,
-    uint32_t          *out_pNumSignaled,
-    uint32_t          *out_pSignaledIndices)
+    HSTR_RESULT,
+    hStreams_EventWait)(
+        uint32_t           in_NumEvents,
+        HSTR_EVENT        *in_pEvents,
+        bool               in_WaitForAll,
+        int32_t            in_TimeOutMilliSeconds,
+        uint32_t          *out_pNumSignaled,
+        uint32_t          *out_pSignaledIndices)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1092,7 +1092,7 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(out_pSignaledIndices);
         HSTR_CORE_API_CALLCOUNTER();
         detail::EventWait_impl_throw(in_NumEvents, in_pEvents, in_WaitForAll,
-                in_TimeOutMilliSeconds, out_pNumSignaled, out_pSignaledIndices);
+                                     in_TimeOutMilliSeconds, out_pNumSignaled, out_pSignaledIndices);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1100,15 +1100,15 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_EventStreamWait,
-        HSTREAMS_1.0)(
-    HSTR_LOG_STR       in_LogStreamID,
-    uint32_t           in_NumEvents,
-    HSTR_EVENT        *in_pEvents,
-    int32_t            in_NumAddresses,
-    void             **in_pAddresses,
-    HSTR_EVENT        *out_pEvent)
+    HSTR_RESULT,
+    hStreams_EventStreamWait,
+    HSTREAMS_1.0)(
+        HSTR_LOG_STR       in_LogStreamID,
+        uint32_t           in_NumEvents,
+        HSTR_EVENT        *in_pEvents,
+        int32_t            in_NumAddresses,
+        void             **in_pAddresses,
+        HSTR_EVENT        *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1120,12 +1120,12 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
         HSTR_CORE_API_CALLCOUNTER();
         detail::EventStreamWait_impl_throw(
-                        in_LogStreamID,
-                        in_NumEvents,
-                        in_pEvents,
-                        in_NumAddresses,
-                        in_pAddresses,
-                        out_pEvent);
+            in_LogStreamID,
+            in_NumEvents,
+            in_pEvents,
+            in_NumAddresses,
+            in_pAddresses,
+            out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1133,14 +1133,14 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_EventStreamWait)(
-    HSTR_LOG_STR       in_LogStreamID,
-    uint32_t           in_NumEvents,
-    HSTR_EVENT        *in_pEvents,
-    int32_t            in_NumAddresses,
-    void             **in_pAddresses,
-    HSTR_EVENT        *out_pEvent)
+    HSTR_RESULT,
+    hStreams_EventStreamWait)(
+        HSTR_LOG_STR       in_LogStreamID,
+        uint32_t           in_NumEvents,
+        HSTR_EVENT        *in_pEvents,
+        int32_t            in_NumAddresses,
+        void             **in_pAddresses,
+        HSTR_EVENT        *out_pEvent)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1152,12 +1152,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(out_pEvent);
         HSTR_CORE_API_CALLCOUNTER();
         detail::EventStreamWait_impl_throw(
-                        in_LogStreamID,
-                        in_NumEvents,
-                        in_pEvents,
-                        in_NumAddresses,
-                        in_pAddresses,
-                        out_pEvent);
+            in_LogStreamID,
+            in_NumEvents,
+            in_pEvents,
+            in_NumAddresses,
+            in_pAddresses,
+            out_pEvent);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1165,11 +1165,11 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_Alloc1D,
-        HSTREAMS_1.0)(
-    void               *in_BaseAddress,
-    uint64_t            in_size)
+    HSTR_RESULT,
+    hStreams_Alloc1D,
+    HSTREAMS_1.0)(
+        void               *in_BaseAddress,
+        uint64_t            in_size)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1180,11 +1180,11 @@ HSTR_EXPORT_IN_VERSION(
         // Use default Alloc1D properties and create buffer for all logical domains
         HSTR_BUFFER_PROPS buffer_props = HSTR_BUFFER_PROPS_INITIAL_VALUES;
         detail::Alloc1DEx_impl_throw(
-                        in_BaseAddress,
-                        in_size,
-                        &buffer_props,
-                        -1,
-                        NULL);
+            in_BaseAddress,
+            in_size,
+            &buffer_props,
+            -1,
+            NULL);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1192,10 +1192,10 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_Alloc1D)(
-    void               *in_BaseAddress,
-    uint64_t            in_size)
+    HSTR_RESULT,
+    hStreams_Alloc1D)(
+        void               *in_BaseAddress,
+        uint64_t            in_size)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1206,11 +1206,11 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         // Use default Alloc1D properties and create buffer for all logical domains
         HSTR_BUFFER_PROPS buffer_props = HSTR_BUFFER_PROPS_INITIAL_VALUES;
         detail::Alloc1DEx_impl_throw(
-                        in_BaseAddress,
-                        in_size,
-                        &buffer_props,
-                        -1,
-                        NULL);
+            in_BaseAddress,
+            in_size,
+            &buffer_props,
+            -1,
+            NULL);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1218,14 +1218,14 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_Alloc1DEx,
-        HSTREAMS_1.0)(
-    void                 *in_BaseAddress,
-    uint64_t              in_Size,
-    HSTR_BUFFER_PROPS    *in_pBufferProps,
-    int64_t               in_NumLogDomains,
-    HSTR_LOG_DOM         *in_pLogDomainIDs)
+    HSTR_RESULT,
+    hStreams_Alloc1DEx,
+    HSTREAMS_1.0)(
+        void                 *in_BaseAddress,
+        uint64_t              in_Size,
+        HSTR_BUFFER_PROPS    *in_pBufferProps,
+        int64_t               in_NumLogDomains,
+        HSTR_LOG_DOM         *in_pLogDomainIDs)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1237,11 +1237,11 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::Alloc1DEx_impl_throw(
-                        in_BaseAddress,
-                        in_Size,
-                        in_pBufferProps,
-                        in_NumLogDomains,
-                        in_pLogDomainIDs);
+            in_BaseAddress,
+            in_Size,
+            in_pBufferProps,
+            in_NumLogDomains,
+            in_pLogDomainIDs);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1249,13 +1249,13 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_Alloc1DEx)(
-    void                 *in_BaseAddress,
-    uint64_t              in_Size,
-    HSTR_BUFFER_PROPS    *in_pBufferProps,
-    int64_t               in_NumLogDomains,
-    HSTR_LOG_DOM         *in_pLogDomainIDs)
+    HSTR_RESULT,
+    hStreams_Alloc1DEx)(
+        void                 *in_BaseAddress,
+        uint64_t              in_Size,
+        HSTR_BUFFER_PROPS    *in_pBufferProps,
+        int64_t               in_NumLogDomains,
+        HSTR_LOG_DOM         *in_pLogDomainIDs)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1267,11 +1267,11 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::Alloc1DEx_impl_throw(
-                        in_BaseAddress,
-                        in_Size,
-                        in_pBufferProps,
-                        in_NumLogDomains,
-                        in_pLogDomainIDs);
+            in_BaseAddress,
+            in_Size,
+            in_pBufferProps,
+            in_NumLogDomains,
+            in_pLogDomainIDs);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1279,12 +1279,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_AddBufferLogDomains,
-        HSTREAMS_1.0)(
-    void            *in_Address,
-    uint64_t         in_NumLogDomains,
-    HSTR_LOG_DOM    *in_pLogDomainIDs)
+    HSTR_RESULT,
+    hStreams_AddBufferLogDomains,
+    HSTREAMS_1.0)(
+        void            *in_Address,
+        uint64_t         in_NumLogDomains,
+        HSTR_LOG_DOM    *in_pLogDomainIDs)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1294,9 +1294,9 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::AddBufferLogDomains_impl_throw(
-                        in_Address,
-                        in_NumLogDomains,
-                        in_pLogDomainIDs);
+            in_Address,
+            in_NumLogDomains,
+            in_pLogDomainIDs);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1304,11 +1304,11 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_AddBufferLogDomains)(
-    void            *in_Address,
-    uint64_t         in_NumLogDomains,
-    HSTR_LOG_DOM    *in_pLogDomainIDs)
+    HSTR_RESULT,
+    hStreams_AddBufferLogDomains)(
+        void            *in_Address,
+        uint64_t         in_NumLogDomains,
+        HSTR_LOG_DOM    *in_pLogDomainIDs)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1318,9 +1318,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::AddBufferLogDomains_impl_throw(
-                        in_Address,
-                        in_NumLogDomains,
-                        in_pLogDomainIDs);
+            in_Address,
+            in_NumLogDomains,
+            in_pLogDomainIDs);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1329,12 +1329,12 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_RmBufferLogDomains,
-        HSTREAMS_1.0)(
-    void            *in_Address,
-    int64_t          in_NumLogDomains,
-    HSTR_LOG_DOM    *in_pLogDomainIDs)
+    HSTR_RESULT,
+    hStreams_RmBufferLogDomains,
+    HSTREAMS_1.0)(
+        void            *in_Address,
+        int64_t          in_NumLogDomains,
+        HSTR_LOG_DOM    *in_pLogDomainIDs)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1344,9 +1344,9 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::RmBufferLogDomains_impl_throw(
-                        in_Address,
-                        in_NumLogDomains,
-                        in_pLogDomainIDs);
+            in_Address,
+            in_NumLogDomains,
+            in_pLogDomainIDs);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1354,11 +1354,11 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_RmBufferLogDomains)(
-    void            *in_Address,
-    int64_t          in_NumLogDomains,
-    HSTR_LOG_DOM    *in_pLogDomainIDs)
+    HSTR_RESULT,
+    hStreams_RmBufferLogDomains)(
+        void            *in_Address,
+        int64_t          in_NumLogDomains,
+        HSTR_LOG_DOM    *in_pLogDomainIDs)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1368,9 +1368,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_CORE_API_CALLCOUNTER();
 
         detail::RmBufferLogDomains_impl_throw(
-                        in_Address,
-                        in_NumLogDomains,
-                        in_pLogDomainIDs);
+            in_Address,
+            in_NumLogDomains,
+            in_pLogDomainIDs);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1379,11 +1379,11 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetBufferNumLogDomains,
-        HSTREAMS_1.0)(
-    void                *in_Address,
-    uint64_t            *out_NumLogDomains)
+    HSTR_RESULT,
+    hStreams_GetBufferNumLogDomains,
+    HSTREAMS_1.0)(
+        void                *in_Address,
+        uint64_t            *out_NumLogDomains)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1391,8 +1391,8 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_NumLogDomains);
         HSTR_CORE_API_CALLCOUNTER();
         detail::GetBufferNumLogDomains_impl_throw(
-                        in_Address,
-                        out_NumLogDomains);
+            in_Address,
+            out_NumLogDomains);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1401,10 +1401,10 @@ HSTR_EXPORT_IN_VERSION(
 
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetBufferNumLogDomains)(
-    void                *in_Address,
-    uint64_t            *out_NumLogDomains)
+    HSTR_RESULT,
+    hStreams_GetBufferNumLogDomains)(
+        void                *in_Address,
+        uint64_t            *out_NumLogDomains)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1412,8 +1412,8 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(out_NumLogDomains);
         HSTR_CORE_API_CALLCOUNTER();
         detail::GetBufferNumLogDomains_impl_throw(
-                        in_Address,
-                        out_NumLogDomains);
+            in_Address,
+            out_NumLogDomains);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1421,13 +1421,13 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetBufferLogDomains,
-        HSTREAMS_1.0)(
-    void                *in_Address,
-    uint64_t             in_NumLogDomains,
-    HSTR_LOG_DOM        *out_pLogDomains,
-    uint64_t            *out_pNumLogDomains)
+    HSTR_RESULT,
+    hStreams_GetBufferLogDomains,
+    HSTREAMS_1.0)(
+        void                *in_Address,
+        uint64_t             in_NumLogDomains,
+        HSTR_LOG_DOM        *out_pLogDomains,
+        uint64_t            *out_pNumLogDomains)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1437,10 +1437,10 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_pNumLogDomains);
         HSTR_CORE_API_CALLCOUNTER();
         detail::GetBufferLogDomains_impl_throw(
-                        in_Address,
-                        in_NumLogDomains,
-                        out_pLogDomains,
-                        out_pNumLogDomains);
+            in_Address,
+            in_NumLogDomains,
+            out_pLogDomains,
+            out_pNumLogDomains);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1448,12 +1448,12 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetBufferLogDomains)(
-    void                *in_Address,
-    uint64_t             in_NumLogDomains,
-    HSTR_LOG_DOM        *out_pLogDomains,
-    uint64_t            *out_pNumLogDomains)
+    HSTR_RESULT,
+    hStreams_GetBufferLogDomains)(
+        void                *in_Address,
+        uint64_t             in_NumLogDomains,
+        HSTR_LOG_DOM        *out_pLogDomains,
+        uint64_t            *out_pNumLogDomains)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1463,10 +1463,10 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(out_pNumLogDomains);
         HSTR_CORE_API_CALLCOUNTER();
         detail::GetBufferLogDomains_impl_throw(
-                        in_Address,
-                        in_NumLogDomains,
-                        out_pLogDomains,
-                        out_pNumLogDomains);
+            in_Address,
+            in_NumLogDomains,
+            out_pLogDomains,
+            out_pNumLogDomains);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1474,11 +1474,11 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetBufferProps,
-        HSTREAMS_1.0)(
-    void                *in_Address,
-    HSTR_BUFFER_PROPS   *out_BufferProps)
+    HSTR_RESULT,
+    hStreams_GetBufferProps,
+    HSTREAMS_1.0)(
+        void                *in_Address,
+        HSTR_BUFFER_PROPS   *out_BufferProps)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1486,8 +1486,8 @@ HSTR_EXPORT_IN_VERSION(
         HSTR_TRACE_API_ARG(out_BufferProps);
         HSTR_CORE_API_CALLCOUNTER();
         detail::GetBufferProps_impl_throw(
-                        in_Address,
-                        out_BufferProps);
+            in_Address,
+            out_BufferProps);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1495,10 +1495,10 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetBufferProps)(
-    void                *in_Address,
-    HSTR_BUFFER_PROPS   *out_BufferProps)
+    HSTR_RESULT,
+    hStreams_GetBufferProps)(
+        void                *in_Address,
+        HSTR_BUFFER_PROPS   *out_BufferProps)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1506,8 +1506,8 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
         HSTR_TRACE_API_ARG(out_BufferProps);
         HSTR_CORE_API_CALLCOUNTER();
         detail::GetBufferProps_impl_throw(
-                        in_Address,
-                        out_BufferProps);
+            in_Address,
+            out_BufferProps);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
     } catch (...) {
         HSTR_RETURN(hStreams_handle_exception());
@@ -1515,10 +1515,10 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_DeAlloc,
-        HSTREAMS_1.0)(
-    void               *in_Address)
+    HSTR_RESULT,
+    hStreams_DeAlloc,
+    HSTREAMS_1.0)(
+        void               *in_Address)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1532,9 +1532,9 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_DeAlloc)(
-    void               *in_Address)
+    HSTR_RESULT,
+    hStreams_DeAlloc)(
+        void               *in_Address)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1548,9 +1548,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetLastError,
-        HSTREAMS_1.0)()
+    HSTR_RESULT,
+    hStreams_GetLastError,
+    HSTREAMS_1.0)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1562,8 +1562,8 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetLastError)()
+    HSTR_RESULT,
+    hStreams_GetLastError)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1575,9 +1575,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        void,
-        hStreams_ClearLastError,
-        HSTREAMS_1.0)()
+    void,
+    hStreams_ClearLastError,
+    HSTREAMS_1.0)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1589,8 +1589,8 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        void,
-        hStreams_ClearLastError)()
+    void,
+    hStreams_ClearLastError)()
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1602,9 +1602,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_Cfg_SetLogLevel)(
-    HSTR_LOG_LEVEL in_loglevel)
+    HSTR_RESULT,
+    hStreams_Cfg_SetLogLevel)(
+        HSTR_LOG_LEVEL in_loglevel)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1618,9 +1618,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_Cfg_SetLogInfoType)(
-    uint64_t in_info_type_mask)
+    HSTR_RESULT,
+    hStreams_Cfg_SetLogInfoType)(
+        uint64_t in_info_type_mask)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1634,9 +1634,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_Cfg_SetMKLInterface)(
-    HSTR_MKL_INTERFACE in_MKLInterface)
+    HSTR_RESULT,
+    hStreams_Cfg_SetMKLInterface)(
+        HSTR_MKL_INTERFACE in_MKLInterface)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1650,41 +1650,41 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        uint32_t,
-        hStreams_GetVerbose,
-        HSTREAMS_1.0)()
+    uint32_t,
+    hStreams_GetVerbose,
+    HSTREAMS_1.0)()
 {
     // That was the default in HSTR_OPTIONS
     return 0;
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        uint32_t,
-        hStreams_GetVerbose)()
+    uint32_t,
+    hStreams_GetVerbose)()
 {
     return 0;
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_SetVerbose,
-        HSTREAMS_1.0)(int target_verbosity)
+    HSTR_RESULT,
+    hStreams_SetVerbose,
+    HSTREAMS_1.0)(int target_verbosity)
 {
     // Do nothing
     return HSTR_RESULT_SUCCESS;
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_SetVerbose)(int target_verbosity)
+    HSTR_RESULT,
+    hStreams_SetVerbose)(int target_verbosity)
 {
     return HSTR_RESULT_SUCCESS;
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetCurrentOptions,
-        HSTREAMS_1.0)(HSTR_OPTIONS *pCurrentOptions, uint64_t buffSize)
+    HSTR_RESULT,
+    hStreams_GetCurrentOptions,
+    HSTREAMS_1.0)(HSTR_OPTIONS *pCurrentOptions, uint64_t buffSize)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1699,8 +1699,8 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetCurrentOptions) (HSTR_OPTIONS *pCurrentOptions, uint64_t buffSize)
+    HSTR_RESULT,
+    hStreams_GetCurrentOptions)(HSTR_OPTIONS *pCurrentOptions, uint64_t buffSize)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1716,9 +1716,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_SetOptions,
-        HSTREAMS_1.0)(const HSTR_OPTIONS *in_options)
+    HSTR_RESULT,
+    hStreams_SetOptions,
+    HSTREAMS_1.0)(const HSTR_OPTIONS *in_options)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1731,8 +1731,8 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_SetOptions)(const HSTR_OPTIONS *in_options)
+    HSTR_RESULT,
+    hStreams_SetOptions)(const HSTR_OPTIONS *in_options)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1745,9 +1745,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_GetVersionStringLen,
-        HSTREAMS_1.0)(uint32_t *out_pVersionStringLen)
+    HSTR_RESULT,
+    hStreams_GetVersionStringLen,
+    HSTREAMS_1.0)(uint32_t *out_pVersionStringLen)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1760,8 +1760,8 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_GetVersionStringLen)(uint32_t *out_pVersionStringLen)
+    HSTR_RESULT,
+    hStreams_GetVersionStringLen)(uint32_t *out_pVersionStringLen)
 {
     try {
         HSTR_TRACE_API_ENTER();
@@ -1774,13 +1774,13 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        HSTR_RESULT,
-        hStreams_Version,
-        HSTREAMS_1.0)(char *buff, uint32_t buffLength)
+    HSTR_RESULT,
+    hStreams_Version,
+    HSTREAMS_1.0)(char *buff, uint32_t buffLength)
 {
     try {
         HSTR_TRACE_API_ENTER();
-        HSTR_TRACE_API_ARG((void*)buff);
+        HSTR_TRACE_API_ARG((void *)buff);
         HSTR_TRACE_API_ARG(buffLength);
         detail::Version_impl_throw(buff, buffLength);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
@@ -1790,12 +1790,12 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_DEFAULT_VERSION(
-        HSTR_RESULT,
-        hStreams_Version)(char *buff, uint32_t buffLength)
+    HSTR_RESULT,
+    hStreams_Version)(char *buff, uint32_t buffLength)
 {
     try {
         HSTR_TRACE_API_ENTER();
-        HSTR_TRACE_API_ARG((void*)buff);
+        HSTR_TRACE_API_ARG((void *)buff);
         HSTR_TRACE_API_ARG(buffLength);
         detail::Version_impl_throw(buff, buffLength);
         HSTR_RETURN(HSTR_RESULT_SUCCESS);
@@ -1805,9 +1805,9 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        int,
-        _hStreams_EmitMessage,
-        HSTREAMS_1.0)
+    int,
+    _hStreams_EmitMessage,
+    HSTREAMS_1.0)
 (HSTR_SEVERITY ols, const char *funcName, const char *format, ...)
 {
     // does nothing
@@ -1815,9 +1815,9 @@ HSTR_EXPORT_IN_VERSION(
 }
 
 HSTR_EXPORT_IN_VERSION(
-        int,
-        _hStreams_EmitMessage,
-        HSTREAMS_2.0)
+    int,
+    _hStreams_EmitMessage,
+    HSTREAMS_2.0)
 (HSTR_SEVERITY ols, const char *funcName, const char *format, ...)
 {
     // does nothing

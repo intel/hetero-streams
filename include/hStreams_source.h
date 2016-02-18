@@ -129,7 +129,7 @@ extern "C" {
 ///
 /////////////////////////////////////////////////////////
 DllAccess HSTR_RESULT
-hStreams_InitInVersion(const char* interface_version);
+hStreams_InitInVersion(const char *interface_version);
 
 static
 DllAccess HSTR_RESULT

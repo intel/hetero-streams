@@ -74,8 +74,8 @@ hStreams_LoadSingleSinkSideLibraryHost(const char *lib_name)
     const std::string full_path = findFileName(lib_name, host_sink_ld_library_path_env_name);
     if (full_path.empty()) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, StringBuilder()
-                                 << "Cannot find host sink-side library " << std::string(lib_name)
-                                 << " in paths specified by " << host_sink_ld_library_path_env_name << "\n");
+                                   << "Cannot find host sink-side library " << std::string(lib_name)
+                                   << " in paths specified by " << host_sink_ld_library_path_env_name << "\n");
     }
 
     LIB_HANDLER::handle_t handle;
@@ -193,8 +193,8 @@ hStreams_LoadSingleSinkSideLibraryMIC(HSTR_COIPROCESS coi_process, const char *l
     const std::string full_path = findFileName(lib_name, mic_sink_ld_library_path_env_name);
     if (full_path.empty()) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, StringBuilder()
-                                 << "Cannot load MIC sink-side library " << std::string(lib_name)
-                                 << " in paths specified by " << mic_sink_ld_library_path_env_name << "\n");
+                                   << "Cannot load MIC sink-side library " << std::string(lib_name)
+                                   << " in paths specified by " << mic_sink_ld_library_path_env_name << "\n");
     }
     HSTR_COILIBRARY coiLibrary;
     HSTR_COIRESULT result = hStreams_COIWrapper::COIProcessLoadLibraryFromFile(
@@ -208,8 +208,8 @@ hStreams_LoadSingleSinkSideLibraryMIC(HSTR_COIPROCESS coi_process, const char *l
         HSTR_LOG(HSTR_INFO_TYPE_MISC) << "Loaded MIC sink-side library " << full_path;
     } else {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
-                                 << "Cannot load MIC sink-side library " << std::string(lib_name)
-                                 << ", COI returned: " << std::string(hStreams_COIWrapper::COIResultGetName(result)) << "\n");
+                                   << "Cannot load MIC sink-side library " << std::string(lib_name)
+                                   << ", COI returned: " << std::string(hStreams_COIWrapper::COIResultGetName(result)) << "\n");
     }
 
     return coiLibrary;

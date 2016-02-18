@@ -104,7 +104,8 @@ class hStreams_AtomicEnum
 {
 public:
     hStreams_AtomicEnum() {};
-    hStreams_AtomicEnum(T v) {
+    hStreams_AtomicEnum(T v)
+    {
         SetValue(v);
     }
 
@@ -116,7 +117,7 @@ public:
     {
         return (T)mac.SetValue((long) v);
     }
-    hStreams_AtomicEnum<T>& operator= (T v)
+    hStreams_AtomicEnum<T> &operator= (T v)
     {
         mac.SetValue((long) v);
         return *this;

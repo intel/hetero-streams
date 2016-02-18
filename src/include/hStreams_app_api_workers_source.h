@@ -41,7 +41,8 @@
  *
  */
 
-namespace detail {
+namespace detail
+{
 
 void
 app_init_domains_in_version_impl_throw(

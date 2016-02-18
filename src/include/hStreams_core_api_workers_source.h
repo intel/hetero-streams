@@ -40,10 +40,11 @@
  *
  */
 
-namespace detail {
+namespace detail
+{
 
 void
-InitInVersion_impl_throw(const char* interface_version);
+InitInVersion_impl_throw(const char *interface_version);
 
 void
 IsInitialized_impl_throw();

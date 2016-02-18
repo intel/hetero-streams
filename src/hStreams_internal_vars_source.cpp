@@ -29,24 +29,24 @@ namespace initial_values
 const HSTR_LOG_STR app_init_next_log_str_ID = 0;
 const HSTR_LOG_DOM next_log_dom_id = 1;
 const HSTR_MKL_INTERFACE mkl_interface = HSTR_MKL_LP64;
-const char* interface_version = "[unknown]";
+const char *interface_version = "[unknown]";
 hStreams_Atomic_HSTR_STATE hStreamsState = HSTR_STATE_UNINITIALIZED;
 
 const HSTR_OPTIONS options = {
-        NULL,
-        exit,
-        0,
-        HSTR_KMP_AFFINITY_BALANCED,
-        HSTR_DEP_POLICY_BUFFERS,
-        32, // limit on physical domains
-        HSTR_OPENMP_PRE_SETUP,
-        -1, // infinite timeout
-        0,
-        NULL,
-        NULL,
-        0,
-        NULL
-    };
+    NULL,
+    exit,
+    0,
+    HSTR_KMP_AFFINITY_BALANCED,
+    HSTR_DEP_POLICY_BUFFERS,
+    32, // limit on physical domains
+    HSTR_OPENMP_PRE_SETUP,
+    -1, // infinite timeout
+    0,
+    NULL,
+    NULL,
+    0,
+    NULL
+};
 } // namespace initial_values
 
 HSTR_LOG_STR app_init_next_log_str_ID = initial_values::app_init_next_log_str_ID;

@@ -68,15 +68,15 @@ using namespace std;
 #ifndef _WIN32
 #define HSTR_EXPORT_IN_VERSION(ret_type, symbol, version)           \
     __asm__(".symver "                                              \
-        HSTR_STRINGIZE(__HSTR_VERSIONED_NAME(symbol, __LINE__))     \
-        "," HSTR_STRINGIZE(symbol) "@" HSTR_STRINGIZE(version));    \
+            HSTR_STRINGIZE(__HSTR_VERSIONED_NAME(symbol, __LINE__))     \
+            "," HSTR_STRINGIZE(symbol) "@" HSTR_STRINGIZE(version));    \
     extern "C" ret_type __HSTR_VERSIONED_NAME(symbol, __LINE__)
 
 #define HSTR_EXPORT_IN_DEFAULT_VERSION(ret_type, symbol)            \
     __asm__(".symver "                                              \
-        HSTR_STRINGIZE(__HSTR_VERSIONED_NAME(symbol, __LINE__))     \
-        "," HSTR_STRINGIZE(symbol) "@@"                             \
-        HSTR_STRINGIZE(HSTR_DEFAULT_SYMVER));                       \
+            HSTR_STRINGIZE(__HSTR_VERSIONED_NAME(symbol, __LINE__))     \
+            "," HSTR_STRINGIZE(symbol) "@@"                             \
+            HSTR_STRINGIZE(HSTR_DEFAULT_SYMVER));                       \
     extern "C" ret_type __HSTR_VERSIONED_NAME(symbol, __LINE__)
 #else // _WIN32
 // On windows we do NOT expose the non-default versions (we never did), so we
@@ -86,15 +86,15 @@ using namespace std;
 
 #define HSTR_EXPORT_IN_DEFAULT_VERSION(ret_type, symbol)   \
     extern "C" ret_type symbol
-    // __pragma(comment(                                               \
-    //     linker,                                                     \
-    //     "/EXPORT:" HSTR_STRINGIZE(symbol)                           \
-    //     "=" HSTR_STRINGIZE(__HSTR_VERSIONED_NAME(symbol, __LINE__)) \
-    // ));                                                             \
-    // extern "C" ret_type __HSTR_VERSIONED_NAME(symbol, __LINE__)
-    // extern "C" ret_type symbol
-    // __pragma(comment(linker, "/EXPORT:" HSTR_STRINGIZE(symbol) "=" HSTR_STRINGIZE(__HSTR_VERSIONED_NAME(symbol, __LINE__)) )); \
-    // extern "C" ret_type __HSTR_VERSIONED_NAME(symbol, __LINE)
+// __pragma(comment(                                               \
+//     linker,                                                     \
+//     "/EXPORT:" HSTR_STRINGIZE(symbol)                           \
+//     "=" HSTR_STRINGIZE(__HSTR_VERSIONED_NAME(symbol, __LINE__)) \
+// ));                                                             \
+// extern "C" ret_type __HSTR_VERSIONED_NAME(symbol, __LINE__)
+// extern "C" ret_type symbol
+// __pragma(comment(linker, "/EXPORT:" HSTR_STRINGIZE(symbol) "=" HSTR_STRINGIZE(__HSTR_VERSIONED_NAME(symbol, __LINE__)) )); \
+// extern "C" ret_type __HSTR_VERSIONED_NAME(symbol, __LINE)
 #endif // _WIN32
 
 

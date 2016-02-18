@@ -164,7 +164,7 @@ class HSTRInitializer
     const HSTR_RESULT init_result_;
 
 public:
-    HSTRInitializer(const char* interface_version) :
+    HSTRInitializer(const char *interface_version) :
         // We should only Fini if the library hasn't been intialized beforehand
         should_fini_(hStreams_IsInitialized() != HSTR_RESULT_SUCCESS),
         init_result_(hStreams_InitInVersion(interface_version))
@@ -204,13 +204,14 @@ DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(time_out_ms_val)
 DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(_hStreams_FatalError)
 DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(kmp_affinity)
 
-namespace detail {
+namespace detail
+{
 /**
  * Helper function to return whether an argument is present in a container with
  * standard interfaces or not
  */
 template <class C, class V>
-inline bool in_container(const C& container, const V& value)
+inline bool in_container(const C &container, const V &value)
 {
     if (std::find(container.begin(), container.end(), value) == container.end()) {
         return false;

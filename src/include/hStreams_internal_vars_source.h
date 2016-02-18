@@ -86,7 +86,7 @@ namespace initial_values
 extern const HSTR_LOG_STR app_init_next_log_str_ID;
 extern const HSTR_LOG_DOM next_log_dom_id;
 extern const HSTR_MKL_INTERFACE mkl_interface;
-extern const char* interface_version;
+extern const char *interface_version;
 extern hStreams_Atomic_HSTR_STATE hStreamsState;
 extern const HSTR_OPTIONS options;
 } // namespace initial_values

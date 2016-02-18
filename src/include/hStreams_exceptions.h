@@ -39,13 +39,13 @@ public:
     /// @param error_code The error code associated with this exception
     /// @param msg The custom message to be associated with this exception
     hStreams_exception(
-            const char *file_name,
-            int line_number,
-            const char *function_name,
-            HSTR_RESULT error_code,
-            std::string const &msg = "",
-            HSTR_INFO_TYPE info_type = HSTR_INFO_TYPE_MISC
-        );
+        const char *file_name,
+        int line_number,
+        const char *function_name,
+        HSTR_RESULT error_code,
+        std::string const &msg = "",
+        HSTR_INFO_TYPE info_type = HSTR_INFO_TYPE_MISC
+    );
     ~hStreams_exception() throw() {};
     const char *what() const throw();
     /// @brief Get the error code associated with the exception

@@ -21,11 +21,11 @@
 
 #if HSTR_VERSION_MICRO
 const char *library_version_string = hStreams_stringer(HSTR_VERSION_MAJOR) "."
-                             hStreams_stringer(HSTR_VERSION_MINOR) "."
-                             hStreams_stringer(HSTR_VERSION_MICRO);
+                                     hStreams_stringer(HSTR_VERSION_MINOR) "."
+                                     hStreams_stringer(HSTR_VERSION_MICRO);
 #else
 const char *library_version_string = hStreams_stringer(HSTR_VERSION_MAJOR) "."
-                             hStreams_stringer(HSTR_VERSION_MINOR);
+                                     hStreams_stringer(HSTR_VERSION_MINOR);
 #endif
 
 namespace globals

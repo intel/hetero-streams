@@ -163,17 +163,17 @@ void set_affinity(hStreams_CPUMask const &cpu_mask)
         break; // no error
     case EFAULT:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                 "Bad memory address used for pthread_setaffinity_np");
+                                   "Bad memory address used for pthread_setaffinity_np");
     case EINVAL:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                 "Bad affinity mask for the worker thread");
+                                   "Bad affinity mask for the worker thread");
     case ESRCH:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR,
-                                 "Bad thread handle in pthread_setaffinity_np");
+                                   "Bad thread handle in pthread_setaffinity_np");
     default:
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                                 << "Unhandled error while calling pthread_setaffinity_np: "
-                                 << pret);
+                                   << "Unhandled error while calling pthread_setaffinity_np: "
+                                   << pret);
     }
 #else
     // FIXME: More than 64 threads on Windows aren't support by that function.
@@ -182,8 +182,8 @@ void set_affinity(hStreams_CPUMask const &cpu_mask)
     DWORD_PTR ret = SetThreadAffinityMask(GetCurrentThread(), cpu_set);
     if (ret == 0) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INTERNAL_ERROR, StringBuilder()
-                                 << "SetThreadAffinityMask has failed. GetLastError return: "
-                                 << StringBuilder::hex(GetLastError()));
+                                   << "SetThreadAffinityMask has failed. GetLastError return: "
+                                   << StringBuilder::hex(GetLastError()));
     }
 
 #endif // _WIN32

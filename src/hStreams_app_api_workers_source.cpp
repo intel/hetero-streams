@@ -42,26 +42,26 @@ detail::app_init_domains_in_version_impl_throw(
     HSTRInitializer hstr_init(in_InterfaceVersion);
     if (hstr_init.getInitResult() != HSTR_RESULT_SUCCESS) {
         throw HSTR_EXCEPTION_MACRO(hstr_init.getInitResult(), StringBuilder()
-                << "Could not initialize the library"
-            );
+                                   << "Could not initialize the library"
+                                  );
     }
 
     if (in_pStreamsPerDomain == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "in_pStreamsPerDomain cannot be NULL"
-            );
+                                   << "in_pStreamsPerDomain cannot be NULL"
+                                  );
     }
     if (!in_NumLogDomains) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "App FUN-level initialization of the Hetero Streams Library with 0 "
-                <<  "logical domains is prohibited"
-            );
+                                   << "App FUN-level initialization of the Hetero Streams Library with 0 "
+                                   <<  "logical domains is prohibited"
+                                  );
     }
     if (!in_LogStreamOversubscription) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "App FUN-level initialization of the Hetero Streams Library with 0 "
-                <<  "logical streams per physical stream is prohibited"
-            );
+                                   << "App FUN-level initialization of the Hetero Streams Library with 0 "
+                                   <<  "logical streams per physical stream is prohibited"
+                                  );
     }
 
     bool is_first_app_initialization;
@@ -69,18 +69,18 @@ detail::app_init_domains_in_version_impl_throw(
     if (globals::app_init_log_doms_IDs.empty()) {
         is_first_app_initialization = true;
         HSTR_DEBUG1(HSTR_INFO_TYPE_TRACE)
-            << "First call to and App FUN-level initialization function.";
+                << "First call to and App FUN-level initialization function.";
     } else {
         is_first_app_initialization = false;
         if (in_NumLogDomains != globals::app_init_log_doms_IDs.size()) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
-                    << "The requested number of logical domains to be used ("
-                    << in_NumLogDomains
-                    << ") is different from the number of logical domains created during "
-                    << "the first call to hStreams_app_init* functions ("
-                    << globals::app_init_log_doms_IDs.size()
-                    << ")"
-                );
+                                       << "The requested number of logical domains to be used ("
+                                       << in_NumLogDomains
+                                       << ") is different from the number of logical domains created during "
+                                       << "the first call to hStreams_app_init* functions ("
+                                       << globals::app_init_log_doms_IDs.size()
+                                       << ")"
+                                      );
         } else {
             HSTR_DEBUG1(HSTR_INFO_TYPE_TRACE)
                     << "Subsequent call to an App FUN-level initialization function, "
@@ -95,8 +95,8 @@ detail::app_init_domains_in_version_impl_throw(
     const uint32_t tot_places = std::accumulate(in_pStreamsPerDomain, in_pStreamsPerDomain + in_NumLogDomains, 0);
     if (!tot_places) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "Initializing hStreams with 0 streams in all logical domains is prohibited."
-            );
+                                   << "Initializing hStreams with 0 streams in all logical domains is prohibited."
+                                  );
     }
 
     HSTR_DEBUG1(HSTR_INFO_TYPE_MISC)
@@ -220,35 +220,35 @@ detail::app_init_domains_in_version_impl_throw(
                                                 &log_domain_ID, &dont_care_overlap);
                 if (ret_val != HSTR_RESULT_SUCCESS) {
                     throw HSTR_EXCEPTION_MACRO(ret_val, StringBuilder()
-                            << "Error while attempting to create a logical domain "
-                            << "in physical domain (ID="
-                            << phys_domain
-                            << ")"
-                        );
+                                               << "Error while attempting to create a logical domain "
+                                               << "in physical domain (ID="
+                                               << phys_domain
+                                               << ")"
+                                              );
                 }
                 globals::app_init_log_doms_IDs.push_back(log_domain_ID);
 
                 HSTR_DEBUG3(HSTR_INFO_TYPE_TRACE)
-                    << "Created logical domain (ID="
-                    << log_domain_ID
-                    << ") out of "
-                    << num_log_domains
-                    << "of width "
-                    << dsize
-                    << " in physical domain "
-                    << phys_domain
-                    << " out of "
-                    << phys_domains_limit
-                    << " with CPU mask from threads "
-                    << d_lower - dsize
-                    << " to "
-                    << d_upper - 1;
+                        << "Created logical domain (ID="
+                        << log_domain_ID
+                        << ") out of "
+                        << num_log_domains
+                        << "of width "
+                        << dsize
+                        << " in physical domain "
+                        << phys_domain
+                        << " out of "
+                        << phys_domains_limit
+                        << " with CPU mask from threads "
+                        << d_lower - dsize
+                        << " to "
+                        << d_upper - 1;
             } else { // is_first_app_initialization
                 log_domain_ID = globals::app_init_log_doms_IDs.at(log_dom_idx);
                 HSTR_DEBUG2(HSTR_INFO_TYPE_TRACE)
-                    << "Reusing logical domain (ID="
-                    << log_domain_ID
-                    << ") for creation of streams.";
+                        << "Reusing logical domain (ID="
+                        << log_domain_ID
+                        << ") for creation of streams.";
                 HSTR_PHYS_DOM ret_physdom;
                 HSTR_CPU_MASK ret_cpu_mask;
                 ret_val = hStreams_GetLogDomainDetails(log_domain_ID, &ret_physdom, ret_cpu_mask);
@@ -258,8 +258,8 @@ detail::app_init_domains_in_version_impl_throw(
                 // paranoid-check ret_physdom and ret_cpu_mask ?
                 if (ret_val != HSTR_RESULT_SUCCESS) {
                     throw HSTR_EXCEPTION_MACRO(ret_val, StringBuilder()
-                            << "Internal error while getting logical domain details."
-                        );
+                                               << "Internal error while getting logical domain details."
+                                              );
                 }
             } // is_first_app_initialization
 
@@ -267,10 +267,10 @@ detail::app_init_domains_in_version_impl_throw(
             // Error checking
             if (in_pStreamsPerDomain[log_dom_idx] > dsize) {
                 throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                        << "Cannot init domain " << log_dom_idx << "with more streams ("
-                        << in_pStreamsPerDomain[log_dom_idx]
-                        << ") than threads available in that domain (" << dsize << ")"
-                    );
+                                           << "Cannot init domain " << log_dom_idx << "with more streams ("
+                                           << in_pStreamsPerDomain[log_dom_idx]
+                                           << ") than threads available in that domain (" << dsize << ")"
+                                          );
             }
 
             if (in_pStreamsPerDomain[log_dom_idx] == 0) {
@@ -308,7 +308,7 @@ detail::app_init_domains_in_version_impl_throw(
                     // places/domain 3               2         2          2         1
                     // log_str_base  0               3         5          7         9
                     //  The math works only because logical streams per place are uniform
-                    HSTR_LOG_STR log_stream_id = log_str_base + lstr *tot_places + place;
+                    HSTR_LOG_STR log_stream_id = log_str_base + lstr * tot_places + place;
                     HSTR_LOG(HSTR_INFO_TYPE_MISC)
                             << "Creating logical stream "
                             << log_stream_id
@@ -326,13 +326,13 @@ detail::app_init_domains_in_version_impl_throw(
                     globals::app_init_next_log_str_ID++;
                     if (ret_val != HSTR_RESULT_SUCCESS) {
                         throw HSTR_EXCEPTION_MACRO(ret_val, StringBuilder()
-                                << "Error while creating the logical stream"
-                                << " (ID="
-                                << log_stream_id
-                                << ") on logical domain (ID="
-                                << log_domain_ID
-                                << ")"
-                            );
+                                                   << "Error while creating the logical stream"
+                                                   << " (ID="
+                                                   << log_stream_id
+                                                   << ") on logical domain (ID="
+                                                   << log_domain_ID
+                                                   << ")"
+                                                  );
                     }
                 } // logical streams per place
             }  // places per logical domain
@@ -365,10 +365,10 @@ detail::app_init_in_version_impl_throw(
     //  !in_LogStreamOversubscription checked in app_init_domains
     if (!in_StreamsPerDomain) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
-                << "Intializing hStreams with 0 streams per domain is prohibited. "
-                << "If you wish to have zero streams in some (but not all) domains, "
-                << "please use hStreams_app_init_domains."
-            );
+                                   << "Intializing hStreams with 0 streams per domain is prohibited. "
+                                   << "If you wish to have zero streams in some (but not all) domains, "
+                                   << "please use hStreams_app_init_domains."
+                                  );
     }
 
     HSTR_LOG_DOM num_phys_log_domains; // 1 logical domain on each physical domain
@@ -376,10 +376,10 @@ detail::app_init_in_version_impl_throw(
     std::vector<uint32_t> places_per_domain(num_phys_log_domains, in_StreamsPerDomain);
 
     app_init_domains_in_version_impl_throw(
-            num_phys_log_domains,
-            places_per_domain.data(),
-            in_LogStreamOversubscription,
-            in_InterfaceVersion);
+        num_phys_log_domains,
+        places_per_domain.data(),
+        in_LogStreamOversubscription,
+        in_InterfaceVersion);
     // We've made it this far, so everything's ok
     hstr_init.dontFini();
 } // detail::app_init_in_version_impl_throw
@@ -397,7 +397,7 @@ detail::app_event_wait_impl_throw(
     hStreams_GetCurrentOptions(&options, sizeof(HSTR_OPTIONS));
 
     EventWait_impl_throw(in_NumEvents, in_pEvents, true,
-            options.time_out_ms_val, NULL, NULL);
+                         options.time_out_ms_val, NULL, NULL);
 } // detail::app_event_wait_impl_throw
 
 void
@@ -416,8 +416,8 @@ detail::app_memset_impl_throw(
 
     if (in_pWriteAddr == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "in_pWriteAddr cannot be NULL"
-            );
+                                   << "in_pWriteAddr cannot be NULL"
+                                  );
     }
 
     uint64_t args[3];
@@ -454,8 +454,8 @@ detail::app_memcpy_impl_throw(
     // Check in_pWriteAddr or in_pReadAddr is not NULL
     if (in_pWriteAddr == NULL || in_pReadAddr == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "Neither in_pWriteAddr nor in_pReturnValue can be NULL"
-            );
+                                   << "Neither in_pWriteAddr nor in_pReturnValue can be NULL"
+                                  );
     }
 
     uint64_t args[3];
@@ -503,8 +503,8 @@ detail::app_sgemm_impl_throw(
 
     if (!A || !B || !C) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "None of A,B or C can be NULL"
-            );
+                                   << "None of A,B or C can be NULL"
+                                  );
     }
 
     uint64_t args[14];
@@ -566,8 +566,8 @@ detail::app_dgemm_impl_throw(
 
     if (!A || !B || !C) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "None of A,B or C can be NULL"
-            );
+                                   << "None of A,B or C can be NULL"
+                                  );
     }
 
     doubleToUint64_t uAlpha, uBeta;
@@ -629,8 +629,8 @@ detail::app_cgemm_impl_throw(
 
     if (!A || !B || !C) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "None of A,B or C can be NULL"
-            );
+                                   << "None of A,B or C can be NULL"
+                                  );
     }
 
     MKL_Complex8ToUint64_t uAlpha, uBeta;
@@ -694,8 +694,8 @@ detail::app_zgemm_impl_throw(
 
     if (!A || !B || !C) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
-                << "None of A,B or C can be NULL"
-            );
+                                   << "None of A,B or C can be NULL"
+                                  );
     }
 
     MKL_Complex16ToUint64_t uAlpha, uBeta;
