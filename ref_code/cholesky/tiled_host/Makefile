@@ -11,8 +11,8 @@ include $(REFCODE_DIR)common/toolchain.mk
 
 CHOLESKY_HOST_TARGET := $(BIN_HOST)cholesky_tiled_host
 
-ADDITIONAL_SOURCE_CXXFLAGS := -mkl -openmp
-ADDITIONAL_SOURCE_LDFLAGS  := -mkl -openmp
+ADDITIONAL_SOURCE_CXXFLAGS := -mkl -qopenmp
+ADDITIONAL_SOURCE_LDFLAGS  := -mkl -qopenmp
 
 CHOLESKY_HOST_SOURCE_SRCS := $(TOP_DIR)cholesky_tiled.cpp $(REFCODE_DIR)common/dtime.cpp $(REFCODE_DIR)common/matrices_generator.cpp
 CHOLESKY_HOST_SOURCE_OBJS := $(CHOLESKY_HOST_SOURCE_SRCS:.cpp=.$(SOURCE_TAG).o)

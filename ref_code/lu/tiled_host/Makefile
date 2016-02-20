@@ -11,8 +11,8 @@ include $(REFCODE_DIR)common/toolchain.mk
 
 LU_HOST_TARGET := $(BIN_HOST)lu_tiled_host
 
-ADDITIONAL_SOURCE_CXXFLAGS := -mkl -openmp
-ADDITIONAL_SOURCE_LDFLAGS  := -mkl -openmp
+ADDITIONAL_SOURCE_CXXFLAGS := -mkl -qopenmp
+ADDITIONAL_SOURCE_LDFLAGS  := -mkl -qopenmp
 
 LU_HOST_SOURCE_SRCS := $(TOP_DIR)lu_tile.cpp $(REFCODE_DIR)common/dtime.cpp $(REFCODE_DIR)common/matrices_generator.cpp
 LU_HOST_SOURCE_OBJS := $(LU_HOST_SOURCE_SRCS:.cpp=.$(SOURCE_TAG).o)

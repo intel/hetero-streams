@@ -13,14 +13,14 @@ CHOLESKY_SOURCE_TARGET := $(BIN_HOST)cholesky_tiled_hstreams_host_multicard
 CHOLESKY_x100_SINK_TARGET := $(BIN_x100)cholesky_sink_1.so
 CHOLESKY_HOST_SINK_TARGET := $(BIN_HOST)cholesky_tiled_hstreams_host_multicard_host.so
 
-ADDITIONAL_SOURCE_CXXFLAGS := -mkl -openmp
-ADDITIONAL_SOURCE_LDFLAGS  := -mkl -lhstreams_source -openmp
+ADDITIONAL_SOURCE_CXXFLAGS := -mkl -qopenmp
+ADDITIONAL_SOURCE_LDFLAGS  := -mkl -lhstreams_source -qopenmp
 
-ADDITIONAL_x100_SINK_CXXFLAGS := -mkl -openmp
-ADDITIONAL_x100_SINK_LDFLAGS  := -mkl -shared -Wl,-soname,cholesky_tiled_hstreams_host_multicard_host.so -openmp
+ADDITIONAL_x100_SINK_CXXFLAGS := -mkl -qopenmp
+ADDITIONAL_x100_SINK_LDFLAGS  := -mkl -shared -Wl,-soname,cholesky_tiled_hstreams_host_multicard_host.so -qopenmp
 
-ADDITIONAL_HOST_SINK_CXXFLAGS := -mkl -openmp
-ADDITIONAL_HOST_SINK_LDFLAGS  := -mkl -shared -Wl,-soname,mat_mult_host_multicard_host.so -openmp
+ADDITIONAL_HOST_SINK_CXXFLAGS := -mkl -qopenmp
+ADDITIONAL_HOST_SINK_LDFLAGS  := -mkl -shared -Wl,-soname,mat_mult_host_multicard_host.so -qopenmp
 
 CHOLESKY_SOURCE_SRCS    = $(TOP_DIR)cholesky_tiled_hstreams_host_multicard.cpp $(REFCODE_DIR)common/dtime.cpp $(REFCODE_DIR)common/hStreams_custom.cpp $(REFCODE_DIR)common/matrices_generator.cpp
 CHOLESKY_x100_SINK_SRCS = $(REFCODE_DIR)common/hStreams_custom_kernels_sink.cpp

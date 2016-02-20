@@ -78,12 +78,12 @@ HOST_INC_DIRS=$(SRC_DIR)include/ $(SRC_DIR)../include/
 
 HOST_COMPILE_FLAGS=$(CFLAGS) $(addprefix -I, $(HOST_INC_DIRS)) \
   -DHSTR_SOURCE \
-  -fPIC -openmp -pthread \
+  -fPIC -qopenmp -pthread \
   -static-intel \
   $(STRICT_COMPILATION_FLAGS) \
   $(CONFIGURATION_FLAGS)
 
-HOST_LINK_FLAGS=$(LDFLAGS) -shared -fPIC -openmp -pthread \
+HOST_LINK_FLAGS=$(LDFLAGS) -shared -fPIC -qopenmp -pthread \
   -Wl,-soname,$(HOST_LIBNAME)\
   -Wl,--version-script=$(SRC_DIR)linker_script_source.map
 

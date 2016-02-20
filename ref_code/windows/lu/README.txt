@@ -90,7 +90,7 @@ Should build, and populate the directory with the following files:
 
 
 C:\Program Files\Intel\MPSS\sdk\tutorials\hstreams\windows\lu\tiled_hstreams>icl
- -Qmic -mkl -openmp -fPIC
+ -Qmic -mkl -qopenmp -fPIC
  -shared ..\..\..\lu\tiled_hstreams\hStreams_custom_kernels_sink.cpp -lhstreams_sink -static-intel -o lu_sink_1.so
 Intel(R) C++ Intel(R) 64 Compiler XE for applications running on Intel(R) 64, Version 15.0.0.108 Build 20140726
 Copyright (C) 1985-2014 Intel Corporation.  All rights reserved.

@@ -12,11 +12,11 @@ include $(REFCODE_DIR)common/toolchain.mk
 LU_SOURCE_TARGET := $(BIN_HOST)lu_tiled_hstreams
 LU_x100_SINK_TARGET := $(BIN_x100)lu_sink_1.so
 
-ADDITIONAL_SOURCE_CXXFLAGS := -mkl -openmp
-ADDITIONAL_SOURCE_LDFLAGS  := -mkl -lhstreams_source -openmp
+ADDITIONAL_SOURCE_CXXFLAGS := -mkl -qopenmp
+ADDITIONAL_SOURCE_LDFLAGS  := -mkl -lhstreams_source -qopenmp
 
-ADDITIONAL_x100_SINK_CXXFLAGS := -mkl -openmp
-ADDITIONAL_x100_SINK_LDFLAGS  := -mkl -shared -Wl,-soname,lu_sink_1.so -openmp
+ADDITIONAL_x100_SINK_CXXFLAGS := -mkl -qopenmp
+ADDITIONAL_x100_SINK_LDFLAGS  := -mkl -shared -Wl,-soname,lu_sink_1.so -qopenmp
 
 LU_SOURCE_SRCS    = $(TOP_DIR)lu_tile_hstreams.cpp $(REFCODE_DIR)common/dtime.cpp $(REFCODE_DIR)common/hStreams_custom.cpp $(REFCODE_DIR)common/matrices_generator.cpp
 LU_x100_SINK_SRCS = $(REFCODE_DIR)common/hStreams_custom_kernels_sink_host.cpp

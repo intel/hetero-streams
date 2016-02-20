@@ -15,8 +15,8 @@ MATMULT_HOST_SINK_TARGET := $(BIN_HOST)mat_mult_host_multicard_host.so
 ADDITIONAL_SOURCE_CXXFLAGS := -mkl -DFP_DATA_TYPE=double
 ADDITIONAL_SOURCE_LDFLAGS  := -mkl -lhstreams_source
 
-ADDITIONAL_HOST_SINK_CXXFLAGS := -mkl -DFP_DATA_TYPE=double -openmp
-ADDITIONAL_HOST_SINK_LDFLAGS  := -mkl -shared -Wl,-soname,mat_mult_host_multicard_host.so -openmp
+ADDITIONAL_HOST_SINK_CXXFLAGS := -mkl -DFP_DATA_TYPE=double -qopenmp
+ADDITIONAL_HOST_SINK_LDFLAGS  := -mkl -shared -Wl,-soname,mat_mult_host_multicard_host.so -qopenmp
 
 MATMULT_SOURCE_SRCS    = $(TOP_DIR)matMult_host_multicard.cpp $(REFCODE_DIR)common/dtime.cpp $(REFCODE_DIR)common/hStreams_custom.cpp
 MATMULT_HOST_SINK_SRCS = $(REFCODE_DIR)common/hStreams_custom_kernels_sink_host.cpp

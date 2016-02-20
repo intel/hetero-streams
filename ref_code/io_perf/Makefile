@@ -11,8 +11,8 @@ include $(REFCODE_DIR)common/toolchain.mk
 
 IO_PERF_TARGET := $(BIN_HOST)io_perf
 
-ADDITIONAL_SOURCE_CXXFLAGS := -openmp
-ADDITIONAL_SOURCE_LDFLAGS  := -lhstreams_source -openmp
+ADDITIONAL_SOURCE_CXXFLAGS := -qopenmp
+ADDITIONAL_SOURCE_LDFLAGS  := -lhstreams_source -qopenmp
 
 IO_PERF_SOURCE_SRCS := $(TOP_DIR)io_perf.cpp $(REFCODE_DIR)common/dtime.cpp
 IO_PERF_SOURCE_OBJS := $(IO_PERF_SOURCE_SRCS:.cpp=.$(SOURCE_TAG).o)

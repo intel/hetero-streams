@@ -41,7 +41,7 @@ x100_CARD_INC_DIRS:=$(SRC_DIR)include/ $(SRC_DIR)../include/
 
 x100_CARD_COMPILE_FLAGS:=$(CFLAGS) $(addprefix -I, $(x100_CARD_INC_DIRS)) \
   -UHSTR_SOURCE \
-  -openmp -pthread \
+  -qopenmp -pthread \
   -rdynamic \
   $(STRICT_COMPILATION_FLAGS) \
   $(CONFIGURATION_FLAGS)
@@ -50,7 +50,7 @@ ifdef COVFILE_RUNTIME_LOCATION
 x100_CARD_COMPILE_FLAGS += $(PREPROC_DEFINE)COVFILE_RUNTIME_LOCATION="$(COVFILE_RUNTIME_LOCATION)"
 endif
 
-x100_CARD_EXE_LINK_FLAGS:=$(LDFLAGS) -rdynamic -openmp -pthread -L$(x100_CARD_BIN_DIR) -Wl,--build-id -shared-intel -Wl,--version-script=$(SRC_DIR)linker_script_x100_card.map
+x100_CARD_EXE_LINK_FLAGS:=$(LDFLAGS) -rdynamic -qopenmp -pthread -L$(x100_CARD_BIN_DIR) -Wl,--build-id -shared-intel -Wl,--version-script=$(SRC_DIR)linker_script_x100_card.map
 
 $(x100_CARD_EXE_TARGET): $(x100_CARD_EXE_OBJS)
 	$(dir_create)
