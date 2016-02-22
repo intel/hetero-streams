@@ -21,7 +21,9 @@ License:	LGPLv2.1 Intel-Sample-Code-License
 URL:		https://github.com/01org/hetero-streams
 Source0:	%{name}-%{version}.tar.gz
 AutoReqProv: no
-Obsoletes:	mpss-hstreams
+# The main package obsoletes both dbg and the main package of mpss-hstreams-*
+# because we can't make the debuginfo package obsolete the -dbg package
+Obsoletes:	mpss-hstreams mpss-hstreams-dbg
 
 BuildRequires:	gcc make
 #Requires:
@@ -50,6 +52,7 @@ hetero-streams provides a simple streaming abstraction for task concurrency.
 Summary: Hetero Streams Library - development files
 Group: System Environment/Libraries
 Requires: %{name} = %{version}
+Obsoletes:  mpss-hstreams-dev
 
 %description devel
 Development files for Hetero Streams Library
@@ -58,6 +61,7 @@ Development files for Hetero Streams Library
 Summary: Hetero Streams Library - documentation files
 Group: Documentation
 Requires: %{name} = %{version}
+Obsoletes:  mpss-hstreams-doc
 
 %description doc
 Documentation files for Hetero Streams Library
