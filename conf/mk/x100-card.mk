@@ -15,13 +15,12 @@
 # Note that we can't use Position Independent Executable
 # on x100 Phis as COI only started supporting PIE executables
 # with the 3.6 release
-KNC_CARD_BLD_DIR:=$(BLD_DIR)knc-card/
-KNC_CARD_BIN_DIR:=$(BIN_DIR)knc-card/
+x100_CARD_BLD_DIR:=$(BLD_DIR)x100-card/
+x100_CARD_BIN_DIR:=$(BIN_DIR)x100-card/
 
+x100_CARD_EXE_TARGET:=$(x100_CARD_BIN_DIR)$(x100_CARD_PAYLOAD_NAME)
 
-KNC_CARD_EXE_TARGET:=$(KNC_CARD_BIN_DIR)$(KNC_CARD_PAYLOAD_NAME)
-
-KNC_CARD_EXE_SOURCE_FILES:= \
+x100_CARD_EXE_SOURCE_FILES:= \
 	hStreams_COIWrapper_sink.cpp \
 	hStreams_Logger.cpp \
 	hStreams_MKLWrapper.cpp \
@@ -34,13 +33,13 @@ KNC_CARD_EXE_SOURCE_FILES:= \
 	hStreams_locks.cpp \
 	hStreams_sink.cpp
 
-KNC_CARD_EXE_OBJS:=$(addprefix $(KNC_CARD_BLD_DIR), $(KNC_CARD_EXE_SOURCE_FILES:.cpp=.knc-card-exe.o))
-KNC_CARD_EXE_DEPS:=$(addprefix $(KNC_CARD_BLD_DIR), $(KNC_CARD_EXE_SOURCE_FILES:.cpp=.knc-card-exe.d))
+x100_CARD_EXE_OBJS:=$(addprefix $(x100_CARD_BLD_DIR), $(x100_CARD_EXE_SOURCE_FILES:.cpp=.x100-card-exe.o))
+x100_CARD_EXE_DEPS:=$(addprefix $(x100_CARD_BLD_DIR), $(x100_CARD_EXE_SOURCE_FILES:.cpp=.x100-card-exe.d))
 
 # include flags
-KNC_CARD_INC_DIRS:=$(SRC_DIR)include/ $(SRC_DIR)../include/
+x100_CARD_INC_DIRS:=$(SRC_DIR)include/ $(SRC_DIR)../include/
 
-KNC_CARD_COMPILE_FLAGS:=$(CFLAGS) $(addprefix -I, $(KNC_CARD_INC_DIRS)) \
+x100_CARD_COMPILE_FLAGS:=$(CFLAGS) $(addprefix -I, $(x100_CARD_INC_DIRS)) \
   -UHSTR_SOURCE \
   -openmp -pthread \
   -rdynamic \
@@ -48,31 +47,31 @@ KNC_CARD_COMPILE_FLAGS:=$(CFLAGS) $(addprefix -I, $(KNC_CARD_INC_DIRS)) \
   $(CONFIGURATION_FLAGS)
 
 ifdef COVFILE_RUNTIME_LOCATION
-KNC_CARD_COMPILE_FLAGS += $(PREPROC_DEFINE)COVFILE_RUNTIME_LOCATION="$(COVFILE_RUNTIME_LOCATION)"
+x100_CARD_COMPILE_FLAGS += $(PREPROC_DEFINE)COVFILE_RUNTIME_LOCATION="$(COVFILE_RUNTIME_LOCATION)"
 endif
 
-KNC_CARD_EXE_LINK_FLAGS:=$(LDFLAGS) -rdynamic -openmp -pthread -L$(KNC_CARD_BIN_DIR) -Wl,--build-id -shared-intel -Wl,--version-script=$(SRC_DIR)linker_script_KNC.map
+x100_CARD_EXE_LINK_FLAGS:=$(LDFLAGS) -rdynamic -openmp -pthread -L$(x100_CARD_BIN_DIR) -Wl,--build-id -shared-intel -Wl,--version-script=$(SRC_DIR)linker_script_x100_card.map
 
-$(KNC_CARD_EXE_TARGET): $(KNC_CARD_EXE_OBJS)
+$(x100_CARD_EXE_TARGET): $(x100_CARD_EXE_OBJS)
 	$(dir_create)
-	$(KNC_CARD_CC) $^ $(KNC_CARD_EXE_LINK_FLAGS) -o $@
+	$(x100_CARD_CC) $^ $(x100_CARD_EXE_LINK_FLAGS) -o $@
 	$(K1OM_STRIP) $(@)
 
-$(KNC_CARD_BLD_DIR)%.knc-card-exe.o: $(SRC_DIR)%.cpp
+$(x100_CARD_BLD_DIR)%.x100-card-exe.o: $(SRC_DIR)%.cpp
 	$(dir_create)
-	$(KNC_CARD_CC) -MMD -MP -c $< $(KNC_CARD_COMPILE_FLAGS) -o $@
+	$(x100_CARD_CC) -MMD -MP -c $< $(x100_CARD_COMPILE_FLAGS) -o $@
 
-$(KNC_CARD_BLD_DIR)%.knc-card-lib.o: $(SRC_DIR)%.cpp
+$(x100_CARD_BLD_DIR)%.x100-card-lib.o: $(SRC_DIR)%.cpp
 	$(dir_create)
-	$(KNC_CARD_CC) -MMD -MP -c $< $(KNC_CARD_COMPILE_FLAGS) -o $@
+	$(x100_CARD_CC) -MMD -MP -c $< $(x100_CARD_COMPILE_FLAGS) -o $@
 
-build-knc-card: $(KNC_CARD_EXE_TARGET)
+build-x100-card: $(x100_CARD_EXE_TARGET)
 
-.PHONY: install-knc-card
-install-knc-card: build-knc-card
+.PHONY: install-x100-card
+install-x100-card: build-x100-card
 
-.PHONY: clean-knc-card
-clean-knc-card:
-	$(RM) $(KNC_CARD_EXE_DEPS) $(KNC_CARD_EXE_OBJS) $(KNC_CARD_EXE_TARGET)
+.PHONY: clean-x100-card
+clean-x100-card:
+	$(RM) $(x100_CARD_EXE_DEPS) $(x100_CARD_EXE_OBJS) $(x100_CARD_EXE_TARGET)
 
--include $(KNC_CARD_DEPS)
+-include $(x100_CARD_DEPS)

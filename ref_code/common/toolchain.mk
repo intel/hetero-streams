@@ -85,4 +85,4 @@ dir_create=@mkdir -p $(@D)
 RM_rf := rm -rf
 
 BIN_HOST = $(REFCODE_DIR)../bin/host/
-BIN_DEV  = $(REFCODE_DIR)../bin/dev/
+BIN_x100 = $(REFCODE_DIR)../bin/x100-card/

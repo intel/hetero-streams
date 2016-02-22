@@ -10,7 +10,7 @@ REFCODE_DIR:=$(realpath $(TOP_DIR)../../)/
 include $(REFCODE_DIR)common/toolchain.mk
 
 LU_SOURCE_TARGET := $(BIN_HOST)lu_tiled_hstreams
-LU_x100_SINK_TARGET := $(BIN_DEV)lu_sink_1.so
+LU_x100_SINK_TARGET := $(BIN_x100)lu_sink_1.so
 
 ADDITIONAL_SOURCE_CXXFLAGS := -mkl -openmp
 ADDITIONAL_SOURCE_LDFLAGS  := -mkl -lhstreams_source -openmp

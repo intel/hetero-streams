@@ -9,9 +9,9 @@
 ./conf/mk/doc.mk
 ./conf/mk/headers.mk
 ./conf/mk/host.mk
-./conf/mk/knc-card.mk
+./conf/mk/x100-card.mk
 ./conf/mk/toolchain.mk
-./conf/sh/incbin.sh
+./conf/py/bin2inc.py
 ./conf/spec/hstreams.spec
 ./conf/vcxproj/hstreams_source/dllmain.cpp
 ./conf/vcxproj/hstreams_source/hstreams_source.vcxproj
@@ -201,5 +201,5 @@
 ./src/include/hStreams_internal_vars_source.h
 ./src/include/hStreams_locks.h
 ./src/include/hStreams_threading.h
-./src/linker_script_KNC.map
+./src/linker_script_x100_card.map
 ./src/linker_script_source.map

@@ -25,7 +25,7 @@ endif
 version := $(version_major).$(version_minor).$(version_micro).$(version_build)
 
 # To not build the documentation, pass NODOC=1 to the make line
-ALL_TARGET := build-host build-knc-card
+ALL_TARGET := build-host build-x100-card
 ifneq "$(NODOC)" "1"
 ALL_TARGET += build-doc
 endif
@@ -33,13 +33,13 @@ endif
 .PHONY: all
 all: $(ALL_TARGET)
 .PHONY: install
-install: install-knc
+install: install-x100-card
 
 # Here's the root directory
 TOP_DIR:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 include $(TOP_DIR)conf/mk/toolchain.mk
-include $(TOP_DIR)conf/mk/knc-card.mk
+include $(TOP_DIR)conf/mk/x100-card.mk
 include $(TOP_DIR)conf/mk/host.mk
 include $(TOP_DIR)conf/mk/headers.mk
 include $(TOP_DIR)conf/mk/doc.mk
@@ -56,8 +56,8 @@ endif
 format:
 	$(ASTYLE) $(ASTYLE_OPTIONS)
 
-.PHONY: install-knc
-install-knc: install-host install-knc-card install-headers install-doc
+.PHONY: install-x100-card
+install-x100-card: install-host install-x100-card install-headers install-doc
 
 .PHONY: clean
-clean: clean-host clean-knc-card clean-doc
+clean: clean-host clean-x100-card clean-doc

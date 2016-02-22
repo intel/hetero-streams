@@ -185,7 +185,7 @@ icpc -c /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/hStre
 icpc -c /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/matrices_generator.cpp -o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/matrices_generator.source.o -Wall -Werror-all -fPIC -DNDEBUG -O3 -diag-disable 13368 -diag-disable 15527 -I/localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common -I/usr/include/hStreams  -mkl -openmp
 icpc /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/lu/tiled_hstreams/lu_tile_hstreams.source.o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/dtime.source.o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/hStreams_custom.source.o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/matrices_generator.source.o -o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/../bin/host/lu_tiled_hstreams   -mkl -lhstreams_source -openmp
 icpc -mmic -c /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/hStreams_custom_kernels_sink_host.cpp -o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/hStreams_custom_kernels_sink_host.x100-sink.o -Wall -Werror-all -fPIC -DNDEBUG -O3 -diag-disable 13368 -diag-disable 15527 -I/localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common -I/usr/include/hStreams  -mkl -openmp
-icpc -mmic /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/hStreams_custom_kernels_sink_host.x100-sink.o -o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/../bin/dev/lu_sink_1.so   -mkl -shared -Wl,-soname,lu_sink_1.so -openmp
+icpc -mmic /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/hStreams_custom_kernels_sink_host.x100-sink.o -o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/../bin/x100-card/lu_sink_1.so   -mkl -shared -Wl,-soname,lu_sink_1.so -openmp
 
 
 HOW TO RUN THE LU REFERENCE CODE
@@ -245,7 +245,7 @@ Run the tiled_hstreams version
 This is how a typical output looks:
 
 ~/hstreams/bin/host ~/hstreams/ref_code/lu/tiled_hstreams
-~/hstreams/bin/dev ~/hstreams/bin/host ~/hstreams/ref_code/lu/tiled_hstreams
+~/hstreams/bin/x100-card ~/hstreams/bin/host ~/hstreams/ref_code/lu/tiled_hstreams
 ~/hstreams/bin/host ~/hstreams/ref_code/lu/tiled_hstreams
 ~/hstreams/ref_code/lu/tiled_hstreams
 matrix is in Row major format

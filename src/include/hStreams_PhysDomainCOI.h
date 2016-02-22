@@ -22,7 +22,7 @@
 class hStreams_LogDomain;
 
 /// @brief An implementation of a physical domain which represents the physical
-///     domain on a local, PCIe-accessed KNC card.
+///     domain on a local, PCIe-accessed x100 card.
 class hStreams_PhysDomainCOI : public hStreams_PhysDomain
 {
     /// @brief A pre-created handle to the COI process

@@ -91,10 +91,6 @@ to add /usr/lib64.
 
 A sample output of this app is as follows:
 
-~/my_hstreams/hstreams-release-3.4/bin/host ~/my_hstreams/hstreams-release-3.4/ref_code/basic_perf
-~/my_hstreams/hstreams-release-3.4/bin/dev ~/my_hstreams/hstreams-release-3.4/bin/host ~/my_hstreams/hstreams-release-3.4/ref_code/basic_perf
-~/my_hstreams/hstreams-release-3.4/bin/host ~/my_hstreams/hstreams-release-3.4/ref_code/basic_perf
-~/my_hstreams/hstreams-release-3.4/ref_code/basic_perf
 >>init
 >>create bufs
 >>xfer mem to remote domain

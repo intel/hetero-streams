@@ -35,10 +35,10 @@ endif
 ifdef ICC
   $(info ICC is defined, will use that.)
   HOST_CC := $(ICC) -std=c++11
-  KNC_CARD_CC := $(ICC) -mmic
+  x100_CARD_CC := $(ICC) -mmic
 else
   HOST_CC := icc -std=c++11
-  KNC_CARD_CC := icc -mmic
+  x100_CARD_CC := icc -mmic
 endif
 
 # dir creation guard, to prevent explicitly adding directories as targets
@@ -67,8 +67,9 @@ CFG_SPEC_DIR:=$(CFG_DIR)spec/
 DOC_DIR:=$(TOP_DIR)doc/
 REF_CODE_DIR:=$(TOP_DIR)ref_code/
 SH_DIR:=$(TOP_DIR)conf/sh/
+PY_DIR:=$(TOP_DIR)conf/py/
 
-INCBIN:=$(SH_DIR)incbin.sh
+INCBIN:=$(PY_DIR)bin2inc.py
 
 K1OM_STRIP:=/usr/linux-k1om-4.7/bin/x86_64-k1om-linux-strip
 
@@ -102,8 +103,8 @@ endif
 CARD_LIBRARY_INSTALL_DIR:=/usr/lib64/
 CARD_PAYLOAD_INSTALL_DIR:=/usr/lib64/
 
-KNC_CARD_PAYLOAD_NAME:=hstreams_start_knc
-KNC_CARD_LIBRARY_NAME:=hstreams_sink # results in libhstreams_sink.so{,.0}
+x100_CARD_PAYLOAD_NAME:=hstreams_start_x100_card
+x100_CARD_LIBRARY_NAME:=hstreams_sink # results in libhstreams_sink.so{,.0}
 
 # RPM SPEC file
 SPEC_FILE:=$(CFG_SPEC_DIR)hstreams.spec

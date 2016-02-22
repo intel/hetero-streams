@@ -176,8 +176,8 @@ detail::InitInVersion_impl_throw(const char *interface_version)
         }
 
         HSTR_COIPROCESS coi_process;
-        coi_res = hStreams_COIWrapper::COIProcessCreateFromMemory(coi_eng, "KNC_startup",
-                  (void *)KNC_startup, KNC_startup_size,
+        coi_res = hStreams_COIWrapper::COIProcessCreateFromMemory(coi_eng, "x100_card_startup",
+                  (void *)x100_card_startup, x100_card_startup_size,
                   0, NULL, false, NULL, true, NULL, 1024 * 1024, globals::target_library_search_path.c_str(),
                   NULL, 0, &coi_process);
         if (HSTR_COI_SUCCESS != coi_res) {

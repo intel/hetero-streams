@@ -33,7 +33,7 @@
       <Command>compile_sink.bat $(SolutionDir)\src $(ProjectDir)</Command>
     </PreBuildEvent>
     <PreLinkEvent>
-      <Command>python ..\..\py\bin2inc.py $(ProjectDir)\hstreams_sink.so $(ProjectDir)\..\hstreams_source\__tmp.cpp KNC_startup</Command>
+      <Command>python ..\..\py\bin2inc.py $(ProjectDir)\hstreams_sink.so $(ProjectDir)\..\hstreams_source\__tmp.cpp x100_card_startup</Command>
     </PreLinkEvent>
     <PostBuildEvent>
       <Command>del hstreams_sink.so</Command>
