@@ -151,8 +151,7 @@ uint64_t hStreams_LibLoader::fetchGlobalFunctionAddress_nothrow(std::string cons
 #else // _WIN32
 void hStreams_LibLoader::load(std::string const &full_path, LIB_HANDLER::handle_t &handle)
 {
-    handle = LoadLibrary(full_path.c_str());
-
+    handle = LoadLibraryEx(full_path.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
     if (handle == NULL) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, "Cannot load library " + full_path);
     }

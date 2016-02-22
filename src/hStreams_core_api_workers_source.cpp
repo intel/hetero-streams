@@ -107,7 +107,7 @@ detail::InitInVersion_impl_throw(const char *interface_version)
     // Constructor will load COI library if it hasn't been loaded already
     new hStreams_COIWrapper;
 
-    //Clear any error if previously set.
+    // Clear any error if previously set.
     hStreams_ClearLastError();
 
 
@@ -119,8 +119,8 @@ detail::InitInVersion_impl_throw(const char *interface_version)
     const char         *fetchSinkFuncAddress_name   = "hStreams_fetchSinkFuncAddress";
     string              executableFileName;
     HSTR_RESULT         hsr;
-    HSTR_COIRESULT           result;
-    HSTR_COIPROCESS dummy_process = NULL;
+    HSTR_COIRESULT      result;
+    HSTR_COIPROCESS     dummy_process = NULL;
 
     if ((hsr = hStreams_FetchExecutableName(executableFileName)) != HSTR_RESULT_SUCCESS) {
         HSTR_WARN(HSTR_INFO_TYPE_MISC) << "Cannot obtain executable name.";
@@ -129,8 +129,10 @@ detail::InitInVersion_impl_throw(const char *interface_version)
     } else {
         HSTR_LOG(HSTR_INFO_TYPE_MISC) << "Executable file name: '" << executableFileName << "'.";
     }
-
     hStreams_ClearLastError();
+
+    // Set search paths for libraries from environment variables
+    setSearchedPaths();
 
     // May return HSTR_COI_DOES_NOT_EXIST if COI_ISA_MIC is not matched
     result = hStreams_COIWrapper::COIEngineGetCount(HSTR_ISA_MIC, &hstr_proc.myNumPhysDomains);
@@ -176,7 +178,7 @@ detail::InitInVersion_impl_throw(const char *interface_version)
         HSTR_COIPROCESS coi_process;
         coi_res = hStreams_COIWrapper::COIProcessCreateFromMemory(coi_eng, "KNC_startup",
                   (void *)KNC_startup, KNC_startup_size,
-                  0, NULL, false, NULL, true, NULL, 1024 * 1024, NULL,
+                  0, NULL, false, NULL, true, NULL, 1024 * 1024, globals::target_library_search_path.c_str(),
                   NULL, 0, &coi_process);
         if (HSTR_COI_SUCCESS != coi_res) {
             throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
@@ -441,6 +443,8 @@ void detail::Fini_impl_throw()
     phys_domains.destroyAllDomains();
 
     hstr_proc.myActivePhysDomains = 0;
+    globals::target_library_search_path.clear();
+    globals::host_library_search_path.clear();
     globals::app_init_next_log_str_ID       = globals::initial_values::app_init_next_log_str_ID;
     globals::interface_version              = globals::initial_values::interface_version;
     globals::mkl_interface                  = globals::initial_values::mkl_interface;

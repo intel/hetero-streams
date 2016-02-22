@@ -313,7 +313,7 @@ typedef ConvertToUint64_t<MKL_Complex16, 2>  MKL_Complex16ToUint64_t;
 
 ///////////////////////////////////////////////////////////////////
 ///
-/// Fetch executable name that is currently running on the source.  Trims the directory path and
+/// Fetch executable name that is currently running on the source. Trims the directory path and
 ///  '.exe' file extension from windows.
 ///
 /// @param  out_buff
@@ -329,6 +329,24 @@ typedef ConvertToUint64_t<MKL_Complex16, 2>  MKL_Complex16ToUint64_t;
 ///
 HSTR_RESULT
 hStreams_FetchExecutableName(std::string &out_buff);
+
+///////////////////////////////////////////////////////////////////
+///
+/// Fetch path of the directory whitch contain executable that is currently running on the source.
+///
+/// @param  out_dir
+///         [out] The buffer that will receive the path of the directory.
+///
+/// @return HSTR_RESULT_SUCCESS if we successfully fetched the executable
+///         directory, and we copied it to out_dir.
+///
+/// @return HSTR_RESULT_BUFF_TOO_SMALL if out_buff was too small to receive
+///         the entire name.
+///
+/// @return HSTR_RESULT_INTERNAL_ERROR when an internal error occurs.
+///
+HSTR_RESULT
+hStreams_FetchExecutableDirectory(std::string &out_dir);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -386,19 +404,27 @@ inline void hStreams_SleepMS(unsigned int ms)
 
 /////////////////////////////////////////////////////////
 ///
+//setSearchedPaths
+/// @brief Set libraries searched paths from environment variables
+///
+/////////////////////////////////////////////////////////
+void setSearchedPaths();
+
+/////////////////////////////////////////////////////////
+///
 // findFileName
-/// @brief Find a filename in the SINK_LD_LIBRARY_PATH or
-/// HOST_SINK_LD_LIBRARY_PATH (for host loading).
+/// @brief Utility function used to find a filename in searchedPaths.
 ///
 /// @param fileName path to the file
 ///
-/// @param env_variable_path env variable in which path to libraries are kept
+/// @param searchedPaths paths to directories where libraries are kept,
+///        in LD_LIBRARY_PATH like format
 ///
 /// @return If the return value is empty, that means the conditions were
 /// such that it could not find the file.
 ///
 /////////////////////////////////////////////////////////
-std::string findFileName(const char *fileName, const char *env_variable_path);
+std::string findFileName(const char *fileName, const char *searchedPaths);
 
 /////////////////////////////////////////////////////////
 ///
