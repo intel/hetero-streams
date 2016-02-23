@@ -12,18 +12,24 @@
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(SolutionDir)bin\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Version=1.0.0;RefCodesDir=$(SolutionDir)\ref_code;IncludeDir=$(SolutionDir)\include;DocsDir=$(SolutionDir)\doc</DefineConstants>
+    <LinkerAdditionalOptions>-ext WixUIExtension</LinkerAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>$(SolutionDir)bin\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <WixVariables>
     </WixVariables>
-    <DefineConstants>RefCodesDir=$(SolutionDir)\ref_code;IncludeDir=$(SolutionDir)\include;Version=1.0.0</DefineConstants>
+    <DefineConstants>Version=1.0.0;RefCodesDir=$(SolutionDir)\ref_code;IncludeDir=$(SolutionDir)\include;DocsDir=$(SolutionDir)\doc</DefineConstants>
+    <LinkerAdditionalOptions>-ext WixUIExtension</LinkerAdditionalOptions>
+    <Cultures>
+    </Cultures>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
+    <Compile Include="__Docs.wxs" />
     <Compile Include="__Include.wxs" />
     <Compile Include="__Tutorials.wxs" />
   </ItemGroup>
@@ -37,13 +43,17 @@
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Strings.wxl" />
+  </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
-    <PreBuildEvent>CALL "$(WIX)\bin\heat.exe" dir "$(SolutionDir)\ref_code" -cg Tutorials -gg -scom -sreg -sfrag -srd -dr TUTORIALS_LOCATION -var var.RefCodesDir -out $(ProjectDir)\__Tutorials.wxs
-CALL "$(WIX)\bin\heat.exe" dir "$(SolutionDir)\include" -cg Include -gg -scom -sreg -sfrag -srd -dr INCLUDE_LOCATION -var var.IncludeDir -out $(ProjectDir)\__Include.wxs</PreBuildEvent>
+    <PostBuildEvent />
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent />
+    <PreBuildEvent>CALL "$(WIX)\bin\heat.exe" dir "$(SolutionDir)\ref_code" -cg Tutorials -gg -scom -sreg -sfrag -srd -dr TUTORIALS_LOCATION -var var.RefCodesDir -out $(ProjectDir)\__Tutorials.wxs
+CALL "$(WIX)\bin\heat.exe" dir "$(SolutionDir)\include" -cg Include -gg -scom -sreg -sfrag -srd -dr INCLUDE_LOCATION -var var.IncludeDir -out $(ProjectDir)\__Include.wxs
+CALL "$(WIX)\bin\heat.exe" dir "$(SolutionDir)\doc" -cg Docs -gg -scom -sreg -sfrag -srd -dr DOCS_LOCATION -var var.DocsDir -out $(ProjectDir)\__Docs.wxs -t $(ProjectDir)\exclude_images.xslt</PreBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

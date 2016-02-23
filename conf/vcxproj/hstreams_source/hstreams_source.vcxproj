@@ -56,8 +56,12 @@
       <OpenMP>GenerateParallelCode</OpenMP>
     </ClCompile>
     <Link>
-      <ModuleDefinitionFile>hstreams_source.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
     </Link>
+    <PostBuildEvent>
+      <Command>del $(ProjectDir)\__tmp.cpp</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

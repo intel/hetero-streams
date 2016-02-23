@@ -11,44 +11,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{71B95181-CCEC-4E91-8403-DEBBD4BC4503}</ProjectGuid>
+    <ProjectGuid>{8F17E8C2-B1FF-454B-BB55-0DC026E9FA95}</ProjectGuid>
+    <RootNamespace>hstreams_documentation</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PlatformToolset>v110</PlatformToolset>
+    <ConfigurationType>Utility</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PlatformToolset>v110</PlatformToolset>
+    <ConfigurationType>Utility</ConfigurationType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IntDir>$(SolutionDir)build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)\bin</OutDir>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
-      <Command>compile_sink.bat $(SolutionDir)\src $(ProjectDir)</Command>
+      <Command>compile_refman.bat $(SolutionDir)</Command>
     </PreBuildEvent>
-    <PreLinkEvent>
-      <Command>python ..\..\py\bin2inc.py $(ProjectDir)\hstreams_sink.so $(ProjectDir)\..\hstreams_source\__tmp.cpp x100_card_startup</Command>
-    </PreLinkEvent>
-    <PostBuildEvent>
-      <Command>del hstreams_sink.so</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PreBuildEvent>
-      <Command>compile_sink.bat $(SolutionDir)\src $(ProjectDir)</Command>
+      <Command>compile_refman.bat $(SolutionDir)</Command>
     </PreBuildEvent>
-    <PreLinkEvent>
-      <Command>python ..\..\py\bin2inc.py $(ProjectDir)\hstreams_sink.so $(ProjectDir)\..\hstreams_source\__tmp.cpp x100_card_startup</Command>
-    </PreLinkEvent>
-    <PostBuildEvent>
-      <Command>del hstreams_sink.so</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
   </ItemGroup>

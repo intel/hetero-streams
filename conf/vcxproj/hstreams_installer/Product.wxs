@@ -1,28 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
  	<Product Id="*" Name="Hetero Streams Library" Language="1033" Version="$(var.Version)" Manufacturer="Intel Corporation" UpgradeCode="8ea6de21-880f-403e-8cc3-1244d2392893">
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+		<Package InstallerVersion="405" Compressed="yes" InstallScope="perMachine" />
 
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="no" AllowDowngrades="no"/>
 		<MediaTemplate EmbedCab="yes"/>
 
 		<Feature Id="ProductFeature" Title="hstreams_installer" Level="1">
+      <ComponentGroupRef Id="Docs"/>
 			<ComponentGroupRef Id="Redist" />
       <ComponentGroupRef Id="Include"/>
       <ComponentGroupRef Id="Tutorials"/>
       <ComponentGroupRef Id="Lib"/>
+      <ComponentGroupRef Id="License"/>
+      <ComponentGroupRef Id="GplLicense"/>
+      <ComponentGroupRef Id="Readme"/>
 		</Feature>
-	</Product>
 
-	<Fragment>
+    <Feature Id="VCRedist" Title="Visual C++ 11.0 Runtime" AllowAdvertise="no" Display="hidden" Level="1">
+      <MergeRef Id="VCRedist"/>
+    </Feature>
+
+    <UIRef Id="WixUI_InstallDir" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.SolutionDir)\License.rtf" />
+    
+	</Product>
+  
+  <Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFiles64Folder">
         <Directory Id="MANUFACTURERDIR" Name="Intel">
-          <Directory Id="INSTALLFOLDER" Name="HeteroStreamLibrary">
+          <Directory Id="INSTALLFOLDER" Name="HeteroStreamsLibrary">
             <Directory Id="REDIST_LOCATION" Name="redist"/>
-            <Directory Id="TUTORIALS_LOCATION" Name="tutorials"/>
+            <Directory Id="TUTORIALS_LOCATION" Name="ref_code"/>
             <Directory Id="INCLUDE_LOCATION" Name="include"/>
             <Directory Id="LIB_LOCATION" Name="lib"/>
+            <Directory Id="DOCS_LOCATION" Name="docs"/>
             </Directory>
           </Directory>
        </Directory>
@@ -44,5 +59,31 @@
         <Environment Id="HSTREAMS_HOME_PATH" Name="HSTREAMS_HOME" Value="[INSTALLFOLDER]" Permanent="no" Action="create" System="no"/>
       </Component>
     </ComponentGroup>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="License" Directory="INSTALLFOLDER">
+      <Component Id="ProductComponent3">
+        <File Source="$(var.SolutionDir)\License.rtf"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="GplLicense" Directory="INSTALLFOLDER">
+      <Component Id="ProductComponent4">
+        <File Source="$(var.SolutionDir)\COPYING"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="Readme" Directory="INSTALLFOLDER">
+      <Component Id="ProductComponent5">
+        <File Source="$(var.SolutionDir)\README.txt"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
+    <DirectoryRef Id="TARGETDIR">
+      <Merge Id="VCRedist" SourceFile="$(var.ProjectDir)\MergeModules\Microsoft_VC110_CRT_x64.msm" DiskId="1" Language="0"/>
+    </DirectoryRef>
   </Fragment>
 </Wix>

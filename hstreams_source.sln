@@ -11,7 +11,10 @@ EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "hstreams_installer", "conf\vcxproj\hstreams_installer\hstreams_installer.wixproj", "{52943309-027E-4328-B819-FCAA89A5ABBB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{72E01404-FF44-4F6F-99CE-829802092691} = {72E01404-FF44-4F6F-99CE-829802092691}
+		{8F17E8C2-B1FF-454B-BB55-0DC026E9FA95} = {8F17E8C2-B1FF-454B-BB55-0DC026E9FA95}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hstreams_documentation", "conf\vcxproj\hstreams_documentation\hstreams_documentation.vcxproj", "{8F17E8C2-B1FF-454B-BB55-0DC026E9FA95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +34,10 @@ Global
 		{52943309-027E-4328-B819-FCAA89A5ABBB}.Debug|x64.Build.0 = Debug|x64
 		{52943309-027E-4328-B819-FCAA89A5ABBB}.Release|x64.ActiveCfg = Release|x64
 		{52943309-027E-4328-B819-FCAA89A5ABBB}.Release|x64.Build.0 = Release|x64
+		{8F17E8C2-B1FF-454B-BB55-0DC026E9FA95}.Debug|x64.ActiveCfg = Debug|x64
+		{8F17E8C2-B1FF-454B-BB55-0DC026E9FA95}.Debug|x64.Build.0 = Debug|x64
+		{8F17E8C2-B1FF-454B-BB55-0DC026E9FA95}.Release|x64.ActiveCfg = Release|x64
+		{8F17E8C2-B1FF-454B-BB55-0DC026E9FA95}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

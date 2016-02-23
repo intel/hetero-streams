@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-US" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="WelcomeDlgDescription">
+   This wizard will install Hetero Streams Library on your computer. To continue, click Next.
+   
+   WARNING: This program is protected by copyright law and international treaties.
+  </String>
+</WixLocalization>
