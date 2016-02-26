@@ -95,7 +95,7 @@ ifeq ("$(wildcard $(DOXYGEN))","")
 $(info [INFO] Running with system-installed doxygen)
 DOXYGEN:=doxygen
 SYSTEM_DOXYGEN_VER:= $(strip $(shell $(DOXYGEN) --version))
-ifneq ("1.6.3", $(DOXYGEN_VER))
+ifneq ($(SYSTEM_DOXYGEN_VER), $(DOXYGEN_VER))
 $(warning [WARN] Please be advised that the doxygen version that will be used is $(SYSTEM_DOXYGEN_VER).)
 $(warning [WARN] It is recommended to use doxygen $(DOXYGEN_VER) for generating the documentation.)
 endif
