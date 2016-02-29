@@ -1,7 +1,7 @@
 ./COPYING
 ./MANIFEST
 ./Makefile
-./README.txt
+./README.md
 ./conf/astyle.rc
 ./conf/doxygen.rc
 ./conf/header.tex

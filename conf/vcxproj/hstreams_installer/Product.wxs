@@ -77,7 +77,7 @@
   <Fragment>
     <ComponentGroup Id="Readme" Directory="INSTALLFOLDER">
       <Component Id="ProductComponent5">
-        <File Source="$(var.SolutionDir)\README.txt"/>
+        <File Source="$(var.SolutionDir)\README.md"/>
       </Component>
     </ComponentGroup>
   </Fragment>
