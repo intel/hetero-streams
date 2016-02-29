@@ -109,7 +109,7 @@
 \newcommand{\mpss}{Intel\textregistered{} MPSS}
 \newcommand{\mpssFullName}{Intel\textregistered{} Manycore Platform Software Stack}
 \newcommand{\hstreams}{hStreams}
-\newcommand{\heterostreams}{heteroStreams}
+\newcommand{\heterostreams}{Hetero Streams Library}
 \newcommand{\windows}{Windows}
 \newcommand{\linux}{Linux}
 \newcommand{\imgdir}{../../../doc/images/}
@@ -118,8 +118,7 @@
 \begin{titlepage}
 \vspace*{7cm}
 \begin{center}
-    {\Large \heterostreams\ 0.9 Programming Guide and API Reference}\\[2em]
-\mpssFullName\ 3.6
+    {\Large \heterostreams\ 1.0 Programming Guide and API Reference}\\[2em]
 \end{center}
 \end{titlepage}
 \clearemptydoublepage
@@ -230,7 +229,7 @@ $ # setup Intel compiler variables
 $ (...)compilervars.sh intel64
 $ icc example_src.cpp -lhstreams_source -o example
 $ icc -fPIC -mmic -shared example_sink.cpp -o example_mic.so
-$ export SINK_LD_LIBRARY_PATH=/opt/mpss/3.6/sysroots/k1om-mpss-linux/usr/lib64/:\
+$ export SINK_LD_LIBRARY_PATH=/opt/mpss/3.7/sysroots/k1om-mpss-linux/usr/lib64/:\
 > $MIC_LD_LIBRARY_PATH:\
 > $(pwd)
 $ ./example
@@ -265,6 +264,25 @@ Whether messages belonging to a particular category are printed or not is contro
 This function accepts a bitmask that determines which messages are to be shown and which are to be dropped.
 The values for modifying this bitmask are described by the values of the \texttt{HSTR\_INFO\_TYPE\_VALUES} enumerated type.
 
+Single log line is formatted as follows:
+
+\emph{Timestamp} \emph{PhysicalDomain} \emph{ProcessId} \emph{ThreadId} \emph{LogLevel} \emph{InfoType} \emph{LogMsg} (\emph{FileName}:\emph{Line})
+
+\iffalse
+Uncomment if needed
+
+\begin{itemize}
+    \item \emph{Timestamp} is number of milliseconds from linux epoch.
+    \item \emph{PhysicalDomain} is number of physical domain.
+    \item \emph{ProcessId} is id of process which made call to hStreams function.
+    \item \emph{ThreadId} is id of thread which made call to hStreams function.
+    \item \emph{LogLevel} is one of \texttt{HSTR\_LOG\_LEVEL\_VALUES}
+    \item \emph{InfoType} is one of \texttt{HSTR\_INFO\_TYPE\_VALUES}
+    \item \emph{LogMsg} is log message.
+    \item \emph{FileName} is name of file from which log message comes from.
+    \item \emph{Line} is line number in \emph{FileName} from which log message comes from.
+\end{itemize}
+\fi
 
 \section{Infrastructure}
 \subsection{\hstreams\ files}
@@ -273,7 +291,6 @@ The values for modifying this bitmask are described by the values of the \texttt
 \begin{tabularx}{\textwidth}{ l X }\hline
   Binary file name & Description \\ \hline
   \texttt{libhstreams\_source.so} & A dynamic shared library providing ,,source'' functionality \\ \hline
-  \texttt{libhstreams\_mic} & \hstreams\ runtime, a startup file for \kncixp.\\ \hline
 \end{tabularx}
 \caption{Binary artifacts of the \hstreams\ library on \linux\ operating system.}
 \label{tab:hstreams-binaries-linux}
@@ -283,7 +300,6 @@ The values for modifying this bitmask are described by the values of the \texttt
 \begin{tabularx}{\textwidth}{ l X }\hline
   Binary file name & Description \\ \hline
   \texttt{hstreams\_source.dll} & A dynamic-link library providing ,,source'' functionality \\ \hline
-  \texttt{libhstreams\_mic} & \hstreams\ runtime, a startup file for \kncixp.\\ \hline
 \end{tabularx}
 \caption{Binary artifacts of the \hstreams\ library on \windows\ operating system.}
 \label{tab:hstreams-binaries-windows}
@@ -317,7 +333,7 @@ hStreams_Init_worker: returns: HSTR_RESULT_DEVICE_NOT_INITIALIZED, Did not find 
 
 In the next example, the \texttt{SINK\_LD\_LIBRARY\_PATH} variable contains only the location of the \texttt{libhstreams\_mic} binary.
 \begin{lstlisting}[style=BashCmdListingStyle,caption={Running the example with incomplete \texttt{SINK\_LD\_LIBRARY\_PATH}},frame=tlrb,label={lst:example-incompletesinkld0}]
-$ export SINK_LD_LIBRARY_PATH=/opt/mpss/3.6/sysroots/k1om-mpss-linux/usr/lib64/
+$ export SINK_LD_LIBRARY_PATH=/opt/mpss/3.7/sysroots/k1om-mpss-linux/usr/lib64/
 $ ./example
 The remote process indicated that the following libraries could not be loaded:  libmkl_intel_lp64.so libmkl_intel_thread.so libmkl_core.so libiomp5.so libimf.so libsvml.so libirng.so libintlc.so.5
 hStreams_Init_worker: returns: HSTR_RESULT_REMOTE_ERROR, Could not create process on the device: COI_MISSING_DEPENDENCY.
@@ -325,7 +341,7 @@ hStreams_Init_worker: returns: HSTR_RESULT_REMOTE_ERROR, Could not create proces
 
 Finally, let us see an example in which all \hstreams-required paths are set properly but the library cannot find user's custom kernels library
 \begin{lstlisting}[style=BashCmdListingStyle,caption={Running the example with user's custom kernels library location missing from \texttt{SINK\_LD\_LIBRARY\_PATH}},frame=tlrb,label={lst:example-incompletesinkld1}]
-$ export SINK_LD_LIBRARY_PATH=/opt/mpss/3.6/sysroots/k1om-mpss-linux/usr/lib64/:$MKLROOT/lib/mic/:$MKLROOT/../compiler/lib/mic
+$ export SINK_LD_LIBRARY_PATH=/opt/mpss/3.7/sysroots/k1om-mpss-linux/usr/lib64/:$MKLROOT/lib/mic/:$MKLROOT/../compiler/lib/mic
 $ ./example
 enqueueFunction: returns: HSTR_RESULT_BAD_NAME, hStreams_fetchSinkFuncAddress: returns: HSTR_RESULT_BAD_NAME, dlsym() returned error: /tmp/coi_procs/1/99657/libhstreams_mic: undefined symbol: hello_world, for function: hello_world.
 A sink-compiled version of called function hello_world not found on logical domain 1, physical domain 0.
