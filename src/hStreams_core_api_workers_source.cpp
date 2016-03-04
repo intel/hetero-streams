@@ -445,6 +445,8 @@ void detail::Fini_impl_throw()
     hstr_proc.myActivePhysDomains = 0;
     globals::target_library_search_path.clear();
     globals::host_library_search_path.clear();
+    globals::tokenized_target_library_search_path.clear();
+    globals::tokenized_host_library_search_path.clear();
     globals::app_init_next_log_str_ID       = globals::initial_values::app_init_next_log_str_ID;
     globals::interface_version              = globals::initial_values::interface_version;
     globals::mkl_interface                  = globals::initial_values::mkl_interface;

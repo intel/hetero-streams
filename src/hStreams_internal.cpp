@@ -90,11 +90,11 @@ hStreams_FetchExecutableDirectory(std::string &out_dir)
 static LIB_HANDLER::handle_t
 hStreams_LoadSingleSinkSideLibraryHost(const char *lib_name)
 {
-    const std::string full_path = findFileName(lib_name, globals::host_library_search_path.c_str());
+    const std::string full_path = findFileName(std::string(lib_name), globals::tokenized_host_library_search_path);
     if (full_path.empty()) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, StringBuilder()
                                    << "Cannot find host sink-side library " << std::string(lib_name)
-                                   << " in paths specified by " << globals::host_library_search_path.c_str() << "\n");
+                                   << " in paths specified by " << globals::host_library_search_path << "\n");
     }
 
     LIB_HANDLER::handle_t handle;
@@ -161,11 +161,11 @@ hStreams_LoadSinkSideLibrariesHost(std::string const &in_ExecutableFileName, std
 
     for (uint16_t i = 0; i < currentOptions.libNameCntHost; ++i) {
         const char *lib_name = currentOptions.libNamesHost[i];
-        const std::string full_path = findFileName(lib_name, globals::host_library_search_path.c_str());
+        const std::string full_path = findFileName(std::string(lib_name), globals::tokenized_host_library_search_path);
         if (full_path.empty()) {
             HSTR_ERROR(HSTR_INFO_TYPE_MISC)
                     << "Cannot find host sink-side library " << lib_name
-                    << " in paths specified by " << globals::host_library_search_path.c_str();
+                    << " in paths specified by " << globals::host_library_search_path;
 
             return HSTR_RESULT_BAD_NAME;
         }
@@ -192,7 +192,7 @@ hStreams_LoadSinkSideLibrariesHost(std::string const &in_ExecutableFileName, std
 #else
     const std::string default_lib = in_ExecutableFileName + "_host.so";
 #endif
-    const std::string full_path = findFileName(default_lib.c_str(), globals::host_library_search_path.c_str());
+    const std::string full_path = findFileName(default_lib, globals::tokenized_host_library_search_path);
     try {
         LIB_HANDLER::handle_t handle;
         hStreams_LibLoader::load(full_path, handle);
@@ -209,18 +209,18 @@ hStreams_LoadSinkSideLibrariesHost(std::string const &in_ExecutableFileName, std
 static HSTR_COILIBRARY
 hStreams_LoadSingleSinkSideLibraryMIC(HSTR_COIPROCESS coi_process, const char *lib_name, int libFlags)
 {
-    const std::string full_path = findFileName(lib_name, globals::target_library_search_path.c_str());
+    const std::string full_path = findFileName(lib_name, globals::tokenized_target_library_search_path);
     if (full_path.empty()) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, StringBuilder()
                                    << "Cannot load MIC sink-side library " << std::string(lib_name)
-                                   << " in paths specified by " << globals::target_library_search_path.c_str() << "\n");
+                                   << " in paths specified by " << globals::target_library_search_path << "\n");
     }
     HSTR_COILIBRARY coiLibrary;
     HSTR_COIRESULT result = hStreams_COIWrapper::COIProcessLoadLibraryFromFile(
                                 coi_process,
                                 full_path.c_str(),
                                 full_path.c_str(),
-                                NULL,
+                                globals::target_library_search_path.c_str(),
                                 libFlags,
                                 &coiLibrary);
     if (result == HSTR_COI_SUCCESS) {
@@ -289,14 +289,14 @@ hStreams_LoadSinkSideLibrariesMIC(HSTR_COIPROCESS coi_process, std::vector<HSTR_
 
     // Third, load the default sink-side library.
     const std::string default_lib = in_ExecutableFileName + "_mic.so";
-    const std::string full_path = findFileName(default_lib.c_str(), globals::target_library_search_path.c_str());
+    const std::string full_path = findFileName(default_lib, globals::tokenized_target_library_search_path);
     if (!full_path.empty()) {
         HSTR_COILIBRARY coiLibrary;
         HSTR_COIRESULT result = hStreams_COIWrapper::COIProcessLoadLibraryFromFile(
                                     coi_process,
                                     full_path.c_str(),
                                     full_path.c_str(),
-                                    NULL,
+                                    globals::target_library_search_path.c_str(),
                                     HSTR_COI_LOADLIBRARY_V1_FLAGS,
                                     &coiLibrary);
         // We deliberately silently ignore errors for loading the default library.
@@ -311,6 +311,43 @@ hStreams_LoadSinkSideLibrariesMIC(HSTR_COIPROCESS coi_process, std::vector<HSTR_
         }
     }
     return HSTR_RESULT_SUCCESS;
+}
+
+// Remove last slash from end of the each path and add path to vector
+static void tokenizePaths(std::string &paths, std::vector<std::string> &tokenized_paths)
+{
+    if (paths.empty()) {
+        return;
+    }
+#ifdef _WIN32
+    std::string path_separator = ";";
+#else
+    std::string path_separator = ":";
+#endif
+    std::string prepared_paths, token;
+    size_t token_begin_pos = 0, token_end_pos = paths.find(path_separator);
+
+    while (true) {
+        token = paths.substr(token_begin_pos, token_end_pos - token_begin_pos);
+        if (token.empty()) {
+            continue;
+        }
+        if (token[token.length() - 1] == '\\'
+#ifdef _WIN32
+                || token[token.length() - 1] == '/'
+#endif
+           ) {
+            token = token.substr(0, token.length() - 1);
+        }
+        tokenized_paths.push_back(token);
+
+        if (token_end_pos == std::string::npos) {
+            break;
+        }
+
+        token_begin_pos = token_end_pos + path_separator.length();
+        token_end_pos = paths.find(path_separator, token_begin_pos);
+    }
 }
 
 void setSearchedPaths()
@@ -356,53 +393,34 @@ void setSearchedPaths()
     } else {
         HSTR_WARN(HSTR_INFO_TYPE_MISC) << "Cannot obtain executable path.";
     }
+
+    tokenizePaths(globals::target_library_search_path, globals::tokenized_target_library_search_path);
+    tokenizePaths(globals::host_library_search_path, globals::tokenized_host_library_search_path);
 }
 
 // FIXME we should really be using something like boost::filesystem or similar for this
-std::string findFileName(const char *fileName, const char *searchedPaths)
+std::string findFileName(const std::string &fileName, const std::vector<std::string> &searchedPaths)
 {
+#ifdef _WIN32
+    std::string pathSymbols = "/\\:";
+    std::string pathSeparator = "\\";
+#else
+    std::string pathSymbols = "/";
+    std::string pathSeparator = "/";
+#endif
     // If the fileName has any part of a path in it (contains '/'), be it absolute or relative, treat it as
     // an explicitly specified filename, and let it go exactly as supplied:
-    if (strchr(fileName, '/')
-#ifdef _WIN32
-            || strchr(fileName, '\\') || strchr(fileName, ':')
-#endif
-       ) {
-        struct mpss_hstreams_stat st;
-        if (!mpss_hstreams_stat(fileName, &st)) {
-            return std::string(fileName);
+    size_t pos;
+    struct hstreams_stat st;
+    if ((pos = fileName.find_first_of(pathSymbols)) != std::string::npos) {
+        if (!hstreams_stat(fileName.c_str(), &st)) {
+            return fileName;
         }
     } else {
-        if (!searchedPaths) {
-            return std::string("");
-        } else {
-            char *sink_ld_library_path = (char *)alloca(strlen(searchedPaths) + 1);
-            std::string pathSeparator;
-            char *str, *saveptr;
-            const char *varSeparator;
-#ifdef _WIN32
-            varSeparator = ";";
-            const char backslash = '\\';
-            pathSeparator = (((std::string)searchedPaths).back() == backslash) ? "" : "\\";
-#else
-            varSeparator = ":";
-            pathSeparator = "/";
-#endif
-            strcpy(sink_ld_library_path, searchedPaths);
-            for (str = sink_ld_library_path;; str = NULL) {
-                std::string filepath;
-                char *token = mpss_hstreams_strtok(str, varSeparator, &saveptr);
-                if (!token) {
-                    break;
-                }
-                filepath.append(token);
-                filepath.append(pathSeparator);
-                filepath.append(fileName);
-                const char *fullPathFileName = filepath.c_str();
-                struct mpss_hstreams_stat st;
-                if (!mpss_hstreams_stat(fullPathFileName, &st)) {
-                    return std::string(fullPathFileName);
-                }
+        for (std::string path : searchedPaths) {
+            std::string filepath = path + pathSeparator + fileName;
+            if (!hstreams_stat(filepath.c_str(), &st)) {
+                return std::string(filepath);
             }
         }
     }

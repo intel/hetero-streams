@@ -70,6 +70,9 @@ HSTR_ALIGN(64) volatile int64_t next_log_dom_id = initial_values::next_log_dom_i
 
 std::string target_library_search_path;
 std::string host_library_search_path;
+
+std::vector<std::string> tokenized_target_library_search_path;
+std::vector<std::string> tokenized_host_library_search_path;
 } // namespace globals
 
 
