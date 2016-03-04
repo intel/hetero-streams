@@ -26,8 +26,8 @@
 hStreams_PhysStream::hStreams_PhysStream(hStreams_LogDomain &log_dom, hStreams_CPUMask const &cpu_mask)
     : log_dom_(&log_dom), cpu_mask_(cpu_mask)
 {
-    lastAction_.opaque[0] = (uint64_t)-1;
-    lastAction_.opaque[1] = (uint64_t)-1;
+    lastAction_.opaque[0] = (uint64_t) - 1;
+    lastAction_.opaque[1] = (uint64_t) - 1;
 }
 
 hStreams_PhysStream::~hStreams_PhysStream()

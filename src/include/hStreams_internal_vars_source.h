@@ -83,6 +83,9 @@ extern hStreams_RW_Lock options_lock;
 extern std::string target_library_search_path;
 extern std::string host_library_search_path;
 
+extern std::vector<std::string> tokenized_target_library_search_path;
+extern std::vector<std::string> tokenized_host_library_search_path;
+
 // For the benefit of hStreams_Fini(), for use whenever applicable (i.e. for
 // POD types). For more complex objects prefer to use .clear() or similar
 namespace initial_values

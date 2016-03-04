@@ -126,13 +126,9 @@ using namespace std;
 #endif
 
 #ifdef _WIN32
-#   define mpss_hstreams_strdup _strdup
-#   define mpss_hstreams_strtok strtok_s
-#   define mpss_hstreams_stat   _stat
+#   define hstreams_stat   _stat
 #else
-#   define mpss_hstreams_strdup strdup
-#   define mpss_hstreams_strtok strtok_r
-#   define mpss_hstreams_stat   stat
+#   define hstreams_stat   stat
 #endif
 
 #undef UNREFERENCED_PARAM
@@ -415,16 +411,15 @@ void setSearchedPaths();
 // findFileName
 /// @brief Utility function used to find a filename in searchedPaths.
 ///
-/// @param fileName path to the file
+/// @param fileName file name or path to the file
 ///
-/// @param searchedPaths paths to directories where libraries are kept,
-///        in LD_LIBRARY_PATH like format
+/// @param vector with directories where libraries are kept
 ///
 /// @return If the return value is empty, that means the conditions were
 /// such that it could not find the file.
 ///
 /////////////////////////////////////////////////////////
-std::string findFileName(const char *fileName, const char *searchedPaths);
+std::string findFileName(const std::string &fileName, const std::vector<std::string> &searchedPaths);
 
 /////////////////////////////////////////////////////////
 ///
