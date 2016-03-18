@@ -5,6 +5,5 @@
 :: of the Intel Sample Source Code License is included.
 ::
 
-set HSTREAMS_SINK=%INTEL_MPSS_HOME%\k1om-mpss-linux\usr\lib64
-set "SINK_LD_LIBRARY_PATH=%HSTREAMS_SINK%;%MIC_LD_LIBRARY_PATH%"
-.\x64\Release\basic_perf.exe
+icl -Qmic -qopenmp -mkl -fPIC -shared ..\..\..\common\hStreams_custom_kernels_sink.cpp -I"%HSTREAMS_HOME%\include" -static-intel -o cholesky_sink_1.so
+

@@ -165,9 +165,9 @@ $ make
 [INFO] Building against system-wide Hetero Streams Library.
 [INFO] In order to build against the library and headers from the repository, append in_repo=1 to make arguments
 [INFO] Building release version. In order to build debug version, append CFG=DEBUG to make arguments
-icpc -c /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/matMult/matMultapi.cpp -o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/matMult/matMultapi.source.o -Wall -Werror-all -fPIC -DNDEBUG -O3 -diag-disable 13368 -diag-disable 15527 -I/localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common -I/usr/include/hStreams  -mkl -DFP_DATA_TYPE=double
-icpc -c /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/dtime.cpp -o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/dtime.source.o -Wall -Werror-all -fPIC -DNDEBUG -O3 -diag-disable 13368 -diag-disable 15527 -I/localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common -I/usr/include/hStreams  -mkl -DFP_DATA_TYPE=double
-icpc /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/matMult/matMultapi.source.o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/dtime.source.o -o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/../bin/host/mat_mult   -mkl -lhstreams_source
+icpc -c [...]/temp_ref_code/hstreams/ref_code/matMult/matMultapi.cpp -o [...]/temp_ref_code/hstreams/ref_code/matMult/matMultapi.source.o -Wall -Werror-all -fPIC -DNDEBUG -O3 -diag-disable 13368 -diag-disable 15527 -I[...]/temp_ref_code/hstreams/ref_code/common -I/usr/include/hStreams  -mkl -DFP_DATA_TYPE=double
+icpc -c [...]/temp_ref_code/hstreams/ref_code/common/dtime.cpp -o [...]/temp_ref_code/hstreams/ref_code/common/dtime.source.o -Wall -Werror-all -fPIC -DNDEBUG -O3 -diag-disable 13368 -diag-disable 15527 -I[...]/temp_ref_code/hstreams/ref_code/common -I/usr/include/hStreams  -mkl -DFP_DATA_TYPE=double
+icpc [...]/temp_ref_code/hstreams/ref_code/matMult/matMultapi.source.o [...]/temp_ref_code/hstreams/ref_code/common/dtime.source.o -o [...]/temp_ref_code/hstreams/ref_code/../bin/host/mat_mult   -mkl -lhstreams_source
 
 
 HOW TO RUN THE MATMULT Block Matrix Multiplier REFERENCE CODE

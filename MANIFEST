@@ -62,6 +62,7 @@
 ./ref_code/common/setEnv.sh
 ./ref_code/common/toolchain.mk
 ./ref_code/common/type_converter.h
+./ref_code/common/host_cpu_mask.h
 ./ref_code/io_perf/Makefile
 ./ref_code/io_perf/README.txt
 ./ref_code/io_perf/io_perf.cpp
@@ -95,13 +96,17 @@
 ./ref_code/windows/cholesky/tiled_host/tiled_host/tiled_host_14.0.vcxproj
 ./ref_code/windows/cholesky/tiled_host/tiled_host_14.0.sln
 ./ref_code/windows/cholesky/tiled_hstreams/build_cs.bat
-./ref_code/windows/cholesky/tiled_hstreams/build_test_app_cs.bat
 ./ref_code/windows/cholesky/tiled_hstreams/runit.bat
 ./ref_code/windows/cholesky/tiled_hstreams/tiled_hstreams.sln
 ./ref_code/windows/cholesky/tiled_hstreams/tiled_hstreams/tiled_hstreams.vcxproj
 ./ref_code/windows/cholesky/tiled_hstreams/tiled_hstreams/tiled_hstreams.vcxproj.filters
 ./ref_code/windows/cholesky/tiled_hstreams/tiled_hstreams/tiled_hstreams_14.0.vcxproj
 ./ref_code/windows/cholesky/tiled_hstreams/tiled_hstreams_14.0.sln
+./ref_code/windows/cholesky/tiled_hstreams_host_multicard/build_cs.bat
+./ref_code/windows/cholesky/tiled_hstreams_host_multicard/runit.bat
+./ref_code/windows/cholesky/tiled_hstreams_host_multicard/tiled_hstreams_host_multicard.sln
+./ref_code/windows/cholesky/tiled_hstreams_host_multicard/tiled_hstreams_host_multicard/tiled_hstreams_host_multicard.vcxproj
+./ref_code/windows/cholesky/tiled_hstreams_host_multicard/tiled_hstreams_host_multicard/tiled_hstreams_host_multicard.vcxproj.filters
 ./ref_code/windows/io_perf/README.txt
 ./ref_code/windows/io_perf/io_perf.sln
 ./ref_code/windows/io_perf/io_perf/io_perf.vcxproj

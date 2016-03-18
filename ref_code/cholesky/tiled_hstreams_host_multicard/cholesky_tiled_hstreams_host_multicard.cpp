@@ -8,6 +8,7 @@
 #include <mkl.h>
 #include <math.h>
 #ifndef WIN32
+#include <unistd.h>
 #include <sys/time.h>
 #endif
 #include <omp.h>
@@ -17,12 +18,12 @@
 
 #include <hStreams_source.h>
 #include <hStreams_app_api.h>
-#include <unistd.h>
 
 #include "helper_functions.h"
 #include "dtime.h"
 #include "hStreams_custom_init.h"
 #include "hStreams_custom.h"
+#include "host_cpu_mask.h"
 
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
@@ -750,23 +751,23 @@ int main(int argc, char **argv)
     }
 
     if (resv_cpu_master) {
-        cpu_set_t my_set;
-        CPU_ZERO(&my_set);
+        HostCPUMask host_cpu_mask;
+        host_cpu_mask.cpu_zero();
 
         for (int i = 0; i < num_resv_cpus; ++i) {
-            CPU_SET(resv_cpus[i], &my_set);
+            host_cpu_mask.cpu_set(resv_cpus[i]);
         }
 
         int ret;
         HSTR_CPU_MASK_ZERO(src_hstr_cpu_mask);
-        ret = sched_setaffinity(0, sizeof(cpu_set_t), &my_set);
-        ret = sched_getaffinity(0, sizeof(cpu_set_t), &my_set);
+        setCurrentProcessAffinityMask(host_cpu_mask);
+        getCurrentProcessAffinityMask(host_cpu_mask);
         int first, last, num_set;
         last = 0;
         first = HSTR_MAX_THREADS;
         num_set = 0;
         for (int i = 0; i < HSTR_MAX_THREADS; i++) {
-            if (CPU_ISSET(i, &my_set)) {
+            if (host_cpu_mask.cpu_isset(i)) {
                 if (i < first) {
                     first = i;
                 }

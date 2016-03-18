@@ -42,9 +42,9 @@ You will see something like the following:
 [INFO] Building against system-wide Hetero Streams Library.
 [INFO] In order to build against the library and headers from the repository, append in_repo=1 to make arguments
 [INFO] Building release version. In order to build debug version, append CFG=DEBUG to make arguments
-icpc -c /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/io_perf/io_perf.cpp -o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/io_perf/io_perf.source.o -Wall -Werror-all -fPIC -DNDEBUG -O3 -diag-disable 13368 -diag-disable 15527 -I/localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common -I/usr/include/hStreams  -qopenmp
-icpc -c /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/dtime.cpp -o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/dtime.source.o -Wall -Werror-all -fPIC -DNDEBUG -O3 -diag-disable 13368 -diag-disable 15527 -I/localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common -I/usr/include/hStreams  -qopenmp
-icpc /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/io_perf/io_perf.source.o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/common/dtime.source.o -o /localdisk/work/wwasko/hstreams_workspace/hstreams/ref_code/../bin/host/io_perf   -lhstreams_source -qopenmp
+icpc -c [...]/temp_ref_code/hstreams/ref_code/io_perf/io_perf.cpp -o [...]/temp_ref_code/hstreams/ref_code/io_perf/io_perf.source.o -Wall -Werror-all -fPIC -DNDEBUG -O3 -diag-disable 13368 -diag-disable 15527 -I[...]/temp_ref_code/hstreams/ref_code/common -I/usr/include/hStreams  -qopenmp
+icpc -c [...]/temp_ref_code/hstreams/ref_code/common/dtime.cpp -o [...]/temp_ref_code/hstreams/ref_code/common/dtime.source.o -Wall -Werror-all -fPIC -DNDEBUG -O3 -diag-disable 13368 -diag-disable 15527 -I[...]/temp_ref_code/hstreams/ref_code/common -I/usr/include/hStreams  -qopenmp
+icpc [...]/temp_ref_code/hstreams/ref_code/io_perf/io_perf.source.o [...]/temp_ref_code/hstreams/ref_code/common/dtime.source.o -o [...]/temp_ref_code/hstreams/ref_code/../bin/host/io_perf   -lhstreams_source -qopenmp
 
 
 **************************************************

@@ -19,6 +19,7 @@
 #include <string.h>
 
 #include "dtime.h"
+#include "host_cpu_mask.h"
 #include <math.h>
 
 //********************************************************************************************
@@ -708,7 +709,7 @@ static int formerMain(int argc, char **argv)
 {
     hStreams_GetCurrentOptions(&hstreams_options, sizeof(hstreams_options));
     hstreams_options.phys_domains_limit = 256;  // Limit to 256 domains
-    hstreams_options.kmp_affinity == HSTR_KMP_AFFINITY_COMPACT;
+    hstreams_options.kmp_affinity = HSTR_KMP_AFFINITY_COMPACT;
 
     //Library to be loaded for sink-side code
     hstreams_options.libNameCntHost = 0; // Use the implicit name approach
@@ -720,7 +721,7 @@ static int formerMain(int argc, char **argv)
     ++pass;
     printf("*** C(mxn) = A(mxk) x B(kxn)\n");
 
-    int use_host = 1, num_mics = 1;
+    uint32_t use_host = 1, num_mics = 1;
     //int nstreams_host = 3, nstreams_mic = 3;
     int nstreams_host, nstreams_mic;
     int num_streams = 3;
@@ -843,7 +844,7 @@ static int formerMain(int argc, char **argv)
     }
     //the second arg is logStrPerParition! not perCard
     int num_doms = use_host + num_mics;
-    int max_log_str;
+    int max_log_str = 0;
 
     if (use_host == 1 && num_mics >= 1) {
         if (LB) {
@@ -938,7 +939,7 @@ static int formerMain(int argc, char **argv)
 
     HSTR_CPU_MASK out_CPUmask, src_hstr_cpu_mask;
     HSTR_PHYS_DOM *out_pPhysDomainID = new HSTR_PHYS_DOM;
-    HSTR_OVERLAP_TYPE *out_pOverlap = new HSTR_OVERLAP_TYPE;
+    //HSTR_OVERLAP_TYPE *out_pOverlap = new HSTR_OVERLAP_TYPE;
 
     uint32_t *places = new uint32_t[num_doms];
 
@@ -963,22 +964,23 @@ static int formerMain(int argc, char **argv)
 
     int iret;
     if (resv_cpu_master) {
-        cpu_set_t my_set;
-        CPU_ZERO(&my_set);
+        HostCPUMask host_cpu_mask;
+        host_cpu_mask.cpu_zero();
 
         for (int i = 0; i < num_resv_cpus; ++i) {
-            CPU_SET(resv_cpus[i], &my_set);
+            host_cpu_mask.cpu_set(resv_cpus[i]);
         }
 
         HSTR_CPU_MASK_ZERO(src_hstr_cpu_mask);
-        iret = sched_setaffinity(0, sizeof(cpu_set_t), &my_set);
-        iret = sched_getaffinity(0, sizeof(cpu_set_t), &my_set);
+        setCurrentProcessAffinityMask(host_cpu_mask);
+        getCurrentProcessAffinityMask(host_cpu_mask);
+
         int first, last, num_set;
         last = 0;
         first = HSTR_MAX_THREADS;
         num_set = 0;
         for (int i = 0; i < HSTR_MAX_THREADS; i++) {
-            if (CPU_ISSET(i, &my_set)) {
+            if (host_cpu_mask.cpu_isset(i)) {
                 if (i < first) {
                     first = i;
                 }
@@ -1020,7 +1022,7 @@ static int formerMain(int argc, char **argv)
             CHECK_HSTR_RESULT(hStreams_GetLogDomainDetails(logDomID[idom], out_pPhysDomainID, out_CPUmask));
             //ShowLimitCPUmask(out_CPUmask);
             CHECK_HSTR_RESULT(hStreams_GetLogStreamIDList(logDomID[idom], places[idom], out_pLogStreamIDs));
-            for (int i = 0; i < places[idom]; ++i) {
+            for (uint32_t i = 0; i < places[idom]; ++i) {
                 CHECK_HSTR_RESULT(hStreams_GetLogStreamDetails(out_pLogStreamIDs[i], logDomID[idom], out_CPUmask));
                 printf("streamId = %d\n", (int)out_pLogStreamIDs[i]);
                 ShowLimitCPUmask(out_CPUmask);
