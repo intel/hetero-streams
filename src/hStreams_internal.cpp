@@ -417,8 +417,9 @@ std::string findFileName(const std::string &fileName, const std::vector<std::str
             return fileName;
         }
     } else {
-        for (std::string path : searchedPaths) {
-            std::string filepath = path + pathSeparator + fileName;
+        for (std::vector<std::string>::const_iterator it = searchedPaths.begin();
+                it != searchedPaths.end(); ++it) {
+            std::string filepath = *it + pathSeparator + fileName;
             if (!hstreams_stat(filepath.c_str(), &st)) {
                 return std::string(filepath);
             }
