@@ -115,8 +115,7 @@ hStreams_app_init_in_version(
     uint32_t    in_LogStreamOversubscription,
     const char *interface_version);
 
-static
-DllAccess HSTR_RESULT
+static inline HSTR_RESULT
 hStreams_app_init(
     uint32_t    in_StreamsPerDomain,
     uint32_t    in_LogStreamOversubscription)
@@ -202,8 +201,7 @@ hStreams_app_init_domains_in_version(
     uint32_t    in_LogStreamOversubscription,
     const char *interface_version);
 
-static
-DllAccess HSTR_RESULT
+static inline HSTR_RESULT
 hStreams_app_init_domains(
     uint32_t    in_NumLogDomains,
     uint32_t   *in_pStreamsPerDomain,
