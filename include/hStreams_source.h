@@ -131,8 +131,7 @@ extern "C" {
 DllAccess HSTR_RESULT
 hStreams_InitInVersion(const char *interface_version);
 
-static
-DllAccess HSTR_RESULT
+static inline HSTR_RESULT
 hStreams_Init()
 {
     return hStreams_InitInVersion(HSTR_VERSION_STRING);
