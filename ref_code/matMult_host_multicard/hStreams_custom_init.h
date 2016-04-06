@@ -147,7 +147,7 @@ hStreams_custom_init_selected_domains(
 
     uint32_t num_places = 0;
     for (uint32_t i = 0; i < num_log_domains; ++i) {
-        num_places += *(places_per_log_domain + i);
+        num_places += places_per_log_domain[i];
     }
 
     uint32_t ldom_low = num_log_domains / num_phys_domains;
@@ -158,7 +158,7 @@ hStreams_custom_init_selected_domains(
 
     // Check that all the requested physical domains exist before creating anything
     for (uint32_t pdom_idx = 0; pdom_idx < num_phys_domains; ++pdom_idx) {
-        HSTR_PHYS_DOM curr_pdom = *(phys_domains_of_interest + pdom_idx);
+        HSTR_PHYS_DOM curr_pdom = phys_domains_of_interest[pdom_idx];
         uint32_t num_threads, max_freq;
         uint64_t mem_types, mem_avail[HSTR_MEM_TYPE_SIZE];
         HSTR_CPU_MASK max_mask, avd_mask;
@@ -172,7 +172,7 @@ hStreams_custom_init_selected_domains(
     }
     // Same loop, this time creating the domains/streams/whatnot
     for (uint32_t pdom_idx = 0; pdom_idx < num_phys_domains; ++pdom_idx) {
-        HSTR_PHYS_DOM curr_pdom = *(phys_domains_of_interest + pdom_idx);
+        HSTR_PHYS_DOM curr_pdom = phys_domains_of_interest[pdom_idx];
         uint32_t num_threads, max_freq;
         uint64_t mem_types, mem_avail[HSTR_MEM_TYPE_SIZE];
         HSTR_CPU_MASK max_mask, avd_mask;
@@ -202,7 +202,7 @@ hStreams_custom_init_selected_domains(
         int ldom_bit_idx = 0;
         for (uint32_t ldom_idx = 0; ldom_idx < ldom_cnt; ++ldom_idx, ++global_ldom_idx) {
             uint32_t ldom_width = (ldom_idx == ldom_cnt - 1) ? ldom_width_high : ldom_width_low;
-            uint32_t ldom_places_cnt = *(places_per_log_domain + global_ldom_idx);
+            uint32_t ldom_places_cnt = places_per_log_domain[global_ldom_idx];
             // how about a nice error code and message?
             HSTR_CPU_MASK ldom_mask;
             HSTR_CPU_MASK_ZERO(ldom_mask);

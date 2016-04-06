@@ -7,10 +7,11 @@
 
 #ifndef _WIN32
 #include <sched.h>
+#include <errno.h>
 #else
 #include <windows.h>
 #endif
-
+#include <iostream>
 
 #ifndef _WIN32
 typedef cpu_set_t host_cpu_set_t;
@@ -21,54 +22,64 @@ typedef DWORD_PTR host_cpu_set_t;
 struct HostCPUMask {
     host_cpu_set_t host_cpu_set;
     void cpu_zero();
-    void cpu_set(int cpu);
-    int cpu_isset(int cpu);
+    void cpu_set(unsigned int cpu);
+    unsigned int cpu_isset(unsigned int cpu);
 };
-void setCurrentProcessAffinityMask(HostCPUMask &host_cpu_mask);
-void getCurrentProcessAffinityMask(HostCPUMask &host_cpu_mask);
+int setCurrentProcessAffinityMask(HostCPUMask &host_cpu_mask);
 
 #ifndef _WIN32
 void HostCPUMask::cpu_zero()
 {
     CPU_ZERO(&host_cpu_set);
 }
-void HostCPUMask::cpu_set(int cpu)
+void HostCPUMask::cpu_set(unsigned int cpu)
 {
     CPU_SET(cpu, &host_cpu_set);
 }
-int HostCPUMask::cpu_isset(int cpu)
+unsigned int HostCPUMask::cpu_isset(unsigned int cpu)
 {
     return CPU_ISSET(cpu, &host_cpu_set);
 }
-void setCurrentProcessAffinityMask(HostCPUMask &host_cpu_mask)
+int setCurrentProcessAffinityMask(HostCPUMask &host_cpu_mask)
 {
-    sched_setaffinity(0, sizeof(cpu_set_t), &(host_cpu_mask.host_cpu_set));
-}
-void getCurrentProcessAffinityMask(HostCPUMask &host_cpu_mask)
-{
-    sched_getaffinity(0, sizeof(cpu_set_t), &host_cpu_mask.host_cpu_set);
+    int ret = sched_setaffinity(0, sizeof(cpu_set_t), &(host_cpu_mask.host_cpu_set));
+    //On error, -1 is returned
+    if(ret == -1)
+    {
+        std::cout << "sched_setaffinity was failed. errno returned: " << errno << std::endl;
+        return 1;
+    }
+    return 0;
 }
 #else
 void HostCPUMask::cpu_zero()
 {
     host_cpu_set = 0;
 }
-void HostCPUMask::cpu_set(int cpu)
+void HostCPUMask::cpu_set(unsigned int cpu)
 {
-    host_cpu_set |= (1LL << cpu);
+    if (cpu < 64)
+        host_cpu_set |= (1LL << cpu);
 }
-int HostCPUMask::cpu_isset(int cpu)
+unsigned int HostCPUMask::cpu_isset(unsigned int cpu)
 {
-    return host_cpu_set && (1LL << cpu);
+    if (cpu < 64)
+        return host_cpu_set & (1LL << cpu);
+    else
+        return 0;
 }
-void setCurrentProcessAffinityMask(HostCPUMask &host_cpu_mask)
+int setCurrentProcessAffinityMask(HostCPUMask &host_cpu_mask)
 {
-    SetProcessAffinityMask(GetCurrentProcess(), host_cpu_mask.host_cpu_set);
-}
-void getCurrentProcessAffinityMask(HostCPUMask &host_cpu_mask)
-{
-    host_cpu_set_t unneeded_system_mask;
-    GetProcessAffinityMask(GetCurrentProcess(), &host_cpu_mask.host_cpu_set, &unneeded_system_mask);
+    //On Windows call SetThreadAffinityMask (used by HostSideSinkWorker) after SetProccesAffinityMask caused error ERROR_INVALID_PARAMETER.
+    //SetThreadAffinityMask is using instead to prevent this error.
+
+    //If the function fails, the return value is zero
+    if(SetThreadAffinityMask(GetCurrentThread(), host_cpu_mask.host_cpu_set) == 0)
+    {
+        std::cout << "SetThreadAffinityMask was failed. GetLastError returned: " << GetLastError() << std::endl;
+        return 1;
+    }
+    return 0;
 }
 #endif
 
