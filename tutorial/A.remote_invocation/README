@@ -1,0 +1,121 @@
+This is the README for A.remote_invocation.
+Please look at the README a level up from here first, for an overview.
+
+This folder contains three very simple tutorial examples of using hStreams,
+ and a fourth, optional exercise. It has four sub-folders as shown below.
+As a reminder, for folders for which code is to be modified by the user, 
+ the file without the _original suffix is what you should edit
+ the file with the _original suffix is a copy of that starting point
+ the file with the _solution suffix is our solution to the exercise
+You can progress your version, filling in code marked with %% TODO
+You can build your version with "make" or "make user", and run with ./run.sh.
+You can build the solution with "make solution", and use ./solution_run.sh
+
+Inside each file, you can look for
+ //!!a //!!b etc. that correspond to points a,b,c,... below
+ //%% EXERCISE: the show where you should make a change
+  when there's something missing, you'll see a %%
+  when there's something that needs to be substituted, you'll see <text>
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 1.hello_hStreams_world
+The exercise shows a simple hello world example, written using hStreams.
+a) what header files are needed (also in _sink.cpp file)
+b) hStreams initialization and finalization
+c) type-converting and packing parameters at the source side
+d) invoking a sink-side function
+e) creating a sink/device side function (_sink.cpp file)
+f) building and running an hStreams application (see Makefile and scripts)
+
+The files in this directory are:
+ hello_hStreams_work_sink.cpp - sink-side code
+ hello_hStreams_work_src.cpp  - working source-side code you should edit
+ hello_hStreams_work_src_original.cpp - copy of hello_hStreams_work_src.cpp
+ hello_hStreams_work_src_solution.cpp - our solution - refer to this
+ Makefile - use "make" for your version, "make solution" for ours
+ names.mk - no need to modify
+ README - more documentation here
+ rootname.mk - no need to modify
+ run.sh - invoke your build with ./run.sh, after "make"
+ solution_run.sh - invoke our solution, after "make solution"
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 2.pass_scalar_args_get_result
+This exercise shows:
+a) how to pass additional scalar arguments to sink
+b) how to pass a return value pointer to sink to hold the return value
+c) how to enable the sink-side code to pass a return value back (see _sink.cpp)
+d) how to wait on an event. Basic synchronization.
+
+The files in this directory are:
+ Makefile
+ names.mk - no need to modify
+ pass_scalar_args_get_result_sink.cpp
+ pass_scalar_args_get_result_src.cpp
+ pass_scalar_args_get_result_src_original.cpp
+ pass_scalar_args_get_result_src_solution.cpp
+ rootname.mk - no need to modify
+ run.sh
+ solution_run.sh
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 3.pass_pointer
+This exercise shows:
+a) User allocation of memory
+b) how wrap user memory in buffers, to convert heap addresses and maintain 
+    dependences, and to create a buffer instance at the sink.
+c) how to transfer data from the host to the MIC
+d) how to pass heap arguments in addition to scalar arguments
+
+The files in this directory are:
+ Makefile
+ names.mk
+ pass_pointer_sink.cpp
+ pass_pointer_src.cpp
+ pass_pointer_src_original.cpp
+ pass_pointer_src_solution.cpp
+ rootname.mk
+ run.sh
+ solution_run.sh
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 4.optional.return_multiple_args
+This reference code shows:
+a) how to use a non-standard name and location of the sink-side source file
+b) how to pass back multiple return values from sink to source, in _src.cpp
+c) how to pass back multiple return values from sink to source, in _sink.cpp
+
+The files in this directory are:
+ Makefile
+ names.mk
+ README
+ return_multiple_args_sink.cpp
+ return_multiple_args_src.cpp
+ return_multiple_args_src_original.cpp
+ return_multiple_args_src_solution.cpp
+ rootname.mk
+ run.sh
+ solution_run.sh
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 5.simple_make
+From this reference code:
+a)	learn the simplest way to compile and hstreams program shown in 
+    1.hello_hStreams_world 
+b)	learn how to run the executable while properly setting up the 
+    lib paths, in the simplest way
+
+The files in this directory are:
+ hello_hStreams_work_sink.cpp
+ hello_hStreams_work_src.cpp
+ hello_hStreams_work_src_original.cpp
+ hello_hStreams_work_src_solution.cpp
+ Makefile
+ Makefile_original
+ solution_run.sh
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+

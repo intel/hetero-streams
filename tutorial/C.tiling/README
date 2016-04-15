@@ -1,0 +1,168 @@
+This is the README for C.tiling
+Please look at the README a level up from here first, for an overview.
+NOTE: For all these exercises, try with different input sizes to see variations in runtime.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 0.compute_math_not_tiled_host
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+This starting-reference code shows:
+ a. A compute intensive kernel that performs O(dimX*dimY*dimZ*length^3) 
+ computations on host.
+ There is no exercise to perform and therefore, _solution _original are simply
+ a copy of _src.
+ 
+The files in this directory are:
+ compute_math_not_tiled_host_src.cpp
+ compute_math_not_tiled_host_src_solution.cpp
+ compute_math_not_tiled_host_src_original.cpp
+ Makefile
+ names.mk
+ rootname.mk
+ run.sh
+ solution_run.sh
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 1.compute_math_tiled_host
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+In this exercise you will learn:
+ a. A possible efficient way of tiling the original code
+ b. Demonstrate indexing changes 
+
+The files in this directory are:
+ compute_math_tiled_host_src.cpp
+ compute_math_tiled_host_src_original.cpp
+ compute_math_tiled_host_src_solution.cpp
+ Makefile
+ names.mk
+ rootname.mk
+ run.sh
+ solution_run.sh
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 2.compute_math_not_tiled_hstreams_naive
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+In this exercise:
+ a. Use hstreams
+ b. Enqueue the entire compute function in one invocation in a stream
+ c. Performs necessary data transfers to get the expected result.
+
+The files in this directory are:
+ compute_math_not_tiled_hstreams_naive_sink.cpp
+ compute_math_not_tiled_hstreams_naive_src.cpp
+ compute_math_not_tiled_hstreams_naive_src_original.cpp
+ compute_math_not_tiled_hstreams_naive_src_solution.cpp
+ Makefile
+ names.mk
+ rootname.mk
+ run.sh
+ solution_run.sh
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 3.compute_math_not_tiled_hstreams_streaming
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+In this exercise you learn how to split the original computation to use the 
+benefit of streaming.
+ a. Split the original 3 nested outer loops onto two parts to use multiple 
+    streams. Keep the outer most parallel loop on host and converts the 
+	body of the loop as a compute function. 
+ b. Enqueue this new compute function as tasks in the available streams in
+    a round-robin fashion.	
+	
+The files in this directory are:
+ compute_math_not_tiled_hstreams_streaming_sink.cpp
+ compute_math_not_tiled_hstreams_streaming_src.cpp
+ compute_math_not_tiled_hstreams_streaming_src_original.cpp
+ compute_math_not_tiled_hstreams_streaming_src_solution.cpp
+ Makefile
+ names.mk
+ rootname.mk
+ run.sh
+ solution_run.sh
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 4.compute_math_tiled_hstreams_streaming
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+This exercise:
+
+ a. Determines unique source proxy addresses that each outer loop iteration 
+    accesses. It also shows how intermediate addresses from a preallocated 
+    large buffer can be used as buffer addresses as well
+ b. Initializes intermediate data at sink, only the portion being worked on
+ c. Transfers output data from sink to source
+ d. Tiles the sink-side code following similar technique used in exercise #1,
+    with address calculation adjusted based on the given intermediate address.
+ 
+
+The files in this directory are:
+ compute_math_tiled_hstreams_streaming_sink.cpp
+ compute_math_tiled_hstreams_streaming_src.cpp
+ compute_math_tiled_hstreams_streaming_src_original.cpp
+ compute_math_tiled_hstreams_streaming_src_solution.cpp
+ Makefile
+ names.mk
+ rootname.mk
+ run.sh
+ solution_run.sh
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 5.compute_math_tiled_hstreams_multicard
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+This exercise shows how to use hstreams to check available MIC cards in 
+the system and use all of them while doing the same work as 
+4.compute_math_tiled_hstreams_streaming
+  a. Finds out the number of physical domains and number of active 
+     physical domains using hStreams_GetNumPhysDomains and creates 
+	 (num_phys_domains * streams_per_domain) streams using 
+     hStreams_app_init
+  b. Chose the stream id in a round-robin using total collective number
+     of streams in the modulus.   
+  
+
+The files in this directory are:
+ compute_math_tiled_hstreams_multicard_sink.cpp
+ compute_math_tiled_hstreams_multicard_src.cpp
+ compute_math_tiled_hstreams_multicard_src_original.cpp
+ compute_math_tiled_hstreams_multicard_src_solution.cpp
+ Makefile
+ names.mk
+ rootname.mk
+ run.sh
+ solution_run.sh
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 6.compute_math_not_tiled_hstreams_host_multicard
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+In this exercise you learn how to use host as a sink.
+ a. Include core API headers, needed for host-side domains and streams (for now)
+ b. First does a default initialization.
+ c. Get detailed info about each available physical domain.
+ d. Add a new logical domain in the system using the domain
+    id, and CPU mask, based on the set bits on use_mask.
+ e. Create a new stream using a given stream id, the logical 
+    domain id where it should be created and a CPU mask.
+ f. Load-balance by choosing proper distribution of the threads.
+ g. Set the hstreams with the newly set up options to enable
+    using host by calling hStreams_SetOptions.	
+ h. Call the compute function at the sink-side 
+    similarly irrespective of whether the sink side is a host
+ i. Add a host version of memset, which is still not available in 
+    hstreams. (check the sink-side code)
+ j. See the Makefile: Use _host extension for host as target
+
+The files in this directory are:
+ compute_math_not_tiled_hstreams_host_multicard_sink.cpp
+ compute_math_not_tiled_hstreams_host_multicard_src.cpp
+ compute_math_not_tiled_hstreams_host_multicard_src_original.cpp
+ compute_math_not_tiled_hstreams_host_multicard_src_solution.cpp
+ Makefile
+ names.mk
+ rootname.mk
+ run.sh
+ solution_run.sh
+ 
+Parameters to run a program:
+./executable_name -d length_in_x_dimension \ 
+length_in_y_dimension length_in_z_dimension  -n number_of_iterations -t tile_size
+
+omit the -t parameters for non-tiled executables.
+

@@ -1,0 +1,81 @@
+This is the README for B.using_streams
+Please look at the README a level up from here first, for an overview.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 1.straight_line_cost_host
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+This starting-reference code shows:
+ The original straight line code.
+ Shows how to time sections of interest
+ There is no exercise to perform
+
+The files in this directory are:
+ Makefile
+ names.mk
+ rootname.mk
+ run.sh
+ solution_run.sh
+ straight_line_code_host_src.cpp
+ straight_line_code_host_src_original.cpp
+ straight_line_code_host_src_solution.cpp
+There is no difference in source code in the _src, _original or _solution files
+ But they are there to maintain consistency.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 2.task_code_host
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+This exercise shows:
+ a. How to re-factor straight line code as tasks
+ b. Variables become arguments
+
+The files in this directory are:
+ Makefile
+ names.mk
+ rootname.mk
+ run.sh
+ solution_run.sh
+ task_code_host_src.cpp
+ task_code_host_src_original.cpp
+ task_code_host_src_solution.cpp
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 3.task_code_sink_buffer_sync
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+This exercise shows:
+ a. Create 2 streams
+ b. Wrap a pointer in a buffer
+ c. Data movement between source and sink
+ d. Enqueue a task
+ e. Sync between streams
+ f. Sync after a stream is done
+
+The files in this directory are:
+ Makefile
+ names.mk
+ rootname.mk
+ run.sh
+ solution_run.sh
+ task_code_sink_buffer_sync_sink.cpp
+ task_code_sink_buffer_sync_src.cpp
+ task_code_sink_buffer_sync_src_original.cpp
+ task_code_sink_buffer_sync_src_solution.cpp
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Folder Name: 4.cross_buffer_xfer
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+This exercise shows:
+ a. Transfer from one buffer to another
+ b. Eliminate a redundant copy operation
+ c. Take a different approach to synchronization
+
+The files in this directory are:
+ cross_buffer_xfer_sink.cpp
+ cross_buffer_xfer_src.cpp
+ cross_buffer_xfer_src_original.cpp
+ cross_buffer_xfer_src_solution.cpp
+ Makefile
+ names.mk
+ rootname.mk
+ run.sh
+ solution_run.sh
+

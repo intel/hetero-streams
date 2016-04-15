@@ -1,0 +1,31 @@
+#!/bin/bash
+
+echo "Make sure that you are on a bash shell!"
+echo "Setting up compiler variables by locating the icc compiler ..."
+
+
+# If you have icc already in your path
+export VARSFILE=$(which icc) || {
+   # If not, try to locate icc
+   export VARSFILE=`locate compilervars.sh | tail -1` intel64
+   $VARSFILE intel64 || {
+           echo "ERROR!!Please load icc before proceding further!"
+   }
+}
+
+export old_pwd=`pwd`
+cd ..
+export TUT_INSTALL=`pwd`
+cd $old_pwd
+
+
+
+# You can also do the following. But its very slow!
+#export VARSFILE=`find /opt -name compilervars.sh 2>/dev/null | tail -1`  intel64
+
+# If you are running on a cluster, that supports moudule load command, the following also works
+#module load intel/2016.01
+#/apps/all/icc/2016.1.150/bin/compilervars.sh intel64
+
+
+

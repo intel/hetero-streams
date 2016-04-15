@@ -1,0 +1,120 @@
+bash-4.3$ cd ../6.compute_math_tiled_hstreams_host_multicard/
+bash-4.3$ ./run.sh -d 8 128 128 -n 64
+DimX=8, DimY=128, DimZ=128, #Loop_Iterations=64
+Test 0 takes 1877.259 ms with result -272.391
+Test 1 takes 1878.311 ms with result -272.391
+Test 2 takes 1878.314 ms with result -272.391
+Test 3 takes 1878.357 ms with result -272.391
+Test's min time is 1877.259 ms
+bash-4.3$ cd ../5.compute_math_tiled_hstreams_multicard/
+bash-4.3$ ./run.sh -d 8 128 128 -n 64
+DimX=8, DimY=128, DimZ=128, #Loop_Iterations=64, tile_size=1
+#Physical domains: 1, #ActivePhysical domains:1, homogeneous?=true
+Test 0 takes 2319.840 ms with result -272.391
+Test 1 takes 2000.830 ms with result -272.391
+Test 2 takes 2000.862 ms with result -272.391
+Test 3 takes 2000.568 ms with result -272.391
+Test's min time is 2000.568 ms
+bash-4.3$ cd ../4.compute_math_tiled_hstreams_streaming/
+bash-4.3$ ./run.sh -d 8 128 128 -n 64
+DimX=8, DimY=128, DimZ=128, #Loop_Iterations=64, tile_size=1
+Test 0 takes 2102.268 ms with result -272.391
+Test 1 takes 1818.844 ms with result -272.391
+Test 2 takes 1818.946 ms with result -272.391
+Test 3 takes 1818.609 ms with result -272.391
+Test's min time is 1818.609 ms
+bash-4.3$ cd ../3.compute_math_not_tiled_hstreams_streaming/
+bash-4.3$ ./run.sh -d 8 128 128 -n 64
+DimX=8, DimY=128, DimZ=128, #Loop_Iterations=64
+Test 0 takes 2397.772 ms with result -272.391
+Test 1 takes 1974.803 ms with result -272.391
+Test 2 takes 1975.389 ms with result -272.391
+Test 3 takes 1976.976 ms with result -272.391
+Test's min time is 1974.803 ms
+bash-4.3$ cd ../2.compute_math_not_tiled_hstreams_naive/
+bash-4.3$ ./run.sh -d 8 128 128 -n 64
+DimX=8, DimY=128, DimZ=128, #Loop_Iterations=64
+Test 0 takes 2247.239 ms with result -272.391
+Test 1 takes 1847.660 ms with result -272.391
+Test 2 takes 1846.961 ms with result -272.391
+Test 3 takes 1847.513 ms with result -272.391
+Test's min time is 1846.961 ms
+bash-4.3$ cd ../1.compute_math_tiled_host/
+bash-4.3$ ./run.sh -d 8 128 128 -n 64
+DimX=8, DimY=128, DimZ=128, #Loop_Iterations=64, tile_size=1
+Test 0 takes 5704.318 ms with result -272.391
+Test 1 takes 5985.402 ms with result -272.391
+Test 2 takes 5320.782 ms with result -272.391
+Test 3 takes 4883.541 ms with result -272.391
+Test's min time is 4883.541 ms
+bash-4.3$ cd ../0.compute_math_not_tiled_host/
+bash-4.3$ ./run.sh -d 8 128 128 -n 64
+DimX=8, DimY=128, DimZ=128, #Loop_Iterations=64
+Test 0 takes 5487.465 ms with result -272.391
+Test 1 takes 5264.458 ms with result -272.391
+Test 2 takes 5316.210 ms with result -272.391
+Test 3 takes 5238.579 ms with result -272.391
+Test's min time is 5238.579 ms
+
+---------------------------------------------------------------------
+bash-4.3$ cd ../6.compute_math_tiled_hstreams_host_multicard/
+bash-4.3$ ./solution_run.sh -d 8 256 256 -n 64
+DimX=8, DimY=256, DimZ=256, #Loop_Iterations=64
+Test 0 takes 7630.180 ms with result -272.391
+Test 1 takes 7631.377 ms with result -272.391
+Test 2 takes 7631.137 ms with result -272.391
+Test 3 takes 7549.924 ms with result -272.391
+Test's min time is 7549.924 ms
+bash-4.3$ cd ../5.compute_math_tiled_hstreams_multicard/
+bash-4.3$ ./solution_run.sh -d 8 256 256 -n 64
+DimX=8, DimY=256, DimZ=256, #Loop_Iterations=64, tile_size=1
+#Physical domains: 1, #ActivePhysical domains:1, homogeneous?=true
+Test 0 takes 7745.954 ms with result -272.391
+Test 1 takes 7397.367 ms with result -272.391
+Test 2 takes 7393.900 ms with result -272.391
+Test 3 takes 7391.766 ms with result -272.391
+Test's min time is 7391.766 ms
+bash-4.3$ cd ../4.compute_math_tiled_hstreams_streaming/
+bash-4.3$ ./solution_run.sh -d 8 256 256 -n 64
+DimX=8, DimY=256, DimZ=256, #Loop_Iterations=64, tile_size=1
+Test 0 takes 7675.933 ms with result -272.391
+Test 1 takes 7395.802 ms with result -272.391
+Test 2 takes 7395.451 ms with result -272.391
+Test 3 takes 7391.957 ms with result -272.391
+Test's min time is 7391.957 ms
+bash-4.3$ cd ../3.compute_math_not_tiled_hstreams_streaming/
+bash-4.3$ ./solution_run.sh -d 8 256 256 -n 64
+DimX=8, DimY=256, DimZ=256, #Loop_Iterations=64
+Test 0 takes 8150.362 ms with result -272.391
+Test 1 takes 7874.147 ms with result -272.391
+Test 2 takes 7870.348 ms with result -272.391
+Test 3 takes 7873.917 ms with result -272.391
+Test's min time is 7870.348 ms
+bash-4.3$ cd ../2.compute_math_not_tiled_hstreams_naive/
+bash-4.3$ ./solution_run.sh -d 8 256 256 -n 64
+DimX=8, DimY=256, DimZ=256, #Loop_Iterations=64
+Test 0 takes 8151.569 ms with result -272.391
+Test 1 takes 7936.173 ms with result -272.391
+Test 2 takes 7945.983 ms with result -272.391
+Test 3 takes 7945.027 ms with result -272.391
+Test's min time is 7936.173 ms
+bash-4.3$ cd ../1.compute_math_tiled_host/
+bash-4.3$ ./solution_run.sh -d 8 256 256 -n 64
+DimX=8, DimY=256, DimZ=256, #Loop_Iterations=64, tile_size=1
+^Cbash-4.3$ ./solution_run.sh -d 8 256 256 -n 64 -t 2
+DimX=8, DimY=256, DimZ=256, #Loop_Iterations=64, tile_size=2
+Test 0 takes 19029.587 ms with result -272.391
+Test 1 takes 18987.209 ms with result -272.391
+Test 2 takes 18975.518 ms with result -272.391
+Test 3 takes 19012.299 ms with result -272.391
+Test's min time is 18975.518 ms
+bash-4.3$ cd ../0.compute_math_not_tiled_host/
+bash-4.3$ ./solution_run.sh -d 8 256 256 -n 64
+bash: ./solution_run.sh: No such file or directory
+bash-4.3$ ./run.sh -d 8 256 256 -n 64
+DimX=8, DimY=256, DimZ=256, #Loop_Iterations=64
+Test 0 takes 18627.847 ms with result -272.391
+Test 1 takes 20334.931 ms with result -272.391
+Test 2 takes 17653.391 ms with result -272.391
+Test 3 takes 17695.574 ms with result -272.391
+Test's min time is 17653.391 ms

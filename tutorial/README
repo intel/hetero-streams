@@ -1,0 +1,94 @@
+Folder Structure:
+
+This tutorial contains 3 folders:
+ A.remote_invocation
+ B.using_streams
+ C.tiling
+Also in this folder
+ This README
+ hStreams_Hands_On_Tutorial.pdf instructions doc
+ run_solutions.sh - runs all solutions, assuming that they are built
+
+The following section gives a brief explanation of what each folder contains.
+See a README in each of these folders for more detail.
+
+Recall these terms
+ - source: where actions are issued from, normally a Xeon host
+ - sink: where actions are executed, normally a MIC or Xeon
+
+This lab assumes that you've read the following docs, which are normally
+found in /usr/share/doc/hStreams:
+  hStreams_Overview.pdf  - gives the big picture
+  hStreams_Tutorial.pdf  - intro to how everything works, API
+  hStreams_Reference.pdf for details - API reference document
+
+The hStreams include files you'll need are
+  hStreams_app_api.h
+  hStreams_source.h
+  hStreams_sink.h
+The key APIs you'll need are:
+  hStreams_app_init
+  hStreams_app_fini
+  hStreams_app_invoke
+  hStreams_app_create_buf
+  hStreams_app_xfer_memory
+  hStreams_app_event_wait
+  hStreams_app_stream_sync
+  hStreams_app_thread_sync
+Other APIs you will use for more
+advanced tutorials:
+  hStreams_SetOptions
+  hStreams_AddLogDomain
+  hStreams_StreamCreate
+  hStreams_GetCurrentOptions
+  hStreams_GetNumPhysDomains
+  hStreams_GetPhysDomainDetails
+
+Here's how the lab works:
+ - Each <#>.<name> folder has a set of files like this
+    <name>_src.cpp - this is the source-side file that you should edit
+    <name>_src_original.cpp - this is a copy of <name>_src.cpp, so you
+     can see where you started
+    <name>_src_solution.cpp - this is our solution to the exercise; you
+     may end up with something slightly different
+    <name>_sink.cpp - this is the sink-side file that you sometimes edit,
+     more often just use
+   Makefile - has commands for make and make solution
+   names.mk - used to control whether a MIC version is build, and
+    to override the sink-side library name (rare)
+   rootname.mk - unique name per directory that's used by scripts
+   ./run.sh - runs your version, after using make
+   ./solution-run.sh - runs our solution, after using make solution
+ - Within each source file, please look for
+  //!!<letter>, where <letter> is a, b, c, etc. - labels for key points
+  //%% EXERCISE - where to modify code
+  %% - represents where code should be filled in
+ - Some exercises indicate whether they passed
+    If it doesn't report anything, don't assume something bad happened
+
+A.remote_invocation
+ Hello hStreams world exercise
+ Basic APIs
+ Offload with a single stream
+ User-defined functions
+ Basic synchronization
+ Scalar and pointer arguments
+ Return values
+ Changing sink-side lib name (optional)
+
+B.using_streams
+ Start with straight line code
+ Convert loop nests to tasks, with heap variables as arguments
+ Execute those tasks in multiple streams concurrently
+ Perform memory transfers and cross-stream synchronization
+
+C.tiling
+ Start with a non-tiled code.
+ port it to run on the MIC, using hstreams: variations including tiled,
+ not tiled, no streaming, streaming/pipelining of computation, pipelining of
+ data movement and computation
+ show how easy it is to run on multiple cards
+ extend to run on the host as well
+
+
+

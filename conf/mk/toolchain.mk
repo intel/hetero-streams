@@ -73,6 +73,7 @@ CFG_DIR:=$(TOP_DIR)conf/
 CFG_SPEC_DIR:=$(CFG_DIR)spec/
 DOC_DIR:=$(TOP_DIR)doc/
 REF_CODE_DIR:=$(TOP_DIR)ref_code/
+TUT_CODE_DIR:=$(TOP_DIR)tutorial/
 SH_DIR:=$(TOP_DIR)conf/sh/
 PY_DIR:=$(TOP_DIR)conf/py/
 

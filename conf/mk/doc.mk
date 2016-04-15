@@ -22,6 +22,7 @@ DOCS := $(addprefix $(DOC_DIR), $(DOC_FILES))
 MAN_PAGES_INSTALL_DIR:=/usr/share/man/man3/
 DOCS_INSTALL_DIR:=/usr/share/doc/hStreams/
 REF_CODE_INSTALL_DIR:=$(DOCS_INSTALL_DIR)/ref_code/
+TUT_CODE_INSTALL_DIR:=$(DOCS_INSTALL_DIR)/tutorial/
 
 # Last command will clean up some man links to class members
 build-doc:
@@ -43,7 +44,9 @@ install-doc: build-doc
 	install -d $(DESTDIR)$(DOCS_INSTALL_DIR)
 	install -m644 $(DOCS) $(DESTDIR)$(DOCS_INSTALL_DIR)
 	install -d $(DESTDIR)$(REF_CODE_INSTALL_DIR)
+	install -d $(DESTDIR)$(TUT_CODE_INSTALL_DIR)
 	cp -dr --no-preserve=ownership $(REF_CODE_DIR)* $(DESTDIR)$(REF_CODE_INSTALL_DIR)
+	cp -dr --no-preserve=ownership $(TUT_CODE_DIR)* $(DESTDIR)$(TUT_CODE_INSTALL_DIR)
 	$(RM) -r $(DESTDIR)$(REF_CODE_INSTALL_DIR)windows
 	$(RM) -r $(DESTDIR)$(REF_CODE_INSTALL_DIR)*/*.bat
 	install -d $(DESTDIR)$(MAN_PAGES_INSTALL_DIR)

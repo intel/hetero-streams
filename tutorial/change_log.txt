@@ -1,0 +1,14 @@
+Date: 6/2/2016
+1. Added a change_log file
+2. source_setup file has been changed to clean up the bin files in the bin folder/subfolders
+3. Made the run scripts executable, but it changes if you modify the file.
+4. Made the solution_run.sh consistent
+5. Added extra checks in B to make sure that N is >0 before moving forward. 
+   Can be done for other examples.
+6. Fixed B.3
+	typo of include file math.h
+	double diff not defined
+7. Fixed B4
+	typo of API hStreams_app_stream_sync   
+8. Added few more comments on C6 hinting how to make it work for 2 cards.	
+ 

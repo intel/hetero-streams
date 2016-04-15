@@ -1,0 +1,1 @@
+pass_scalar_args_get_result

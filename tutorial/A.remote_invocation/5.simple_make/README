@@ -1,0 +1,12 @@
+The Makefile in this folder shows the simplest possible ways to compile an 
+hstreams program. It creates both the executable and sink side shared library
+in the folder where the source code reside. Therefore, to be able to run them
+we need to add the present working directory to the library paths.
+
+The required setup has been shown in solution_run.sh file. 
+
+The exercise in this tutorial is to remove extraneous staffs from the 
+Makefile_original file, which has been used in all other tutorials. 
+This file is generic enough to accommodate everything covered in the entire 
+tutorial. You should still keep that generic for serve your need, and should be 
+able to use it to compile other new your programs.
