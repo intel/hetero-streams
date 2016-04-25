@@ -89,6 +89,11 @@ HOST_LINK_FLAGS=$(LDFLAGS) -shared -fPIC -qopenmp -pthread \
 
 HOST_INSTALL_DIR:=/usr/lib64/
 
+ifeq ($(COVERAGE),y)
+    HOST_CC := export PATH=$(bullseye_path):$(PATH) ; cov01 --on -v ; $(HOST_CC)
+endif
+
+
 $(HOST_TARGET): $(HOST_OBJS) $(HOST_ONTHEFLY_OBJS)
 	$(dir_create)
 	$(HOST_CC) $^ $(HOST_LINK_FLAGS) -o $@

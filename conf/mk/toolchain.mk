@@ -30,6 +30,13 @@ else
   $(error Unknown configuration: $(CFG))
 endif
 
+mpss_toolchains := /opt/mpss_toolchains
+
+ifeq ($(COVERAGE),y)
+    bullseye_coverage := $(mpss_toolchains)/coverage/bullseye
+    bullseye_path := $(bullseye_coverage)/bin
+endif
+
 #
 # compiler
 ifdef ICC
@@ -77,7 +84,7 @@ HOST_BUILD_DIR:=build/host/
 HOST_BIN_DIR:=bin/host/
 
 # astyle
-ASTYLE_DIR:=/opt/mpss_toolchains/astyle
+ASTYLE_DIR:=$(mpss_toolchains)/astyle
 ASTYLE_VER:=2.05.1
 ASTYLE_OPTIONS_FILE:=$(CFG_DIR)astyle.rc
 ASTYLE_OPTIONS:=--options=$(ASTYLE_OPTIONS_FILE) -n --recursive "$(TOP_DIR)*.h" "$(TOP_DIR)*.cpp"
@@ -88,7 +95,7 @@ $(info [INFO] Running with system-installed astyle)
 ASTYLE:=astyle
 endif
 
-DOXYGEN_DIR=/opt/mpss_toolchains/doxygen
+DOXYGEN_DIR=$(mpss_toolchains)/doxygen
 DOXYGEN_VER=1.6.3
 DOXYGEN:=$(DOXYGEN_DIR)/$(DOXYGEN_VER)/bin/doxygen
 ifeq ("$(wildcard $(DOXYGEN))","")
