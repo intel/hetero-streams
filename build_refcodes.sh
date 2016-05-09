@@ -19,6 +19,7 @@ REF_CODES=( basic_perf                     \
     cholesky/tiled_host                    \
     cholesky/tiled_hstreams                \
     cholesky/tiled_hstreams_host_multicard \
+    hello_world                            \
     io_perf                                \
     lu/tiled_host                          \
     lu/tiled_hstreams                      \

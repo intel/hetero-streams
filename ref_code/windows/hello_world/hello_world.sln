@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hello_world", "hello_world\hello_world.vcxproj", "{C8183E67-F552-42DF-9B1C-D8E4EFE433AB}"
+ProjectSection(ProjectDependencies) = postProject
+	{081822B4-ACCD-4953-975C-5AD8A6E74581} = {081822B4-ACCD-4953-975C-5AD8A6E74581}
+EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hello_world_sink", "hello_world_sink\hello_world_sink.vcxproj", "{081822B4-ACCD-4953-975C-5AD8A6E74581}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+	    {C8183E67-F552-42DF-9B1C-D8E4EFE433AB}.Debug|x64.ActiveCfg = Debug|x64
+		{C8183E67-F552-42DF-9B1C-D8E4EFE433AB}.Debug|x64.Build.0 = Debug|x64
+		{C8183E67-F552-42DF-9B1C-D8E4EFE433AB}.Release|x64.ActiveCfg = Release|x64
+		{C8183E67-F552-42DF-9B1C-D8E4EFE433AB}.Release|x64.Build.0 = Release|x64
+                {081822B4-ACCD-4953-975C-5AD8A6E74581}.Debug|x64.ActiveCfg = Debug|x64
+		{081822B4-ACCD-4953-975C-5AD8A6E74581}.Debug|x64.Build.0 = Debug|x64
+                {081822B4-ACCD-4953-975C-5AD8A6E74581}.Release|x64.ActiveCfg = Release|x64
+		{081822B4-ACCD-4953-975C-5AD8A6E74581}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

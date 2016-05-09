@@ -40,6 +40,11 @@
 ./ref_code/basic_perf/README.txt
 ./ref_code/basic_perf/basic_perf.cpp
 ./ref_code/basic_perf/run_basic_perf.sh
+./ref_code/hello_world/README.txt
+./ref_code/hello_world/Makefile
+./ref_code/hello_world/hello_world_sink.cpp
+./ref_code/hello_world/hello_world_src.cpp
+./ref_code/hello_world/run_hello_world.sh
 ./ref_code/cholesky/README.txt
 ./ref_code/cholesky/tiled_host/Makefile
 ./ref_code/cholesky/tiled_host/cholesky_tiled.cpp
@@ -88,6 +93,14 @@
 ./ref_code/windows/basic_perf/basic_perf/basic_perf.vcxproj
 ./ref_code/windows/basic_perf/basic_perf/basic_perf.vcxproj.filters
 ./ref_code/windows/basic_perf/run_basic_perf.bat
+./ref_code/windows/hello_world/README.txt
+./ref_code/windows/hello_world/hello_world.sln
+./ref_code/windows/hello_world/hello_world/hello_world.vcxproj
+./ref_code/windows/hello_world/hello_world/hello_world.vcxproj.filters
+./ref_code/windows/hello_world/hello_world_sink/hello_world_sink.vcxproj
+./ref_code/windows/hello_world/hello_world_sink/hello_world_sink.vcxproj.filters
+./ref_code/windows/hello_world/hello_world_sink/compile_sink.bat
+./ref_code/windows/hello_world/run_hello_world.bat
 ./ref_code/windows/cholesky/README.txt
 ./ref_code/windows/cholesky/tiled_host/runit.bat
 ./ref_code/windows/cholesky/tiled_host/tiled_host.sln
