@@ -319,6 +319,7 @@ static void tokenizePaths(std::string &paths, std::vector<std::string> &tokenize
     if (paths.empty()) {
         return;
     }
+
 #ifdef _WIN32
     std::string path_separator = ";";
 #else
@@ -328,24 +329,30 @@ static void tokenizePaths(std::string &paths, std::vector<std::string> &tokenize
     size_t token_begin_pos = 0, token_end_pos = paths.find(path_separator);
 
     while (true) {
-        token = paths.substr(token_begin_pos, token_end_pos - token_begin_pos);
-        if (token.empty()) {
-            continue;
-        }
-        if (token[token.length() - 1] == '\\'
-#ifdef _WIN32
-                || token[token.length() - 1] == '/'
-#endif
-           ) {
-            token = token.substr(0, token.length() - 1);
-        }
-        tokenized_paths.push_back(token);
-
         if (token_end_pos == std::string::npos) {
-            break;
+            token_end_pos = paths.length();
+        }
+
+        token = paths.substr(token_begin_pos, token_end_pos - token_begin_pos);
+
+        if (!token.empty()) {
+
+            if (token[token.length() - 1] == '\\'
+#ifdef _WIN32
+                    || token[token.length() - 1] == '/'
+#endif
+               ) {
+                token = token.substr(0, token.length() - 1);
+            }
+            tokenized_paths.push_back(token);
         }
 
         token_begin_pos = token_end_pos + path_separator.length();
+
+        if (token_begin_pos >= paths.length()) {
+            break;
+        }
+
         token_end_pos = paths.find(path_separator, token_begin_pos);
     }
 }
