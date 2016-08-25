@@ -60,7 +60,8 @@
       </ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
-      <Command>del $(ProjectDir)\__tmp.cpp</Command>
+      <Command>del $(ProjectDir)\x100_card_startup.cpp
+del $(ProjectDir)\x200_card_startup.cpp</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -69,7 +70,8 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\src\include;$(INTEL_MPSS_HOST_SDK)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <PostBuildEvent>
-      <Command>del $(ProjectDir)\__tmp.cpp</Command>
+      <Command>del $(ProjectDir)\x100_card_startup.cpp
+del $(ProjectDir)\x200_card_startup.cpp</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Message>
@@ -161,7 +163,8 @@
     <ClCompile Include="..\..\..\src\hStreams_sink.cpp" />
     <ClCompile Include="..\..\..\src\hStreams_threading.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="__tmp.cpp" />
+    <ClCompile Include="x100_card_startup.cpp" />
+    <ClCompile Include="x200_card_startup.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

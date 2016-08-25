@@ -1,0 +1,36 @@
+/*
+ * Hetero Streams Library - A streaming library for heterogeneous platforms
+ * Copyright (c) 2014 - 2016, Intel Corporation.
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms and conditions of the GNU Lesser General Public License,
+ * version 2.1, as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for
+ * more details.
+ */
+
+/*
+ * This file only contains the "unspecified base version" node, since its
+ * only purpose is to make some symbols local.
+ * Actually, the only symbols that _have_ to be global are: hStreams_init_partition,
+ * hStreams_fetchSinkFuncAddress, hStreamsThunk, hStreams_init_sink and main.
+ */
+{
+    global:
+        hStreams_init_partition;
+        hStreamsThunk;
+        hStreams_cgemm_sink;
+        hStreams_zgemm_sink;
+        hStreams_fetchSinkFuncAddress;
+        hStreams_sgemm_sink;
+        hStreams_memset_sink;
+        hStreams_init_sink;
+        hStreams_dgemm_sink;
+        hStreams_memcpy_sink;
+        main;
+    local:
+        *;
+};

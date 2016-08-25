@@ -236,7 +236,7 @@ hStreams_LoadSingleSinkSideLibraryMIC(HSTR_COIPROCESS coi_process, const char *l
 
 
 HSTR_RESULT
-hStreams_LoadSinkSideLibrariesMIC(HSTR_COIPROCESS coi_process, std::vector<HSTR_COILIBRARY> &out_loadedLibs, std::string const &in_ExecutableFileName)
+hStreams_LoadSinkSideLibrariesMIC(HSTR_COIPROCESS coi_process, std::vector<HSTR_COILIBRARY> &out_loadedLibs, std::string const &in_ExecutableFileName, HSTR_ISA_TYPE isa_type)
 {
     HSTR_RESULT hs_result;
     out_loadedLibs.clear();
@@ -288,8 +288,10 @@ hStreams_LoadSinkSideLibrariesMIC(HSTR_COIPROCESS coi_process, std::vector<HSTR_
     }
 
     // Third, load the default sink-side library.
-    const std::string default_lib = in_ExecutableFileName + "_mic.so";
+    // TODO: add x100.so support for KNC
+    const std::string default_lib = in_ExecutableFileName + (isa_type == HSTR_ISA_KNC ? "_mic.so" : "_x200.so");
     const std::string full_path = findFileName(default_lib, globals::tokenized_target_library_search_path);
+
     if (!full_path.empty()) {
         HSTR_COILIBRARY coiLibrary;
         HSTR_COIRESULT result = hStreams_COIWrapper::COIProcessLoadLibraryFromFile(

@@ -114,13 +114,12 @@ detail::InitInVersion_impl_throw(const char *interface_version)
     assert(0 == (((uint64_t)&hstr_proc.dummy_buf) & 63));
     assert(0 == (((uint64_t)&hstr_proc.dummy_data) & 63));
 
-    uint32_t            i, active_domains, first_valid_domainID = (uint32_t) - 1;
-    const char         *thunk_name                  = "hStreamsThunk";
-    const char         *fetchSinkFuncAddress_name   = "hStreams_fetchSinkFuncAddress";
+    uint32_t            active_domains_knc, num_phys_domains_knc,
+                        active_domains_x200, num_phys_domains_x200;
     string              executableFileName;
     HSTR_RESULT         hsr;
     HSTR_COIRESULT      result;
-    HSTR_COIPROCESS     dummy_process = NULL;
+    HSTR_COIPROCESS     dummy_process_knc = NULL, dummy_process_x200 = NULL, dummy_process = NULL;
 
     if ((hsr = hStreams_FetchExecutableName(executableFileName)) != HSTR_RESULT_SUCCESS) {
         HSTR_WARN(HSTR_INFO_TYPE_MISC) << "Cannot obtain executable name.";
@@ -134,8 +133,122 @@ detail::InitInVersion_impl_throw(const char *interface_version)
     // Set search paths for libraries from environment variables
     setSearchedPaths();
 
-    // May return HSTR_COI_DOES_NOT_EXIST if COI_ISA_MIC is not matched
-    result = hStreams_COIWrapper::COIEngineGetCount(HSTR_ISA_MIC, &hstr_proc.myNumPhysDomains);
+    InitPhysicalDomains_impl_throw(HSTR_ISA_KNC, executableFileName,
+                                   "x100_card_startup", (void *)x100_card_startup, x100_card_startup_size,
+                                   active_domains_knc, dummy_process_knc, num_phys_domains_knc);
+
+    InitPhysicalDomains_impl_throw(HSTR_ISA_KNL, executableFileName,
+                                   "x200_card_startup", (void *)x200_card_startup, x200_card_startup_size,
+                                   active_domains_x200, dummy_process_x200, num_phys_domains_x200);
+
+    //This shouldn't happened, cannot have both card types in system.
+    if (num_phys_domains_knc * num_phys_domains_x200 > 0) {
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DEVICE_NOT_INITIALIZED, StringBuilder()
+                                   << "A problem encountered while initalizing physical devices: "
+                                   << "System contains both KNC and KNL card. "
+                                  );
+    }
+
+    hstr_proc.myNumPhysDomains = num_phys_domains_knc ? num_phys_domains_knc : num_phys_domains_x200;
+    hstr_proc.myActivePhysDomains = num_phys_domains_knc ? active_domains_knc : active_domains_x200;
+
+    dummy_process = num_phys_domains_knc ? dummy_process_knc : dummy_process_x200;
+
+    std::vector<LIB_HANDLER::handle_t> loaded_libs_handles;
+    hStreams_LoadSinkSideLibrariesHost(executableFileName, loaded_libs_handles);
+
+    hStreams_PhysDomain *host_phys_dom = new hStreams_PhysDomainHost(dummy_process, loaded_libs_handles);
+    phys_domains.addToCollection(host_phys_dom);
+    HSTR_CPU_MASK dummy_mask;
+    HSTR_CPU_MASK_ZERO(dummy_mask);
+    hStreams_LogDomain *source_log_dom = new hStreams_LogDomain(HSTR_SRC_LOG_DOMAIN, dummy_mask, *host_phys_dom);
+    log_domains.addToCollection(source_log_dom);
+
+
+    if (active_domains_knc == 0 && active_domains_x200 == 0) {
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DEVICE_NOT_INITIALIZED, StringBuilder()
+                                   << "No active MIC cards in the system. Use of hStreams is not permitted"
+                                  );
+    }
+
+    // Check that all physical domains have the same resources
+    hstr_proc.homogeneous = phys_domains.isHomogenous();
+
+    // Create dummy buffer for EventStreamWait
+    result = hStreams_COIWrapper::COIBufferCreate(
+                 1,                             // Size: 1. Smallest performant size
+                 HSTR_COI_BUFFER_OPENCL,             // COI Buffer Type: OCL, non-thread specific
+                 0,                             // Flags: 0
+                 NULL,                          // not initialized
+                 1, &dummy_process, // Unused but required
+                 &hstr_proc.dummy_buf);        // Assign to pointer to COIBuffer
+    if (result != HSTR_COI_SUCCESS) {
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DEVICE_NOT_INITIALIZED, StringBuilder()
+                                   << "A problem encountered while creating a helper buffer: "
+                                   << hStreams_COIWrapper::COIResultGetName(result)
+                                  );
+    }
+
+    // Check envirables for 2M buffer usage.  DMA is faster if host and device
+    //   use 2MB.
+    // Host usage of 2MB requires either
+    //  THP, enabled on RH Linux if
+    //   /sys/kernel/mm/redhat_transparent_hugepage/enable is always
+    //  User forces 2MB with mmap
+#define STRLEN_2MB 40
+    char env_2MB[STRLEN_2MB + 1];
+    const char *const env_2MB_var = getenv("MIC_USE_2MB_BUFFERS");
+    if (env_2MB_var && strlen(env_2MB_var)) {
+        strncpy(env_2MB, env_2MB_var, STRLEN_2MB);
+        env_2MB[STRLEN_2MB] = 0;
+        env_2MB[STRLEN_2MB - 1] = '\0'; // be safe in case length exceeded
+        // Format is <int>[BKMGT]
+        uint64_t multiplier = 1;
+        if (strlen(env_2MB) > 0) { // This second strlen check is not needed but is required due to Kkloc work.
+            switch (env_2MB[strlen(env_2MB) - 1]) { // size
+            case '\0':
+                break;
+            case 'T':
+            case 't':
+                multiplier *= 1024;
+            case 'G':
+            case 'g':
+                multiplier *= 1024;
+            case 'M':
+            case 'm':
+                multiplier *= 1024;
+            case 'K':
+            case 'k':
+                multiplier *= 1024;
+            case 'B':
+            case 'b':
+                // strip the size suffix, if present
+                env_2MB[strlen(env_2MB) - 1] = '\0';
+                break;
+            default:
+                HSTR_WARN(HSTR_INFO_TYPE_MISC)
+                        << env_2MB[strlen(env_2MB) - 1]
+                        << " is not a valid suffix for MIC_USE_2MB_BUFFERS, please use one of [BKMGT] or none.";
+            }
+            huge_page_usage_threshold = atoi(env_2MB) * multiplier;
+        }
+    }
+
+    state_guard.initSuccessfull();
+} // hStreams_InitInVersion_impl_throw
+
+void detail::InitPhysicalDomains_impl_throw(HSTR_ISA_TYPE isa_type, std::string executableFileName,
+        std::string library_name, void *sink_startup_ptr, uint64_t sink_startup_size,
+        uint32_t &active_domains, HSTR_COIPROCESS &dummy_process, uint32_t &num_phys_domains)
+{
+
+    uint32_t            i, first_valid_domainID = (uint32_t) - 1;
+    const char         *thunk_name                  = "hStreamsThunk";
+    const char         *fetchSinkFuncAddress_name   = "hStreams_fetchSinkFuncAddress";
+    HSTR_COIRESULT      result;
+
+    // May return HSTR_COI_DOES_NOT_EXIST if isa_type is not matched
+    result = hStreams_COIWrapper::COIEngineGetCount(isa_type, &num_phys_domains);
     // Result checking
     if (result != HSTR_COI_SUCCESS) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
@@ -146,15 +259,15 @@ detail::InitInVersion_impl_throw(const char *interface_version)
 
     // Artificially constrain the number of domains
     // FIXME: Currently it uses the lowest-indexed domains
-    if (hstr_proc.myNumPhysDomains > hStreams_GetOptions_phys_domains_limit()) {
-        hstr_proc.myNumPhysDomains = hStreams_GetOptions_phys_domains_limit();
+    if (num_phys_domains > hStreams_GetOptions_phys_domains_limit()) {
+        num_phys_domains = hStreams_GetOptions_phys_domains_limit();
     }
 
-    for (i = 0, active_domains = 0; i < hstr_proc.myNumPhysDomains; i++) {
+    for (i = 0, active_domains = 0; i < num_phys_domains; i++) {
         HSTR_COIRESULT coi_res;
         HSTR_COIENGINE coi_eng;
 
-        coi_res = hStreams_COIWrapper::COIEngineGetHandle(HSTR_ISA_MIC, i, &coi_eng);
+        coi_res = hStreams_COIWrapper::COIEngineGetHandle(isa_type, i, &coi_eng);
         if (HSTR_COI_SUCCESS != coi_res) {
             HSTR_DEBUG1(HSTR_INFO_TYPE_MISC)
                     << "Skipping physical domain no. "
@@ -176,8 +289,8 @@ detail::InitInVersion_impl_throw(const char *interface_version)
         }
 
         HSTR_COIPROCESS coi_process;
-        coi_res = hStreams_COIWrapper::COIProcessCreateFromMemory(coi_eng, "x100_card_startup",
-                  (void *)x100_card_startup, x100_card_startup_size,
+        coi_res = hStreams_COIWrapper::COIProcessCreateFromMemory(coi_eng,
+                  library_name.c_str(), sink_startup_ptr, sink_startup_size,
                   0, NULL, false, NULL, true, NULL, 1024 * 1024, globals::target_library_search_path.c_str(),
                   NULL, 0, &coi_process);
         if (HSTR_COI_SUCCESS != coi_res) {
@@ -188,7 +301,8 @@ detail::InitInVersion_impl_throw(const char *interface_version)
                                       );
         }
         std::vector<HSTR_COILIBRARY> loaded_libs;
-        HSTR_RESULT hstr_res = hStreams_LoadSinkSideLibrariesMIC(coi_process, loaded_libs, executableFileName);
+        HSTR_RESULT hstr_res = hStreams_LoadSinkSideLibrariesMIC(coi_process, loaded_libs,
+                               executableFileName, isa_type);
         if (hstr_res != HSTR_RESULT_SUCCESS) {
             throw HSTR_EXCEPTION_MACRO(hstr_res, StringBuilder()
                                        << "An error occured while loading libraries on the MIC."
@@ -298,89 +412,7 @@ detail::InitInVersion_impl_throw(const char *interface_version)
         active_domains++; // Advance valid engines
     }
 
-    std::vector<LIB_HANDLER::handle_t> loaded_libs_handles;
-    hStreams_LoadSinkSideLibrariesHost(executableFileName, loaded_libs_handles);
-
-    hStreams_PhysDomain *host_phys_dom = new hStreams_PhysDomainHost(dummy_process, loaded_libs_handles);
-    phys_domains.addToCollection(host_phys_dom);
-    HSTR_CPU_MASK dummy_mask;
-    HSTR_CPU_MASK_ZERO(dummy_mask);
-    hStreams_LogDomain *source_log_dom = new hStreams_LogDomain(HSTR_SRC_LOG_DOMAIN, dummy_mask, *host_phys_dom);
-    log_domains.addToCollection(source_log_dom);
-
-
-    if (active_domains == 0) {
-        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DEVICE_NOT_INITIALIZED, StringBuilder()
-                                   << "No active MIC cards in the system. Use of hStreams is not permitted"
-                                  );
-    }
-
-    // Check that all physical domains have the same resources
-    hstr_proc.homogeneous = phys_domains.isHomogenous();
-
-    // Create dummy buffer for EventStreamWait
-    result = hStreams_COIWrapper::COIBufferCreate(
-                 1,                             // Size: 1. Smallest performant size
-                 HSTR_COI_BUFFER_OPENCL,             // COI Buffer Type: OCL, non-thread specific
-                 0,                             // Flags: 0
-                 NULL,                          // not initialized
-                 1, &dummy_process, // Unused but required
-                 &hstr_proc.dummy_buf);        // Assign to pointer to COIBuffer
-    if (result != HSTR_COI_SUCCESS) {
-        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_DEVICE_NOT_INITIALIZED, StringBuilder()
-                                   << "A problem encountered while creating a helper buffer: "
-                                   << hStreams_COIWrapper::COIResultGetName(result)
-                                  );
-    }
-
-    // Check envirables for 2M buffer usage.  DMA is faster if host and device
-    //   use 2MB.
-    // Host usage of 2MB requires either
-    //  THP, enabled on RH Linux if
-    //   /sys/kernel/mm/redhat_transparent_hugepage/enable is always
-    //  User forces 2MB with mmap
-#define STRLEN_2MB 40
-    char env_2MB[STRLEN_2MB + 1];
-    const char *const env_2MB_var = getenv("MIC_USE_2MB_BUFFERS");
-    if (env_2MB_var && strlen(env_2MB_var)) {
-        strncpy(env_2MB, env_2MB_var, STRLEN_2MB);
-        env_2MB[STRLEN_2MB] = 0;
-        env_2MB[STRLEN_2MB - 1] = '\0'; // be safe in case length exceeded
-        // Format is <int>[BKMGT]
-        uint64_t multiplier = 1;
-        if (strlen(env_2MB) > 0) { // This second strlen check is not needed but is required due to Kkloc work.
-            switch (env_2MB[strlen(env_2MB) - 1]) { // size
-            case '\0':
-                break;
-            case 'T':
-            case 't':
-                multiplier *= 1024;
-            case 'G':
-            case 'g':
-                multiplier *= 1024;
-            case 'M':
-            case 'm':
-                multiplier *= 1024;
-            case 'K':
-            case 'k':
-                multiplier *= 1024;
-            case 'B':
-            case 'b':
-                // strip the size suffix, if present
-                env_2MB[strlen(env_2MB) - 1] = '\0';
-                break;
-            default:
-                HSTR_WARN(HSTR_INFO_TYPE_MISC)
-                        << env_2MB[strlen(env_2MB) - 1]
-                        << " is not a valid suffix for MIC_USE_2MB_BUFFERS, please use one of [BKMGT] or none.";
-            }
-            huge_page_usage_threshold = atoi(env_2MB) * multiplier;
-        }
-    }
-
-    hstr_proc.myActivePhysDomains = active_domains;
-    state_guard.initSuccessfull();
-} // hStreams_InitInVersion_impl_throw
+} // hStreams_InitPhysicalDomains_impl_throw
 
 void
 detail::IsInitialized_impl_throw()

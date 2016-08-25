@@ -16,6 +16,8 @@
 #define HSTREAMS_CORE_API_WORKERS_SOURCE_H
 
 #include "hStreams_types.h"
+#include "hStreams_COIWrapper.h"
+#include <string>
 
 /**
  * All workers reside in the detail namespace.
@@ -45,6 +47,11 @@ namespace detail
 
 void
 InitInVersion_impl_throw(const char *interface_version);
+
+void
+InitPhysicalDomains_impl_throw(HSTR_ISA_TYPE isa_type, std::string executableFileName,
+                               std::string library_name, void *sink_startup_ptr, uint64_t sink_startup_size,
+                               uint32_t &active_domains, HSTR_COIPROCESS &dummy_process, uint32_t &num_phys_domains);
 
 void
 IsInitialized_impl_throw();

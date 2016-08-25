@@ -33,10 +33,12 @@
       <Command>compile_sink.bat $(SolutionDir)\src $(ProjectDir)</Command>
     </PreBuildEvent>
     <PreLinkEvent>
-      <Command>python ..\..\py\bin2inc.py $(ProjectDir)\hstreams_sink.so $(ProjectDir)\..\hstreams_source\__tmp.cpp x100_card_startup</Command>
+      <Command>python ..\..\py\bin2inc.py $(ProjectDir)\hstreams_sink_x100.so $(ProjectDir)\..\hstreams_source\x100_card_startup.cpp x100_card_startup
+python ..\..\py\bin2inc.py $(ProjectDir)\hstreams_sink_x200.so $(ProjectDir)\..\hstreams_source\x200_card_startup.cpp x200_card_startup</Command>
     </PreLinkEvent>
     <PostBuildEvent>
-      <Command>del hstreams_sink.so</Command>
+      <Command>del hstreams_sink_x100.so
+del hstreams_sink_x200.so</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -44,10 +46,12 @@
       <Command>compile_sink.bat $(SolutionDir)\src $(ProjectDir)</Command>
     </PreBuildEvent>
     <PreLinkEvent>
-      <Command>python ..\..\py\bin2inc.py $(ProjectDir)\hstreams_sink.so $(ProjectDir)\..\hstreams_source\__tmp.cpp x100_card_startup</Command>
+      <Command>python ..\..\py\bin2inc.py $(ProjectDir)\hstreams_sink_x100.so $(ProjectDir)\..\hstreams_source\x100_card_startup.cpp x100_card_startup
+python ..\..\py\bin2inc.py $(ProjectDir)\hstreams_sink_x200.so $(ProjectDir)\..\hstreams_source\x200_card_startup.cpp x200_card_startup</Command>
     </PreLinkEvent>
     <PostBuildEvent>
-      <Command>del hstreams_sink.so</Command>
+      <Command>del hstreams_sink_x100.so
+del hstreams_sink_x200.so</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

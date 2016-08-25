@@ -43,9 +43,11 @@ ifdef ICC
   $(info ICC is defined, will use that.)
   HOST_CC := $(ICC) -std=c++11
   x100_CARD_CC := $(ICC) -mmic
+  x200_CARD_CC := $(ICC) -xMIC-AVX512
 else
   HOST_CC := icc -std=c++11
   x100_CARD_CC := icc -mmic
+  x200_CARD_CC := icc -xMIC-AVX512
 endif
 
 # dir creation guard, to prevent explicitly adding directories as targets
@@ -117,7 +119,8 @@ CARD_LIBRARY_INSTALL_DIR:=/usr/lib64/
 CARD_PAYLOAD_INSTALL_DIR:=/usr/lib64/
 
 x100_CARD_PAYLOAD_NAME:=hstreams_start_x100_card
-x100_CARD_LIBRARY_NAME:=hstreams_sink # results in libhstreams_sink.so{,.0}
+
+x200_CARD_PAYLOAD_NAME:=hstreams_start_x200_card
 
 # RPM SPEC file
 SPEC_FILE:=$(CFG_SPEC_DIR)hstreams.spec

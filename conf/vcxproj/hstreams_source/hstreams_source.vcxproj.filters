@@ -212,9 +212,6 @@
     <ClCompile Include="..\..\..\src\hStreams_COIWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="__tmp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hStreams_app_api_sink.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -231,6 +228,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hStreams_core_api_workers_source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="x100_card_startup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="x200_card_startup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

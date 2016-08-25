@@ -10,6 +10,7 @@
 ./conf/mk/headers.mk
 ./conf/mk/host.mk
 ./conf/mk/x100-card.mk
+./conf/mk/x200-card.mk
 ./conf/mk/toolchain.mk
 ./conf/py/bin2inc.py
 ./conf/spec/hstreams.spec
@@ -370,4 +371,5 @@
 ./src/include/hStreams_locks.h
 ./src/include/hStreams_threading.h
 ./src/linker_script_x100_card.map
+./src/linker_script_x200_card.map
 ./src/linker_script_source.map

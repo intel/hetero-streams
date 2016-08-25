@@ -362,7 +362,7 @@ hStreams_FetchExecutableDirectory(std::string &out_dir);
 ///         variable mic_sink_ld_library_path_env_name.
 ///////////////////////////////////////////////////////////////////////////////////////
 HSTR_RESULT
-hStreams_LoadSinkSideLibrariesMIC(HSTR_COIPROCESS coi_process, std::vector<HSTR_COILIBRARY> &out_loadedLibs, const std::string &in_ExecutableFileName);
+hStreams_LoadSinkSideLibrariesMIC(HSTR_COIPROCESS coi_process, std::vector<HSTR_COILIBRARY> &out_loadedLibs, const std::string &in_ExecutableFileName, HSTR_ISA_TYPE isa_type);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///
