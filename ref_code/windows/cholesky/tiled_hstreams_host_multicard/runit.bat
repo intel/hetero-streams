@@ -6,7 +6,7 @@
 ::
 
 set HSTREAMS_SINK=%INTEL_MPSS_HOME%\k1om-mpss-linux\usr\lib64;%INTEL_MPSS_HOME%\sdk\tutorials\hstreams\windows\cholesky\tiled_hstreams_host_multicard
-set "SINK_LD_LIBRARY_PATH=%HSTREAMS_SINK%;%MIC_LD_LIBRARY_PATH%"
+set "SINK_LD_LIBRARY_PATH=%HSTREAMS_SINK%;%MIC_LD_LIBRARY_PATH%;%cd%"
 
 REM col major
 .\x64\Release\tiled_hstreams_host_multicard.exe -m 4800 -t 6 -s 5 -l col -i 5

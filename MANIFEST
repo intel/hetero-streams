@@ -120,6 +120,10 @@
 ./ref_code/windows/cholesky/tiled_hstreams_host_multicard/tiled_hstreams_host_multicard.sln
 ./ref_code/windows/cholesky/tiled_hstreams_host_multicard/tiled_hstreams_host_multicard/tiled_hstreams_host_multicard.vcxproj
 ./ref_code/windows/cholesky/tiled_hstreams_host_multicard/tiled_hstreams_host_multicard/tiled_hstreams_host_multicard.vcxproj.filters
+./ref_code/windows/cholesky/tiled_hstreams_host_multicard/tiled_hstreams_host_multicard_host/dllmain.cpp
+./ref_code/windows/cholesky/tiled_hstreams_host_multicard/tiled_hstreams_host_multicard_host/targetver.h
+./ref_code/windows/cholesky/tiled_hstreams_host_multicard/tiled_hstreams_host_multicard_host/tiled_hstreams_host_multicard_host.vcxproj
+./ref_code/windows/cholesky/tiled_hstreams_host_multicard/tiled_hstreams_host_multicard_host/tiled_hstreams_host_multicard_host.vcxproj.filters
 ./ref_code/windows/io_perf/README.txt
 ./ref_code/windows/io_perf/io_perf.sln
 ./ref_code/windows/io_perf/io_perf/io_perf.vcxproj
