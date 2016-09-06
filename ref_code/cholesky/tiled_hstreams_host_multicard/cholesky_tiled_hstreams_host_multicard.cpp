@@ -761,7 +761,7 @@ int main(int argc, char **argv)
         int ret;
         HSTR_CPU_MASK_ZERO(src_hstr_cpu_mask);
         ret = setCurrentProcessAffinityMask(host_cpu_mask);
-        if (ret != 0){
+        if (ret != 0) {
             printf("setCurrentProcessAffinityMask failed, counted Gflops values may be inaccurate.");
         }
 

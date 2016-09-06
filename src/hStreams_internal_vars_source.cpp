@@ -106,3 +106,5 @@ HSTR_ALIGN(64) volatile int64_t huge_page_usage_threshold = -1;
 const char *host_sink_ld_library_path_env_name = "HOST_SINK_LD_LIBRARY_PATH";
 const char *sink_ld_library_path_env_name = "SINK_LD_LIBRARY_PATH";
 const char *mic_ld_library_path_env_name = "MIC_LD_LIBRARY_PATH";
+
+const uint32_t fixed_buffer_actions_cleanup_value = 100;

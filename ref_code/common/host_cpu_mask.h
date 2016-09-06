@@ -44,8 +44,7 @@ int setCurrentProcessAffinityMask(HostCPUMask &host_cpu_mask)
 {
     int ret = sched_setaffinity(0, sizeof(cpu_set_t), &(host_cpu_mask.host_cpu_set));
     //On error, -1 is returned
-    if(ret == -1)
-    {
+    if (ret == -1) {
         std::cout << "sched_setaffinity was failed. errno returned: " << errno << std::endl;
         return 1;
     }
@@ -58,15 +57,17 @@ void HostCPUMask::cpu_zero()
 }
 void HostCPUMask::cpu_set(unsigned int cpu)
 {
-    if (cpu < 64)
+    if (cpu < 64) {
         host_cpu_set |= (1LL << cpu);
+    }
 }
 unsigned int HostCPUMask::cpu_isset(unsigned int cpu)
 {
-    if (cpu < 64)
+    if (cpu < 64) {
         return host_cpu_set & (1LL << cpu);
-    else
+    } else {
         return 0;
+    }
 }
 int setCurrentProcessAffinityMask(HostCPUMask &host_cpu_mask)
 {
@@ -74,8 +75,7 @@ int setCurrentProcessAffinityMask(HostCPUMask &host_cpu_mask)
     //SetThreadAffinityMask is using instead to prevent this error.
 
     //If the function fails, the return value is zero
-    if(SetThreadAffinityMask(GetCurrentThread(), host_cpu_mask.host_cpu_set) == 0)
-    {
+    if (SetThreadAffinityMask(GetCurrentThread(), host_cpu_mask.host_cpu_set) == 0) {
         std::cout << "SetThreadAffinityMask was failed. GetLastError returned: " << GetLastError() << std::endl;
         return 1;
     }

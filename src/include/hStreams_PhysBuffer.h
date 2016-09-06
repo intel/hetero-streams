@@ -31,13 +31,10 @@ class hStreams_PhysBuffer : public hStreams_RefCountDestroyed
     /// @brief A mutex to synchronize internal operations
     hStreams_Lock lock_;
     /// @brief A vector of actions in which this buffer is involved.
-    /// @todo This is currently a non-reducible cache, i.e. it only grows
-    ///     larger and larger. Already-completed events could be well lazily purged
-    ///     from the cache during calls to the classe's interface,
-    ///     \c hStreams_PhysBuffer::addPendingAction() specifically.
-    ///
     /// Destruction of the buffer will wait on the completion of these actions.
     std::vector<HSTR_EVENT> pending_actions_;
+    /// @brief A number of addPendingAction() calls from last removeDoneActions() call.
+    uint64_t action_cleanup_counter_;
     /// @brief A logical buffer with contain this physical buffer
     const hStreams_LogBuffer *log_buf_;
     /// @brief A handle to the COI buffer
@@ -47,6 +44,8 @@ class hStreams_PhysBuffer : public hStreams_RefCountDestroyed
     const uint64_t padding_;
     /// @brief The sink-side address of the buffer's beginning
     const uint64_t sink_start_addr_;
+    /// @brief This class is used in removeCompletedActions() as condition to remove action
+    class isActionCompleted_functor_;
 public:
     /// @param[in] HSTR_COIBUFFER a handle to a pre-created COI buffer
     /// @param[in] sink_start_addr a pre-looked-up sink-side address of the buffer's beginning
@@ -62,7 +61,10 @@ public:
     ///     beginning in the source proxy memory address space.
     uint64_t translateToSinkAddress(uint64_t host_offset) const;
     /// @brief Register an action that concerns this buffer
+    /// Already-completed events are removed after a certain number of calls.
     void addPendingAction(HSTR_EVENT action);
+    /// @brief Remove completed actions from set of actions which concerns this buffer.
+    void removeCompletedActions();
     /// @brief Get a reference to parent log buffer
     const hStreams_LogBuffer &getLogBuffer() const;
     /// @brief Get a copy of COI buffer handle
