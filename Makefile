@@ -14,7 +14,7 @@
 
 name    := hstreams
 version_major := 1
-version_minor := 1
+version_minor := 2
 version_micro := 0
 ifdef BUILDNO
 version_build := $(BUILDNO)
