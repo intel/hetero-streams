@@ -1744,6 +1744,32 @@ HSTR_EXPORT_IN_DEFAULT_VERSION(
     }
 }
 
+HSTR_EXPORT_IN_DEFAULT_VERSION(
+    HSTR_RESULT,
+    hStreams_SetLibrariesToLoad)(
+        HSTR_ISA_TYPE in_isaType,
+        uint32_t in_NumLibNames,
+        char **in_ppLibNames,
+        int *in_pLibFlags)
+{
+    try {
+        HSTR_TRACE_API_ENTER();
+        HSTR_TRACE_API_ARG(in_isaType);
+        HSTR_TRACE_API_ARG(in_NumLibNames);
+        HSTR_TRACE_API_ARG(in_ppLibNames);
+        HSTR_TRACE_API_ARG(in_pLibFlags);
+        detail::SetLibrariesToLoad_impl_throw(
+            in_isaType,
+            in_NumLibNames,
+            in_ppLibNames,
+            in_pLibFlags
+        );
+        HSTR_RETURN(HSTR_RESULT_SUCCESS);
+    } catch (...) {
+        HSTR_RETURN(hStreams_handle_exception());
+    }
+}
+
 HSTR_EXPORT_IN_VERSION(
     HSTR_RESULT,
     hStreams_GetVersionStringLen,

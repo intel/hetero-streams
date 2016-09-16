@@ -24,6 +24,7 @@
 #include "hStreams_PhysDomainHost.h"
 #include "hStreams_PhysDomainCOI.h"
 #include "hStreams_LogBuffer.h"
+#include "hStreams_COIWrapper_types.h"
 
 namespace
 {
@@ -484,6 +485,7 @@ void detail::Fini_impl_throw()
     globals::mkl_interface                  = globals::initial_values::mkl_interface;
     globals::next_log_dom_id                = globals::initial_values::next_log_dom_id;
     globals::options                        = globals::initial_values::options;
+    globals::libraries_to_load.clear();
     globals::app_init_log_doms_IDs.clear();
 
     globals::hStreamsState = HSTR_STATE_UNINITIALIZED;
@@ -792,7 +794,7 @@ detail::AddLogDomain_impl_throw(
 
     *out_pOverlap = overlap;
     *out_pLogDomainID = newID;
-} // detail::AddLogDomain_worker
+} // detail::AddLogDomain_impl_throw
 
 void
 detail::RmLogDomains_impl_throw(
@@ -1670,7 +1672,7 @@ detail::ThreadSynchronize_impl_throw()
             hStreams_RW_Lock::HSTR_RW_LOCK_READ);
     hStreams_RW_Scope_Locker_Unlocker log_domains_scope_lock(log_domains_lock,
             hStreams_RW_Lock::HSTR_RW_LOCK_READ);
-    // See StreamSynchronize_worker for detailed explanation about the write lock
+    // See StreamSynchronize_impl_throw for detailed explanation about the write lock
     hStreams_RW_Scope_Locker_Unlocker log_streams_scope_lock(log_streams_lock,
             hStreams_RW_Lock::HSTR_RW_LOCK_WRITE);
     hStreams_RW_Scope_Locker_Unlocker log_buffers_scope_lock(log_buffers_lock,
@@ -2346,7 +2348,7 @@ detail::GetBufferLogDomains_impl_throw(
                                    << in_NumLogDomains
                                   );
     }
-} // detail::GetBufferLogDomains_worker
+} // detail::GetBufferLogDomains_impl_throw
 
 void
 detail::GetBufferProps_impl_throw(
@@ -2489,6 +2491,35 @@ detail::GetCurrentOptions_impl_throw(HSTR_OPTIONS *pCurrentOptions, uint64_t buf
     *pCurrentOptions = globals::options;
 } // detail::GetCurrentOptions_impl_throw(HSTR_OPTIONS *pCurrentOptions, uint64_t buffSize)
 
+namespace
+{
+// This expects arguments are validated.
+// It is the common part for SetOptions and SetLibrariesToLoad
+void SetLibrariesToLoad_worker(
+    HSTR_ISA_TYPE in_isaType,
+    uint32_t in_NumLibNames,
+    char **in_ppLibNames,
+    int *in_pLibFlags
+)
+{
+    hStreams_RW_Scope_Locker_Unlocker hstreams_options_rw_lock(
+        globals::libraries_to_load_lock, hStreams_RW_Lock::HSTR_RW_LOCK_WRITE);
+
+    std::vector<std::pair<std::string, int>> lib_names_with_flags;
+    lib_names_with_flags.reserve(in_NumLibNames);
+
+    for (uint32_t i = 0; i < in_NumLibNames; i++) {
+        std::pair<std::string, int> single_lib_with_flags(
+            std::string(in_ppLibNames[i]),
+            (in_pLibFlags != NULL ? in_pLibFlags[i] : HSTR_COI_LOADLIBRARY_V1_FLAGS));
+        lib_names_with_flags.push_back(single_lib_with_flags);
+    }
+
+    globals::libraries_to_load[in_isaType] = lib_names_with_flags;
+
+} // SetLibrariesToLoad_worker
+} // anonymous namespace
+
 void
 detail::SetOptions_impl_throw(const HSTR_OPTIONS *in_options)
 {
@@ -2558,9 +2589,67 @@ detail::SetOptions_impl_throw(const HSTR_OPTIONS *in_options)
                                       );
         }
     }
+
     hStreams_RW_Scope_Locker_Unlocker hstreams_options_rw_lock(globals::options_lock, hStreams_RW_Lock::HSTR_RW_LOCK_WRITE);
     globals::options = *in_options;
+
+    // Check if libNameCntHost or libNameCnt is zero to prevent accidental removal of the
+    // libraries added by hStreams_SetLibrariesToLoad()
+    if (0 != in_options->libNameCntHost) {
+        SetLibrariesToLoad_worker(HSTR_ISA_x86_64, in_options->libNameCntHost, in_options->libNamesHost, NULL);
+    }
+    if (0 != in_options->libNameCnt) {
+        SetLibrariesToLoad_worker(HSTR_ISA_KNC, in_options->libNameCnt, in_options->libNames, in_options->libFlags);
+    }
 } // detail::SetOptions_impl_throw(const HSTR_OPTIONS *in_options)
+
+void
+detail::SetLibrariesToLoad_impl_throw(
+    HSTR_ISA_TYPE in_isaType,
+    uint32_t in_NumLibNames,
+    char **in_ppLibNames,
+    int *in_pLibFlags
+)
+{
+    if (IsInitialized_impl_nothrow() == HSTR_RESULT_SUCCESS) {
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_PERMITTED, StringBuilder()
+                                   << "hStreams_SetLibrariesToLoad() cannot "
+                                   << "be called if the library has been already initialized."
+                                  );
+    }
+    if (0 > in_isaType
+            || HSTR_ISA_INVALID == in_isaType
+            || HSTR_ISA_MIC == in_isaType
+            // Assume that HSTR_ISA_KNL is last valid value, this can be changed in future
+            || HSTR_ISA_KNL < in_isaType) {
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
+                                   << "Not supported or invalid in_isaType."
+                                  );
+    }
+    if (0 == in_NumLibNames) {
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_OUT_OF_RANGE, StringBuilder()
+                                   << "in_NumLibNames can't be 0."
+                                  );
+    }
+    if (NULL == in_ppLibNames) {
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NULL_PTR, StringBuilder()
+                                   << "in_ppLibNames can't be NULL."
+                                  );
+    }
+    for (uint32_t i = 0; i < in_NumLibNames; i++) {
+        if (in_ppLibNames[i] == NULL) {
+            throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_INCONSISTENT_ARGS, StringBuilder()
+                                       << "in_ppLibNames can't contain NULL entries."
+                                      );
+        }
+    }
+    if (HSTR_ISA_x86_64 == in_isaType && NULL != in_pLibFlags) {
+        throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_NOT_IMPLEMENTED, StringBuilder()
+                                   << "Using non-null in_pLibFlags for host in unsupported."
+                                  );
+    }
+    SetLibrariesToLoad_worker(in_isaType, in_NumLibNames, in_ppLibNames, in_pLibFlags);
+} // detail::SetLibrariesToLoad_impl_throw
 
 void
 detail::GetVersionStringLen_impl_throw(uint32_t *out_pVersionStringLen)

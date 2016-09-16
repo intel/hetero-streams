@@ -521,9 +521,17 @@ typedef struct HSTR_OPTIONS {
        should be loaded on MIC sinks during initialization.
        By default, one library is determined at runtime for the client
         application.  See more comments near declaration of hStreams_Init(). */
+    /// @deprecated This option has been deprecated in favor of
+    ///     \c hStreams_SetLibrariesToLoad().
+    //    HSTR_DEPRECATED("HSTR_OPTIONS::libNameCnt has been deprecated. "
+    //                    "Please refer to hStreams_SetLibrariesToLoad().")
     uint16_t               libNameCnt;  /* Both: libFlags[] and libNames[]
                                           should have libNameCnt elements if
                                           either is defined.  */
+    /// @deprecated This option has been deprecated in favor of
+    ///     \c hStreams_SetLibrariesToLoad().
+    //    HSTR_DEPRECATED("HSTR_OPTIONS::libFlags has been deprecated. "
+    //                    "Please refer to hStreams_SetLibrariesToLoad().")
     int                   *libFlags;    /* setting libFlags to NULL causes the
                                          default COI lib flags to be used
                                          for loading all of libNames.
@@ -533,6 +541,10 @@ typedef struct HSTR_OPTIONS {
                                          should explicitly define the lib
                                          flags to be used when loading the
                                          library in libNames[i]. */
+    /// @deprecated This option has been deprecated in favor of
+    ///     \c hStreams_SetLibrariesToLoad().
+    //    HSTR_DEPRECATED("HSTR_OPTIONS::libNames has been deprecated. "
+    //                    "Please refer to hStreams_SetLibrariesToLoad().")
     char                 **libNames;    /* there should be libNameCnt libNames. */
 
     /* The following struct members allow the hstreams client application
@@ -540,9 +552,16 @@ typedef struct HSTR_OPTIONS {
        should be loaded on host sinks during initialization.
        By default, one library is determined at runtime for the client
        application. See more comments near declaration of hStreams_Init(). */
+    /// @deprecated This option has been deprecated in favor of
+    ///     \c hStreams_SetLibrariesToLoad().
+    //    HSTR_DEPRECATED("HSTR_OPTIONS::libNameCntHost has been deprecated. "
+    //                    "Please refer to hStreams_SetLibrariesToLoad().")
     uint16_t libNameCntHost;           /* libNames_host[] should have libNameCnt elements if
                                             either is defined. */
-
+    /// @deprecated This option has been deprecated in favor of
+    ///     \c hStreams_SetLibrariesToLoad().
+    //    HSTR_DEPRECATED("HSTR_OPTIONS::libNamesHost has been deprecated. "
+    //                    "Please refer to hStreams_SetLibrariesToLoad().")
     char **libNamesHost;               /* there should be libNameCnt_host libNames_host. */
 } HSTR_OPTIONS;
 

@@ -88,12 +88,12 @@ hStreams_FetchExecutableDirectory(std::string &out_dir)
 }
 
 static LIB_HANDLER::handle_t
-hStreams_LoadSingleSinkSideLibraryHost(const char *lib_name)
+hStreams_LoadSingleSinkSideLibraryHost(const std::string &lib_name)
 {
-    const std::string full_path = findFileName(std::string(lib_name), globals::tokenized_host_library_search_path);
+    const std::string full_path = findFileName(lib_name, globals::tokenized_host_library_search_path);
     if (full_path.empty()) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, StringBuilder()
-                                   << "Cannot find host sink-side library " << std::string(lib_name)
+                                   << "Cannot find host sink-side library " << lib_name
                                    << " in paths specified by " << globals::host_library_search_path << "\n");
     }
 
@@ -122,7 +122,7 @@ hStreams_LoadMKLHost()
     if (mkl_result != MKL_THREADING_INTEL) {
         HSTR_WARN(HSTR_INFO_TYPE_MISC)
                 << "MKL_Set_Threading_Layer returned unexpected value: " << mkl_result
-                << ". Expeced value is: MKL_THREADING_INTEL(" << MKL_THREADING_INTEL << ").";
+                << ". Expected value is: MKL_THREADING_INTEL(" << MKL_THREADING_INTEL << ").";
     }
 
     if (globals::mkl_interface == HSTR_MKL_LP64) {
@@ -131,7 +131,7 @@ hStreams_LoadMKLHost()
         if (mkl_result != MKL_INTERFACE_LP64) {
             HSTR_WARN(HSTR_INFO_TYPE_MISC)
                     << "MKL_Set_Interface_Layer returned unexpected value: " << mkl_result
-                    << ". Expeced value is: MKL_INTERFACE_LP64(" << MKL_INTERFACE_LP64 << ").";
+                    << ". Expected value is: MKL_INTERFACE_LP64(" << MKL_INTERFACE_LP64 << ").";
         }
     } else if (globals::mkl_interface == HSTR_MKL_ILP64) {
         mkl_result = set_interface_layer(MKL_INTERFACE_ILP64);
@@ -139,7 +139,7 @@ hStreams_LoadMKLHost()
         if (mkl_result != MKL_INTERFACE_ILP64) {
             HSTR_WARN(HSTR_INFO_TYPE_MISC)
                     << "MKL_Set_Interface_Layer returned unexpected value: " << mkl_result
-                    << ". Expeced value is: MKL_INTERFACE_ILP64(" << MKL_INTERFACE_ILP64 << ").";
+                    << ". Expected value is: MKL_INTERFACE_ILP64(" << MKL_INTERFACE_ILP64 << ").";
         }
     }
 
@@ -155,26 +155,16 @@ hStreams_LoadSinkSideLibrariesHost(std::string const &in_ExecutableFileName, std
 {
     HSTR_RESULT hs_result;
 
-    // First, load all of the explicitly specified libraries in the options.
-    HSTR_OPTIONS currentOptions = globals::initial_values::options;
-    CHECK_HSTR_RESULT(hStreams_GetCurrentOptions(&currentOptions, sizeof(currentOptions)));
-
-    for (uint16_t i = 0; i < currentOptions.libNameCntHost; ++i) {
-        const char *lib_name = currentOptions.libNamesHost[i];
-        const std::string full_path = findFileName(std::string(lib_name), globals::tokenized_host_library_search_path);
-        if (full_path.empty()) {
-            HSTR_ERROR(HSTR_INFO_TYPE_MISC)
-                    << "Cannot find host sink-side library " << lib_name
-                    << " in paths specified by " << globals::host_library_search_path;
-
-            return HSTR_RESULT_BAD_NAME;
-        }
-    }
-
     try {
-        for (uint16_t i = 0; i < currentOptions.libNameCntHost; ++i) {
+        // First, load all of the libraries explicitly specified by user.
+        hStreams_RW_Scope_Locker_Unlocker hstreams_options_rw_lock(globals::libraries_to_load_lock, hStreams_RW_Lock::HSTR_RW_LOCK_READ);
+
+        std::vector<std::pair<std::string, int>> libs_to_load_host = globals::libraries_to_load[HSTR_ISA_x86_64];
+        std::vector<std::pair<std::string, int>>::iterator it;
+        for (it = libs_to_load_host.begin(); it != libs_to_load_host.end(); ++it) {
+            const std::string &lib_name = it->first;
             loaded_libs_handles.push_back(
-                hStreams_LoadSingleSinkSideLibraryHost(currentOptions.libNamesHost[i]));
+                hStreams_LoadSingleSinkSideLibraryHost(lib_name));
         }
 
         // Second, load proper MKL version if needed
@@ -207,12 +197,12 @@ hStreams_LoadSinkSideLibrariesHost(std::string const &in_ExecutableFileName, std
 }
 
 static HSTR_COILIBRARY
-hStreams_LoadSingleSinkSideLibraryMIC(HSTR_COIPROCESS coi_process, const char *lib_name, int libFlags)
+hStreams_LoadSingleSinkSideLibraryMIC(HSTR_COIPROCESS coi_process, const std::string &lib_name, int libFlags)
 {
     const std::string full_path = findFileName(lib_name, globals::tokenized_target_library_search_path);
     if (full_path.empty()) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_BAD_NAME, StringBuilder()
-                                   << "Cannot load MIC sink-side library " << std::string(lib_name)
+                                   << "Cannot load MIC sink-side library " << lib_name
                                    << " in paths specified by " << globals::target_library_search_path << "\n");
     }
     HSTR_COILIBRARY coiLibrary;
@@ -227,7 +217,7 @@ hStreams_LoadSingleSinkSideLibraryMIC(HSTR_COIPROCESS coi_process, const char *l
         HSTR_LOG(HSTR_INFO_TYPE_MISC) << "Loaded MIC sink-side library " << full_path;
     } else {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
-                                   << "Cannot load MIC sink-side library " << std::string(lib_name)
+                                   << "Cannot load MIC sink-side library " << lib_name
                                    << ", COI returned: " << std::string(hStreams_COIWrapper::COIResultGetName(result)) << "\n");
     }
 
@@ -241,50 +231,56 @@ hStreams_LoadSinkSideLibrariesMIC(HSTR_COIPROCESS coi_process, std::vector<HSTR_
     HSTR_RESULT hs_result;
     out_loadedLibs.clear();
 
-    // First, load all of the explicitly specified libraries in the options.
-    HSTR_OPTIONS currentOptions = globals::initial_values::options;
-    CHECK_HSTR_RESULT(hStreams_GetCurrentOptions(&currentOptions, sizeof(currentOptions)));
-    out_loadedLibs.reserve(currentOptions.libNameCnt + 2);
+    // First, load all of the libraries explicitly specified by user.
+    {
+        hStreams_RW_Scope_Locker_Unlocker hstreams_options_rw_lock(globals::libraries_to_load_lock, hStreams_RW_Lock::HSTR_RW_LOCK_READ);
 
-    try {
-        for (uint16_t i = 0; i < currentOptions.libNameCnt; ++i) {
-            out_loadedLibs.push_back(
-                hStreams_LoadSingleSinkSideLibraryMIC(
-                    coi_process,
-                    currentOptions.libNames[i],
-                    currentOptions.libFlags ? currentOptions.libFlags[i] : HSTR_COI_LOADLIBRARY_V1_FLAGS));
-        }
+        std::vector<std::pair<std::string, int>> libs_to_load = globals::libraries_to_load[isa_type];
+        out_loadedLibs.reserve(libs_to_load.size() + 4);
 
-        // Second, load proper MKL version if needed
-        const char *mkl_name = NULL;
-        if (globals::mkl_interface == HSTR_MKL_LP64) {
-            mkl_name = "libmkl_intel_lp64.so";
-        } else if (globals::mkl_interface == HSTR_MKL_ILP64) {
-            mkl_name = "libmkl_intel_ilp64.so";
-        }
+        try {
+            std::vector<std::pair<std::string, int>>::iterator it;
+            for (it = libs_to_load.begin(); it != libs_to_load.end(); ++it) {
+                const std::string &lib_name = it->first;
+                const int &lib_flags = it->second;
+                out_loadedLibs.push_back(
+                    hStreams_LoadSingleSinkSideLibraryMIC(
+                        coi_process,
+                        lib_name.c_str(),
+                        lib_flags));
+            }
 
-        if (mkl_name != NULL) {
-            // Load dependencies first. libmkl_intel_{,i}lp64.{so,dll} doesn't have a builtin
-            // dependency on its actual dependencies so we have to load them manually.
-            out_loadedLibs.push_back(
-                hStreams_LoadSingleSinkSideLibraryMIC(
-                    coi_process,
-                    "libmkl_core.so",
-                    HSTR_COI_LOADLIBRARY_GLOBAL | HSTR_COI_LOADLIBRARY_LAZY));
-            out_loadedLibs.push_back(
-                hStreams_LoadSingleSinkSideLibraryMIC(
-                    coi_process,
-                    "libmkl_intel_thread.so",
-                    HSTR_COI_LOADLIBRARY_GLOBAL | HSTR_COI_LOADLIBRARY_LAZY));
-            // Load MKL
-            out_loadedLibs.push_back(
-                hStreams_LoadSingleSinkSideLibraryMIC(
-                    coi_process,
-                    mkl_name,
-                    HSTR_COI_LOADLIBRARY_V1_FLAGS));
+            // Second, load proper MKL version if needed
+            const char *mkl_name = NULL;
+            if (globals::mkl_interface == HSTR_MKL_LP64) {
+                mkl_name = "libmkl_intel_lp64.so";
+            } else if (globals::mkl_interface == HSTR_MKL_ILP64) {
+                mkl_name = "libmkl_intel_ilp64.so";
+            }
+
+            if (mkl_name != NULL) {
+                // Load dependencies first. libmkl_intel_{,i}lp64.{so,dll} doesn't have a builtin
+                // dependency on its actual dependencies so we have to load them manually.
+                out_loadedLibs.push_back(
+                    hStreams_LoadSingleSinkSideLibraryMIC(
+                        coi_process,
+                        "libmkl_core.so",
+                        HSTR_COI_LOADLIBRARY_GLOBAL | HSTR_COI_LOADLIBRARY_LAZY));
+                out_loadedLibs.push_back(
+                    hStreams_LoadSingleSinkSideLibraryMIC(
+                        coi_process,
+                        "libmkl_intel_thread.so",
+                        HSTR_COI_LOADLIBRARY_GLOBAL | HSTR_COI_LOADLIBRARY_LAZY));
+                // Load MKL
+                out_loadedLibs.push_back(
+                    hStreams_LoadSingleSinkSideLibraryMIC(
+                        coi_process,
+                        mkl_name,
+                        HSTR_COI_LOADLIBRARY_V1_FLAGS));
+            }
+        } catch (...) {
+            return hStreams_handle_exception();
         }
-    } catch (...) {
-        return hStreams_handle_exception();
     }
 
     // Third, load the default sink-side library.
@@ -430,7 +426,7 @@ std::string findFileName(const std::string &fileName, const std::vector<std::str
                 it != searchedPaths.end(); ++it) {
             std::string filepath = *it + pathSeparator + fileName;
             if (!hstreams_stat(filepath.c_str(), &st)) {
-                return std::string(filepath);
+                return filepath;
             }
         }
     }

@@ -89,6 +89,11 @@ extern hStreams_Atomic_HSTR_STATE hStreamsState;
 extern HSTR_OPTIONS options;
 extern hStreams_RW_Lock options_lock;
 
+// Map contain vectors with libraries to load for each device type
+// Each library is paired with flags of which will be used to its load
+extern std::map<HSTR_ISA_TYPE, std::vector<std::pair<std::string, int>>> libraries_to_load;
+extern hStreams_RW_Lock libraries_to_load_lock;
+
 extern std::string target_library_search_path;
 extern std::string host_library_search_path;
 

@@ -59,8 +59,13 @@ extern const std::array<const std::string, 4> supported_interface_versions = {
     "1.2"
 };
 hStreams_Atomic_HSTR_STATE hStreamsState = initial_values::hStreamsState;
+
 HSTR_OPTIONS options = initial_values::options;
 hStreams_RW_Lock options_lock;
+
+std::map<HSTR_ISA_TYPE, std::vector<std::pair<std::string, int>>> libraries_to_load;
+hStreams_RW_Lock libraries_to_load_lock;
+
 #ifdef _WIN32
 #pragma warning( push )
 #pragma warning( disable : 4324 ) /* Disable warning for: 'lastError' : structure was padded due to __declspec(align()) */

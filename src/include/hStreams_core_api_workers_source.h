@@ -255,6 +255,13 @@ void
 SetOptions_impl_throw(const HSTR_OPTIONS *in_options);
 
 void
+SetLibrariesToLoad_impl_throw(
+    HSTR_ISA_TYPE    in_isaType,
+    uint32_t         in_NumLibNames,
+    char           **in_ppLibNames,
+    int             *in_pLibFlags);
+
+void
 GetVersionStringLen_impl_throw(uint32_t *out_pVersionStringLen);
 
 void

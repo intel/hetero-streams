@@ -195,6 +195,7 @@ HSTREAMS_V
 
       /*Common*/
        hStreams_SetOptions;
+       hStreams_SetLibrariesToLoad;
        hStreams_GetCurrentOptions;
        hStreams_GetVerbose;
        hStreams_SetVerbose;

@@ -1569,6 +1569,50 @@ hStreams_SetOptions(const HSTR_OPTIONS *in_options);
 
 /////////////////////////////////////////////////////////
 ///
+// hStreams_SetLibrariesToLoad
+/// @ingroup hStreams_Configuration
+/// @brief Set libraries to be loaded during initialization of hStreams for
+///     given \c HSTR_ISA_TYPE
+///
+/// @param in_isaType
+///         [in] ISA type for which given libraries will be loaded during
+///         initialization
+///
+/// @param in_numLibNames
+///         [in] Number of libraries names passed through \c in_ppLibNames
+///
+/// @param in_ppLibNames
+///         [in] Names of libraries to be loaded
+///
+/// @param in_pLibFlags
+///         [in] Flags to be used for loading libraries
+///         Setting in_pLibFlags to NULL causes the default lib flags to be
+///         used for loading all of libraries.
+///         Setting in_pLibFlags other than NULL on host is not supported.
+///
+/// @return If successful, \c hStreams_SetLibrariesToLoad() returns \c
+/// HSTR_RESULT_SUCCESS.
+/// Otherwise, it returns on of the following errors:
+/// @arg \c HSTR_RESULT_NOT_PERMITTED if the heterostreams library has been
+///     already initialized
+/// @arg \c HSTR_RESULT_OUT_OF_RANGE if in_isaType is not valid one or is not supported
+///     or if in_NumLibNames == 0
+/// @arg \c HSTR_RESULT_NULL_PTR if in_ppLibNames is NULL
+/// @arg \c HSTR_RESULT_INCONSISTENT_ARGS if in_ppLibNames contain NULL entries
+/// @arg \c HSTR_RESULT_NOT_IMPLEMENTED if in_isaType == HSTR_ISA_x86_64 and in_pLibFlags != NULL
+///
+/// @thread_safety Thread safe.
+///
+/////////////////////////////////////////////////////////
+DllAccess HSTR_RESULT
+hStreams_SetLibrariesToLoad(
+    HSTR_ISA_TYPE   in_isaType,
+    uint32_t        in_numLibNames,
+    char          **in_ppLibNames,
+    int            *in_pLibFlags);
+
+/////////////////////////////////////////////////////////
+///
 // hStreams_GetCurrentOptions
 /// @ingroup hStreams_Configuration
 /// @brief Query user parameters by getting hStreams Options
