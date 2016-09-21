@@ -221,10 +221,10 @@ void hello_world(uint64_t arg)
 \end{minipage}
 
 In order to run the example, one must set the environment variable \texttt{SINK\_LD\_LIBRARY\_PATH} so that \hstreams\ runtime can pick up the appropriate libraries.
-Listing \ref{lst:running-example-linux} shows a record of a session on the Linux operating system in which both the source and the sink components of the example are compiled, the environment variable is set and finally, the application is executed.
+Listing \ref{lst:running-example-linux-knc} and \ref{lst:running-example-linux-x200} shows a record of a session on the Linux operating system in which both the source and the sink components of the example are compiled, the environment variable is set and finally, the application is executed.
 Listing \ref{lst:running-example-windows} shows a corresponding session on the Windows operating system.
 
-\begin{lstlisting}[style=BashCmdListingStyle,caption={Compiling and running the example on Linux},frame=tlrb,label={lst:running-example-linux}]
+\begin{lstlisting}[style=BashCmdListingStyle,caption={Compiling and running the example on Linux on KNC card},frame=tlrb,label={lst:running-example-linux-knc}]
 $ # setup Intel compiler variables
 $ (...)compilervars.sh intel64
 $ icc example_src.cpp -lhstreams_source -o example
@@ -235,6 +235,17 @@ $ export SINK_LD_LIBRARY_PATH=/opt/mpss/3.7/sysroots/k1om-mpss-linux/usr/lib64/:
 $ ./example
 Hello world, deadbeef
 \end{lstlisting}
+
+\begin{lstlisting}[style=BashCmdListingStyle,caption={Compiling and running the example on Linux on x200 card},frame=tlrb,label={lst:running-example-linux-x200}]
+$ # setup Intel compiler variables
+$ (...)compilervars.sh intel64
+$ icc example_src.cpp -lhstreams_source -o example
+$ icc -fPIC -xMIC-AVX512 -shared example_sink.cpp -o example_mic.so
+$ export SINK_LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)
+$ ./example
+Hello world, deadbeef
+\end{lstlisting}
+
 
 \begin{lstlisting}[style=BatchListingStyle,caption={Compiling and running the example on Windows},frame=tlrb,label={lst:running-example-windows}]
 > rem setup Intel compiler variables

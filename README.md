@@ -14,13 +14,13 @@ Directory                 | Description
 
 --------------------------------------------------------------------------------
 ### Requirements
-Intel(R) Manycore Platform Software Stack recommended version is 3.7. If using Intel(R)
-MPSS in version prior to 3.7 see __Using Hetero Streams Library with Intel(R) Manycore
+Intel(R) Manycore Platform Software Stack recommended version is 3.8 for KNC card or 4.3.2 for x200 card. If using Intel(R)
+MPSS in version prior to 3.8 see __Using Hetero Streams Library with Intel(R) Manycore
 Platform Software Stack prior to version 3.7__ section.
 #### Linux*
 Name of Tool                              | Supported version
 :-----------------------------------------|:-------------------:
-Intel(R) Manycore Platform Software Stack | 3.4, 3.6
+Intel(R) Manycore Platform Software Stack | 3.4, 3.8, 4.3.2
 Intel(R) C++ Compiler                     | 15.0, 16.0
 Intel(R) Math Kernel Library              | 11.2, 11.3
 Doxygen                                   | 1.6.3
@@ -30,7 +30,7 @@ pdflatex                                  | texlive-latex-bin-bin-svn14050.0-32.
 #### Windows*
 Name of Tool                              | Supported version
 :-----------------------------------------|:-------------------:
-Intel(R) Manycore Platform Software Stack | 3.4, 3.6
+Intel(R) Manycore Platform Software Stack | 3.4, 3.8
 Intel(R) C++ Compiler                     | 15.0, 16.0
 Intel(R) Math Kernel Library              | 11.2, 11.3
 Doxygen (Optional[^Docs])                 | 1.6.3
@@ -57,22 +57,22 @@ The make should generate RPMs in the rpmbuild/ directory:
     $ tree rpmbuild/*RPMS/
     rpmbuild/RPMS/
     └── x86_64
-        ├── hstreams-1.0.0.DEVBOX-1.x86_64.rpm
-        ├── hstreams-debuginfo-1.0.0.DEVBOX-1.x86_64.rpm
-        ├── hstreams-devel-1.0.0.DEVBOX-1.x86_64.rpm
-        └── hstreams-doc-1.0.0.DEVBOX-1.x86_64.rpm
+        ├── hstreams-1.2.0.DEVBOX-1.x86_64.rpm
+        ├── hstreams-debuginfo-1.2.0.DEVBOX-1.x86_64.rpm
+        ├── hstreams-devel-1.2.0.DEVBOX-1.x86_64.rpm
+        └── hstreams-doc-1.2.0.DEVBOX-1.x86_64.rpm
     rpmbuild/SRPMS/
-    └── hstreams-1.0.0.DEVBOX-1.src.rpm
+    └── hstreams-1.2.0.DEVBOX-1.src.rpm
 
 These RPMs can be installed using your favourite package manager, e.g. rpm:
 
     $ sudo rpm -ihv rpmbuild/RPMS/x86_64/hstreams-*
     Preparing...                          ################################# [100%]
     Updating / installing...
-       1:hstreams-1.0.0.DEVBOX-1          ################################# [ 25%]
-       2:hstreams-devel-1.0.0.DEVBOX-1    ################################# [ 50%]
-       3:hstreams-doc-1.0.0.DEVBOX-1      ################################# [ 75%]
-       4:hstreams-debuginfo-1.0.0.DEVBOX-1################################# [100%]
+       1:hstreams-1.2.0.DEVBOX-1          ################################# [ 25%]
+       2:hstreams-devel-1.2.0.DEVBOX-1    ################################# [ 50%]
+       3:hstreams-doc-1.2.0.DEVBOX-1      ################################# [ 75%]
+       4:hstreams-debuginfo-1.2.0.DEVBOX-1################################# [100%]
 
 #### Windows*
 ##### Build with installer and documentation
@@ -80,7 +80,7 @@ These RPMs can be installed using your favourite package manager, e.g. rpm:
 2. Add MiKTeX (make sure that is pointing to bin directory in MiKTeX installation folder)
 and Doxygen to PATH.
 3. Run build solution in visual studio. Make sure selected configuration is Release/x64.
-4. Run HeteroStreamsLibrary-1.0.0.msi and follow the instructions in the installer.
+4. Run HeteroStreamsLibrary-1.2.0.msi and follow the instructions in the installer.
 
 ##### Build without installer and documentation
 1. Open hstreams_source.sln placed in root of project.
