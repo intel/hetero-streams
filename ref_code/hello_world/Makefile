@@ -12,6 +12,7 @@ include $(REFCODE_DIR)common/toolchain.mk
 TARGET := $(BIN_HOST)hello_world
 # By default, the sink side library name is source side executable + _mic.so
 x100_SINK_TARGET := $(BIN_x100)hello_world_mic.so
+x200_SINK_TARGET := $(BIN_x200)hello_world_x200.so
 
 ADDITIONAL_SOURCE_CXXFLAGS :=
 ADDITIONAL_SOURCE_LDFLAGS  := -lhstreams_source
@@ -19,14 +20,24 @@ ADDITIONAL_SOURCE_LDFLAGS  := -lhstreams_source
 ADDITIONAL_x100_SINK_CXXFLAGS :=
 ADDITIONAL_x100_SINK_LDFLAGS  := -shared -Wl,-soname,hello_world_mic.so
 
+ADDITIONAL_x200_SINK_CXXFLAGS :=
+ADDITIONAL_x200_SINK_LDFLAGS  := -shared -Wl,-soname,hello_world_x200.so
+
 SOURCE_SRCS := $(TOP_DIR)hello_world_src.cpp
 SOURCE_OBJS := $(SOURCE_SRCS:.cpp=.$(SOURCE_TAG).o)
 
 x100_SINK_SRCS = $(TOP_DIR)hello_world_sink.cpp
 x100_SINK_OBJS = $(x100_SINK_SRCS:.cpp=.$(x100_SINK_TAG).o)
 
+x200_SINK_SRCS = $(TOP_DIR)hello_world_sink.cpp
+x200_SINK_OBJS = $(x200_SINK_SRCS:.cpp=.$(x200_SINK_TAG).o)
+
 # The default "all" target - builds everything
+ifeq "$(TARGET)" "knc"
 all: $(TARGET) $(x100_SINK_TARGET)
+else ifeq "$(TARGET)" "x200"
+all: $(TARGET) $(x200_SINK_TARGET)
+endif
 
 # If you're curious about the syntax below, please see 4.12.1 Syntax of Static Pattern Rules
 # https://www.gnu.org/software/make/manual/html_node/Static-Usage.html#Static-Usage
@@ -38,9 +49,17 @@ $(x100_SINK_OBJS): %.$(x100_SINK_TAG).o: %.cpp
 	$(dir_create)
 	$(x100_SINK_CXX) -c $^ -o $@ $(x100_SINK_CXXFLAGS) $(ADDITIONAL_x100_SINK_CXXFLAGS)
 
+$(x200_SINK_OBJS): %.$(x200_SINK_TAG).o: %.cpp
+	$(dir_create)
+	$(x200_SINK_CXX) -c $^ -o $@ $(x200_SINK_CXXFLAGS) $(ADDITIONAL_x200_SINK_CXXFLAGS)
+
 $(x100_SINK_TARGET): $(x100_SINK_OBJS)
 	$(dir_create)
 	$(x100_SINK_CXX) $^ -o $@ $(x100_SINK_LDFLAGS) $(ADDITIONAL_x100_SINK_LDFLAGS)
+
+$(x200_SINK_TARGET): $(x200_SINK_OBJS)
+	$(dir_create)
+	$(x200_SINK_CXX) $^ -o $@ $(x200_SINK_LDFLAGS) $(ADDITIONAL_x200_SINK_LDFLAGS)
 
 $(TARGET): $(SOURCE_OBJS)
 	$(dir_create)
@@ -48,4 +67,4 @@ $(TARGET): $(SOURCE_OBJS)
 
 .PHONY: clean
 clean:
-	$(RM_rf) $(TARGET) $(SOURCE_OBJS) $(x100_SINK_TARGET) $(x100_SINK_OBJS)
+	$(RM_rf) $(TARGET) $(SOURCE_OBJS) $(x100_SINK_TARGET) $(x100_SINK_OBJS) $(x200_SINK_TARGET) $(x200_SINK_OBJS)

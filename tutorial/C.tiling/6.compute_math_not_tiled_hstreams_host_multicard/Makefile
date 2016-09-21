@@ -12,9 +12,14 @@
 # This Makefile should be consistent across all installations and directories
 # Customization
 #   ../../hStreams.mk defines HSRT_INSTALL standard path to hstreams
-#     and whether code is generated for MIC
+#   ./names.mk defines names and whether code is generated for MIC
 #   ./rootname.mk contains a string which is the rootname for each directory
 #     Example: hello_hStreams_world, for 1.hello_hStreams_world
+
+# Check if environment variables are set
+ifndef TUT_INSTALL
+    $(error [ERROR] Environment variables are not set. Please run ". source_setup" in tutorial root folder.)
+endif
 
 # Loads base names for files and executables, and flags to indicate whether MIC
 # (i.e., Xeon Phi) is being used or not.
@@ -22,7 +27,7 @@ include names.mk
 
 # Dynamically determines the top level directory.
 TOP_DIR:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-
+# Get HSTR_INSTALL from hStreams.mk
 include ../../hStreams.mk
 
 # Location for ref_code directory
@@ -31,14 +36,19 @@ REFCODE_DIR:=$(TUT_INSTALL)/ref_code/
 # Sets up compiler flags and commands
 include $(REFCODE_DIR)common/toolchain.mk
 
+# Set targets' names
 TARGET_USER := $(BIN_HOST)$(NAME)
-TARGET_SOLN := $(BIN_HOST)$(NAME)_solution
+TARGET_SOLN := $(BIN_HOST)$(NAME_SOLN)
 
-# Normally, the convention of a _mic extension is used
-#  But if you want a different name you need to tell hStreams what to load
-#  with HSTR_OPTIONS - see A.remote_invocation/4.optional.hello_extra
-x100_SINK_TARGET_USER := $(BIN_x100)$(SINK_NAME).so
-x100_SINK_TARGET_SOLN := $(BIN_x100)$(SINK_SOLN_NAME).so
+# Normally, the convention of a _mic extension for x100 architecture and
+# _x200 extension for x200 architecture is used.
+# But if you want a different name you need to tell hStreams what to load
+# with HSTR_OPTIONS - see A.remote_invocation/4.optional.hello_extra
+x100_SINK_TARGET_USER := $(BIN_x100)$(SINK_NAME_x100).so
+x100_SINK_TARGET_SOLN := $(BIN_x100)$(SINK_SOLN_NAME_x100).so
+
+x200_SINK_TARGET_USER := $(BIN_x200)$(SINK_NAME_x200).so
+x200_SINK_TARGET_SOLN := $(BIN_x200)$(SINK_SOLN_NAME_x200).so
 
 # Here are some additional compiler flags that have been used to improve program
 # runtime.  These have nothing in particular to do with hStreams.
@@ -53,6 +63,7 @@ x100_SINK_TARGET_SOLN := $(BIN_x100)$(SINK_SOLN_NAME).so
 ADDITIONAL_SOURCE_CXXFLAGS := -qopenmp -ansi-alias -opt-subscript-in-range \
  -AVX -ip -parallel -restrict
 ADDITIONAL_x100_SINK_CXXFLAGS := -qopenmp -restrict
+ADDITIONAL_x200_SINK_CXXFLAGS := -qopenmp -restrict
 
 # Additional dynamically loaded libraries
 #  -lhstreams_source is required for hStreams
@@ -64,6 +75,11 @@ ADDITIONAL_x100_SINK_USER_LDFLAGS:= -shared \
   -Wl,-soname,$(x100_SINK_TARGET_USER) -qopenmp
 ADDITIONAL_x100_SINK_SOLN_LDFLAGS:= -shared \
   -Wl,-soname,$(x100_SINK_TARGET_SOLN) -qopenmp
+
+ADDITIONAL_x200_SINK_USER_LDFLAGS:= -shared \
+  -Wl,-soname,$(x200_SINK_TARGET_USER) -qopenmp
+ADDITIONAL_x200_SINK_SOLN_LDFLAGS:= -shared \
+  -Wl,-soname,$(x200_SINK_TARGET_SOLN) -qopenmp
 
 # Sources and objects
 SOURCE_SRCS := $(TOP_DIR)$(NAME)_src.cpp $(TOP_DIR)$(NAME)_src_solution.cpp \
@@ -77,8 +93,10 @@ SOLN_OBJS := $(SOLN_SRCS:.cpp=.$(SOURCE_TAG).o)
 # Sink-side source and object files
 x100_SINK_SRCS = $(TOP_DIR)$(NAME)_sink.cpp
 x100_SINK_OBJS = $(x100_SINK_SRCS:.cpp=.$(x100_SINK_TAG).o)
+x200_SINK_SRCS = $(TOP_DIR)$(NAME)_sink.cpp
+x200_SINK_OBJS = $(x200_SINK_SRCS:.cpp=.$(x200_SINK_TAG).o)
 
-#//!!j Use _host suffix for host as target library
+# Use _host suffix for host as target library
 ADDITIONAL_HOST_SINK_CXXFLAGS := -qopenmp  -restrict -AVX
 ADDITIONAL_HOST_SINK_LDFLAGS  := -shared -Wl,-soname,$(NAME)_host.so -qopenmp
 HOST_SINK_TARGET_USER := $(BIN_HOST)$(NAME)_host.so
@@ -87,17 +105,27 @@ HOST_SINK_SRCS = $(TOP_DIR)$(NAME)_sink.cpp
 HOST_SINK_OBJS = $(HOST_SINK_SRCS:.cpp=.$(HOST_SINK_TAG).o)
 
 ifdef IS_MIC
-# Makefile user-modified version    # Changes to add host as a sink.
-user: $(TARGET_USER) $(x100_SINK_TARGET_USER) $(HOST_SINK_TARGET_USER)
+    ifeq "$(TARGET)" "knc"
+        # Makefile user-modified version # Changes to add host as a sink.
+        user: $(TARGET_USER) $(x100_SINK_TARGET_USER) $(HOST_SINK_TARGET_USER)
 
-# Makefile pre-defined solution version # Changes to add host as a sink.
-solution: $(TARGET_SOLN) $(x100_SINK_TARGET_SOLN) $(HOST_SINK_TARGET_SOLN)
+        # Makefile pre-defined solution version # Changes to add host as a sink.
+        solution: $(TARGET_SOLN) $(x100_SINK_TARGET_SOLN) $(HOST_SINK_TARGET_SOLN)
+
+    else ifeq "$(TARGET)" "x200"
+        # Makefile user-modified version  # Changes to add host as a sink.
+        user: $(TARGET_USER) $(x200_SINK_TARGET_USER) $(HOST_SINK_TARGET_USER)
+
+        # Makefile pre-defined solution version  # Changes to add host as a sink.
+        solution: $(TARGET_SOLN) $(x200_SINK_TARGET_SOLN) $(HOST_SINK_TARGET_SOLN)
+
+    endif
 else
-# Makefile user-modified version
-user: $(TARGET_USER)
+    # Makefile user-modified version
+    user: $(TARGET_USER)
 
-# Makefile user-modified version
-solution: $(TARGET_SOLN)
+    # Makefile pre-defined solution version
+    solution: $(TARGET_SOLN)
 endif
 
 # The default "all" target - builds everything
@@ -110,26 +138,21 @@ $(SOURCE_OBJS): %.$(SOURCE_TAG).o: %.cpp
 	$(dir_create)
 	$(SOURCE_CXX) -c $^ -o $@ $(SOURCE_CXXFLAGS) $(ADDITIONAL_SOURCE_CXXFLAGS)
 
-$(x100_SINK_OBJS): %.$(x100_SINK_TAG).o: %.cpp
+$(TARGET_USER): $(USER_OBJS)
 	$(dir_create)
-	$(x100_SINK_CXX) -c $^ -o $@ $(x100_SINK_CXXFLAGS) \
-	$(ADDITIONAL_x100_SINK_CXXFLAGS)
+	$(SOURCE_CXX) $^ -o $@ $(SOURCE_LDFLAGS) \
+	$(ADDITIONAL_SOURCE_LDFLAGS)
 
-# Changes to add host as a sink.
+$(TARGET_SOLN): $(SOLN_OBJS)
+	$(dir_create)
+	$(SOURCE_CXX) $^ -o $@ $(SOURCE_LDFLAGS) \
+	$(ADDITIONAL_SOURCE_LDFLAGS)
+
+# Changes to add host as a sink. ###############################################
 $(HOST_SINK_OBJS): %.$(HOST_SINK_TAG).o: %.cpp
 	$(dir_create)
 	$(HOST_SINK_CXX) -c $^ -o $@ $(HOST_SINK_CXXFLAGS) \
 	$(ADDITIONAL_HOST_SINK_CXXFLAGS)
-################################################################################
-$(x100_SINK_TARGET_USER): $(x100_SINK_OBJS)
-	$(dir_create)
-	$(x100_SINK_CXX) $^ -o $@ $(x100_SINK_LDFLAGS) \
-	$(ADDITIONAL_x100_SINK_USER_LDFLAGS)
-
-$(x100_SINK_TARGET_SOLN): $(x100_SINK_OBJS)
-	$(dir_create)
-	$(x100_SINK_CXX) $^ -o $@ $(x100_SINK_LDFLAGS) \
-	$(ADDITIONAL_x100_SINK_SOLN_LDFLAGS)
 
 # Changes to add host as a sink.
 $(HOST_SINK_TARGET_USER): $(HOST_SINK_OBJS)
@@ -143,18 +166,40 @@ $(HOST_SINK_TARGET_SOLN): $(HOST_SINK_OBJS)
 	$(HOST_SINK_CXX) $^ -o $@ $(HOST_SINK_LDFLAGS) \
 	$(ADDITIONAL_HOST_SINK_LDFLAGS)
 ################################################################################
-$(TARGET_USER): $(USER_OBJS)
-	$(dir_create)
-	$(SOURCE_CXX) $^ -o $@ $(SOURCE_LDFLAGS) \
-	$(ADDITIONAL_SOURCE_LDFLAGS)
 
-$(TARGET_SOLN): $(SOLN_OBJS)
+$(x100_SINK_OBJS): %.$(x100_SINK_TAG).o: %.cpp
 	$(dir_create)
-	$(SOURCE_CXX) $^ -o $@ $(SOURCE_LDFLAGS) \
-	$(ADDITIONAL_SOURCE_LDFLAGS)
+	$(x100_SINK_CXX) -c $^ -o $@ $(x100_SINK_CXXFLAGS) \
+	$(ADDITIONAL_x100_SINK_CXXFLAGS)
+
+$(x100_SINK_TARGET_USER): $(x100_SINK_OBJS)
+	$(dir_create)
+	$(x100_SINK_CXX) $^ -o $@ $(x100_SINK_LDFLAGS) \
+	$(ADDITIONAL_x100_SINK_USER_LDFLAGS)
+
+$(x100_SINK_TARGET_SOLN): $(x100_SINK_OBJS)
+	$(dir_create)
+	$(x100_SINK_CXX) $^ -o $@ $(x100_SINK_LDFLAGS) \
+	$(ADDITIONAL_x100_SINK_SOLN_LDFLAGS)
+
+$(x200_SINK_OBJS): %.$(x200_SINK_TAG).o: %.cpp
+	$(dir_create)
+	$(x200_SINK_CXX) -c $^ -o $@ $(x200_SINK_CXXFLAGS) \
+	$(ADDITIONAL_x200_SINK_CXXFLAGS)
+
+$(x200_SINK_TARGET_USER): $(x200_SINK_OBJS)
+	$(dir_create)
+	$(x200_SINK_CXX) $^ -o $@ $(x200_SINK_LDFLAGS) \
+	$(ADDITIONAL_x200_SINK_USER_LDFLAGS)
+
+$(x200_SINK_TARGET_SOLN): $(x200_SINK_OBJS)
+	$(dir_create)
+	$(x200_SINK_CXX) $^ -o $@ $(x200_SINK_LDFLAGS) \
+	$(ADDITIONAL_x200_SINK_SOLN_LDFLAGS)
 
 .PHONY: clean
 clean:
 	$(RM_rf) $(TARGET_USER) $(TARGET_SOLN) $(SOURCE_OBJS) \
 	$(x100_SINK_USER_TARGET) $(x100_SINK_SOLN_TARGET) $(x100_SINK_OBJS) \
+	$(x200_SINK_USER_TARGET) $(x200_SINK_SOLN_TARGET) $(x200_SINK_OBJS) \
 	$(HOST_SINK_TARGET) $(HOST_SINK_OBJS)

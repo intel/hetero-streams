@@ -258,6 +258,8 @@ void detail::InitPhysicalDomains_impl_throw(HSTR_ISA_TYPE isa_type, std::string 
         HSTR_DEBUG1(HSTR_INFO_TYPE_MISC) << "Received COI_DOES_NOT_EXIST for given "
             << "isa type: " <<  isa_type;
 
+        num_phys_domains = 0;
+
         return;
     }
 

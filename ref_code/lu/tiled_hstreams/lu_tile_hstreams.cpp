@@ -483,16 +483,16 @@ void lu_tiled(double *mat, int tile_size, int num_tiles, int mat_size,
 
 int main(int argc, char **argv)
 {
+    //Library to be loaded for sink-side code
+    char *libNamesKNC[] = {"lu_sink_1.so"};
+    char *libNamesKNL[] = {"lu_sink_2.so"};
+    uint32_t libNameCnt = 1;
+
+    hStreams_SetLibrariesToLoad(HSTR_ISA_KNC, libNameCnt, libNamesKNC, NULL);
+    hStreams_SetLibrariesToLoad(HSTR_ISA_KNL, libNameCnt, libNamesKNL, NULL);
+
     HSTR_OPTIONS hstreams_options;
     hStreams_GetCurrentOptions(&hstreams_options, sizeof(HSTR_OPTIONS));
-
-    char *libNames[200] = {NULL, NULL};
-
-    //Library to be loaded for sink-side code
-    libNames[0] = "lu_sink_1.so";
-    hstreams_options.libNameCnt = 1;
-    hstreams_options.libNames = libNames;
-    hstreams_options.libFlags = NULL;
 
     int mat_size_m, num_tiles, niter, tile_size;
     niter = 5;
@@ -506,7 +506,6 @@ int main(int argc, char **argv)
     int verify = 1;
     int use_num_threads;
 
-    hStreams_SetOptions(&hstreams_options);
     for (int i = 1; i < argc; i++) {
         if (*argv[i] == SWITCH_CHAR) {
             switch (*(argv[i] + 1)) {

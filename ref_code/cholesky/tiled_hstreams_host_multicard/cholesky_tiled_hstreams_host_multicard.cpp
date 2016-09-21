@@ -571,19 +571,13 @@ int cholesky_tiled(double *mat, int tile_size, int num_tiles, int mat_size,
 
 int main(int argc, char **argv)
 {
-    HSTR_OPTIONS hstreams_options;
-    CHECK_HSTR_RESULT(hStreams_GetCurrentOptions(&hstreams_options, sizeof(HSTR_OPTIONS)));
-
-    char *libNames[200] = {NULL, NULL};
-
     //Library to be loaded for sink-side code
-    libNames[0] = "cholesky_sink_1.so";
-    hstreams_options.libNameCnt = 1;
-    hstreams_options.libNames = libNames;
-    hstreams_options.libFlags = NULL;
+    char *libNamesKNC[] = {"cholesky_sink_1.so"};
+    char *libNamesKNL[] = {"cholesky_sink_2.so"};
+    uint32_t libNameCnt = 1;
 
-    hstreams_options.libNameCntHost = 0;
-    hstreams_options.libNamesHost = NULL;
+    hStreams_SetLibrariesToLoad(HSTR_ISA_KNC, libNameCnt, libNamesKNC, NULL);
+    hStreams_SetLibrariesToLoad(HSTR_ISA_KNL, libNameCnt, libNamesKNL, NULL);
 
     int mat_size_m, num_tiles, niter, tile_size;
     niter = 5;
@@ -597,7 +591,6 @@ int main(int argc, char **argv)
 
     int verify = 1;
 
-    CHECK_HSTR_RESULT(hStreams_SetOptions(&hstreams_options));
     for (int i = 1; i < argc; i++) {
         if (*argv[i] == SWITCH_CHAR) {
             switch (*(argv[i] + 1)) {

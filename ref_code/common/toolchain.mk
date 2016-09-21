@@ -25,6 +25,26 @@ endif # libhstreams_source.so exists
 $(info [INFO] Building against repository-local Hetero Streams Library)
 endif # libhstreams_source.so exists
 
+# Check or set (if unset) target sink architecture
+ifdef TARGET
+ifneq "$(TARGET)" "knc"
+ifneq "$(TARGET)" "x200"
+$(error [ERRR] Invalid TARGET value. Valid values are "knc" "x200")
+endif
+endif
+else
+ifeq ($(shell cat /sys/class/mic/mic0/family),x100)
+TARGET := knc
+else ifeq ($(shell cat /sys/class/mic/mic0/family),x200)
+TARGET := x200
+else ifeq ($(shell cat /sys/class/mic/mic0/info/mic_family),x200)
+TARGET := x200
+else
+$(warning [WARN] TARGET variable isn't set. Default x200 target will be use.)
+TARGET := x200
+endif
+endif
+
 # Two configurations can be built: DEBUG or RELEASE.
 # By default, RELEASE config is built.
 # To create DEBUG config, make CFG=DEBUG
@@ -53,6 +73,7 @@ else # in_repo == 1
 __local_inc_dir := $(realpath $(REFCODE_DIR)../include)
 LOCAL_SOURCE_CXXFLAGS    := -I$(__local_inc_dir)/
 LOCAL_x100_SINK_CXXFLAGS := -I$(__local_inc_dir)/
+LOCAL_x200_SINK_CXXFLAGS := -I$(__local_inc_dir)/
 LOCAL_HOST_SINK_CXXFLAGS := -I$(__local_inc_dir)/
 # libs
 __local_lib_dir := $(realpath $(REFCODE_DIR)../bin/host)
@@ -61,22 +82,26 @@ endif # in_repo == 1
 
 SOURCE_CXXFLAGS    := $(COMMON_CXXFLAGS) $(LOCAL_SOURCE_CXXFLAGS)
 x100_SINK_CXXFLAGS := $(COMMON_CXXFLAGS) $(LOCAL_x100_SINK_CXXFLAGS)
+x200_SINK_CXXFLAGS := $(COMMON_CXXFLAGS) $(LOCAL_x200_SINK_CXXFLAGS)
 HOST_SINK_CXXFLAGS := $(COMMON_CXXFLAGS) $(LOCAL_HOST_SINK_CXXFLAGS)
 
 SOURCE_LDFLAGS    := $(COMMON_LDFLAGS) $(LOCAL_SOURCE_LDFLAGS)
 x100_SINK_LDFLAGS := $(COMMON_LDFLAGS) $(LOCAL_x100_SINK_LDFLAGS)
+x200_SINK_LDFLAGS := $(COMMON_LDFLAGS) $(LOCAL_x200_SINK_LDFLAGS)
 HOST_SINK_LDFLAGS := $(COMMON_LDFLAGS) $(LOCAL_HOST_SINK_LDFLAGS)
 
 # We use icpc for compilation
 SOURCE_CXX    := icpc
 HOST_SINK_CXX := icpc
 x100_SINK_CXX := icpc -mmic
+x200_SINK_CXX := icpc -xMIC-AVX512
 
 # Tags which to use for namng the intermediate object files Helps avoid name
 # clashes among compilations for different targets from one source file.
 SOURCE_TAG    := source
 HOST_SINK_TAG := host-sink
 x100_SINK_TAG := x100-sink
+x200_SINK_TAG := x200-sink
 
 # dir creation guard, to prevent explicitly adding directories as targets
 # put $(dir_create) as a first command in the target definition
@@ -86,3 +111,4 @@ RM_rf := rm -rf
 
 BIN_HOST = $(REFCODE_DIR)../bin/host/
 BIN_x100 = $(REFCODE_DIR)../bin/x100-card/
+BIN_x200 = $(REFCODE_DIR)../bin/x200-card/

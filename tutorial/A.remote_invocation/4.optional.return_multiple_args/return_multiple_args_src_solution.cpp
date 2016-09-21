@@ -28,22 +28,24 @@ int main(int argc, char *argv[])
     HSTR_EVENT out_Event;
 
     //--------------------------------------------------------------
-    //!!a Modify the required options to point to a non-standard sink file name
-    HSTR_OPTIONS hstreams_options;
-    // Get current option.
-    CHECK_HSTR_RESULT(hStreams_GetCurrentOptions(
-                          &hstreams_options, sizeof(HSTR_OPTIONS)));
+    //!!a Point to a non-standard sink file name
+    // Library to be loaded for sink-side:
+    // a4_sink_1.so for x100 architecture (for ISA type HSTR_ISA_KNC)
+    // a4_sink_2.so for x200 architecture (for ISA type HSTR_ISA_KNL)
 
-    // Library to be loaded for sink-side: a4_sink_1.so
-    //!!%% EXERCISE: fill in string
-    char *libNames[] = {"a4_sink_1.so"};
+    //!!%% EXERCISE: fill in ISA type
+    HSTR_ISA_TYPE isaTypeKNC = HSTR_ISA_KNC;
+    HSTR_ISA_TYPE isaTypeKNL = HSTR_ISA_KNL;
 
-    // Modify hstreams_options to reflect the new library.
     //!!%% EXERCISE: fill in number of libraries you're adding
-    hstreams_options.libNameCnt = 1; // one library to load.
-    hstreams_options.libNames = libNames; // pointer to the name.
+    uint32_t numLibNames = 1; // one library to load on each architecture.
 
-    CHECK_HSTR_RESULT(hStreams_SetOptions(&hstreams_options));
+    //!!%% EXERCISE: fill in strings
+    char *libNamesKNC[] = {"a4_sink_1.so"};
+    char *libNamesKNL[] = {"a4_sink_2.so"};
+
+    CHECK_HSTR_RESULT(hStreams_SetLibrariesToLoad(HSTR_ISA_KNC, numLibNames, libNamesKNC, NULL));
+    CHECK_HSTR_RESULT(hStreams_SetLibrariesToLoad(HSTR_ISA_KNL, numLibNames, libNamesKNL, NULL));
     //--------------------------------------------------------------
 
     //--------------------------------------------------------------
