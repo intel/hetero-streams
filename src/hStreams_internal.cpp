@@ -231,12 +231,24 @@ hStreams_LoadSinkSideLibrariesMIC(HSTR_COIPROCESS coi_process, std::vector<HSTR_
     HSTR_RESULT hs_result;
     out_loadedLibs.clear();
 
+    // Prepare libmkl_intel_{,i}lp64.so dependencies. It doesn't have a builtin
+    // dependency on its actual dependencies so we have to load them manually.
+    std::vector<std::string> mkl_dependencies;
+    mkl_dependencies.push_back("libmkl_core.so");
+    mkl_dependencies.push_back("libmkl_intel_thread.so");
+    if (isa_type != HSTR_ISA_KNC) {
+        mkl_dependencies.push_back("libmkl_avx512_mic.so");
+        mkl_dependencies.push_back("libmkl_def.so");
+    }
+
     // First, load all of the libraries explicitly specified by user.
     {
         hStreams_RW_Scope_Locker_Unlocker hstreams_options_rw_lock(globals::libraries_to_load_lock, hStreams_RW_Lock::HSTR_RW_LOCK_READ);
 
         std::vector<std::pair<std::string, int>> libs_to_load = globals::libraries_to_load[isa_type];
-        out_loadedLibs.reserve(libs_to_load.size() + 4);
+
+        // Add 2, because except libraries in vectors 2 libraries are loaded: libmkl_intel_{,i}lp64.so and default sink-side library
+        out_loadedLibs.reserve(libs_to_load.size() + mkl_dependencies.size() + 2);
 
         try {
             std::vector<std::pair<std::string, int>>::iterator it;
@@ -259,18 +271,15 @@ hStreams_LoadSinkSideLibrariesMIC(HSTR_COIPROCESS coi_process, std::vector<HSTR_
             }
 
             if (mkl_name != NULL) {
-                // Load dependencies first. libmkl_intel_{,i}lp64.{so,dll} doesn't have a builtin
-                // dependency on its actual dependencies so we have to load them manually.
-                out_loadedLibs.push_back(
-                    hStreams_LoadSingleSinkSideLibraryMIC(
-                        coi_process,
-                        "libmkl_core.so",
-                        HSTR_COI_LOADLIBRARY_GLOBAL | HSTR_COI_LOADLIBRARY_LAZY));
-                out_loadedLibs.push_back(
-                    hStreams_LoadSingleSinkSideLibraryMIC(
-                        coi_process,
-                        "libmkl_intel_thread.so",
-                        HSTR_COI_LOADLIBRARY_GLOBAL | HSTR_COI_LOADLIBRARY_LAZY));
+                // Load dependencies
+                std::vector<std::string>::iterator it;
+                for (it = mkl_dependencies.begin(); it != mkl_dependencies.end(); ++it) {
+                    out_loadedLibs.push_back(
+                        hStreams_LoadSingleSinkSideLibraryMIC(
+                            coi_process,
+                            *it,
+                            HSTR_COI_LOADLIBRARY_GLOBAL | HSTR_COI_LOADLIBRARY_LAZY));
+                }
                 // Load MKL
                 out_loadedLibs.push_back(
                     hStreams_LoadSingleSinkSideLibraryMIC(

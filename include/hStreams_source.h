@@ -1533,7 +1533,7 @@ hStreams_Cfg_SetLogInfoType(
 ///     Otherwise, it returns one of the following errors:
 /// @arg \c HSTR_RESULT_NOT_PERMITTED if the hetero-streams library has been
 ///     already initialized
-/// @arg \c HSTR_RESULT_OUT_OF_RANGE if the input argument value does not correpond to
+/// @arg \c HSTR_RESULT_OUT_OF_RANGE if the input argument value does not correspond to
 ///     a valid MKL interface
 ///
 /// @thread_safety Not thread safe.
