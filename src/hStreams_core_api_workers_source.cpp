@@ -251,7 +251,9 @@ void detail::InitPhysicalDomains_impl_throw(HSTR_ISA_TYPE isa_type, std::string 
     // May return HSTR_COI_DOES_NOT_EXIST if isa_type is not matched
     result = hStreams_COIWrapper::COIEngineGetCount(isa_type, &num_phys_domains);
     // Result checking
-    if (result != HSTR_COI_SUCCESS) {
+    // For COI from 4.x version COI
+    // is returning HSTR_COI_DOES_NOT_EXIST for KNC isa type
+    if (result != HSTR_COI_SUCCESS && result != HSTR_COI_DOES_NOT_EXIST) {
         throw HSTR_EXCEPTION_MACRO(HSTR_RESULT_REMOTE_ERROR, StringBuilder()
                                    << "Cannot initialize. COIEngineGetCount returned "
                                    << hStreams_COIWrapper::COIResultGetName(result)
