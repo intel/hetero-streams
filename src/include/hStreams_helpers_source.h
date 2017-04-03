@@ -192,17 +192,17 @@ public:
 // The DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION() macro declares a thread-safe function
 // for getting one member of the HSTR_OPTIONS struct.  These functions are defined in
 // hStreams_common.cpp
-#define DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(MEMBER_NAME) \
-    HSTR_TYPEOF(((HSTR_OPTIONS*)0)->MEMBER_NAME) hStreams_GetOptions_ ## MEMBER_NAME (void);
+#define DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(MEMBER_NAME, MEMBER_TYPE) \
+    MEMBER_TYPE hStreams_GetOptions_ ## MEMBER_NAME (void);
 
 // Declare each of the thread safe functions for getting the current value of
 // the members of the hstreams options structure:
-DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(dep_policy)
-DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(phys_domains_limit)
-DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(openmp_policy)
-DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(time_out_ms_val)
-DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(_hStreams_FatalError)
-DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(kmp_affinity)
+DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(dep_policy, HSTR_DEP_POLICY)
+DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(phys_domains_limit, uint32_t)
+DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(openmp_policy, HSTR_OPENMP_POLICY)
+DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(time_out_ms_val, int)
+DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(_hStreams_FatalError, hStreams_FatalError_Prototype_Fptr)
+DECLARE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(kmp_affinity, HSTR_KMP_AFFINITY)
 
 namespace detail
 {

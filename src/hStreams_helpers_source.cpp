@@ -146,8 +146,8 @@ hStreams_helper_func_19parm(
 // The DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION() macro defines a thread-safe function
 // for getting one member of the HSTR_OPTIONS struct.  These functions are declared in
 // hStreams_internal.h
-#define DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(MEMBER_NAME)                                       \
-    HSTR_TYPEOF(((HSTR_OPTIONS*)0)->MEMBER_NAME) hStreams_GetOptions_ ## MEMBER_NAME (void) \
+#define DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(MEMBER_NAME, MEMBER_TYPE)                          \
+    MEMBER_TYPE hStreams_GetOptions_ ## MEMBER_NAME (void) \
     {                                                                                              \
         try {                                                                                      \
             hStreams_RW_Scope_Locker_Unlocker hstreams_options_rw_lock(globals::options_lock,      \
@@ -162,10 +162,10 @@ hStreams_helper_func_19parm(
 
 // Define each of the thread safe functions for getting the current value of
 // the (non-deprecated) members of the hstreams options structure:
-DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(dep_policy)
-DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(phys_domains_limit)
-DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(openmp_policy)
-DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(time_out_ms_val)
-DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(_hStreams_FatalError)
-DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(kmp_affinity)
+DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(dep_policy, HSTR_DEP_POLICY)
+DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(phys_domains_limit, uint32_t)
+DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(openmp_policy, HSTR_OPENMP_POLICY)
+DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(time_out_ms_val, int)
+DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(_hStreams_FatalError, hStreams_FatalError_Prototype_Fptr)
+DEFINE_GET_HSTR_OPTIONS_MEMBER_FUNCTION(kmp_affinity, HSTR_KMP_AFFINITY)
 
