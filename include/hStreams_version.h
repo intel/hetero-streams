@@ -16,8 +16,8 @@
 #define __HSTR_VERSION_H__
 
 #define HSTR_VERSION_MAJOR 1
-#define HSTR_VERSION_MINOR 2
+#define HSTR_VERSION_MINOR 3
 #define HSTR_VERSION_MICRO 0
-#define HSTR_VERSION_STRING "1.2"
+#define HSTR_VERSION_STRING "1.3"
 
 #endif

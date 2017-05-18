@@ -6,7 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>52943309-027e-4328-b819-fcaa89a5abbb</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>HeteroStreamsLibrary-1.2.0</OutputName>
+    <OutputName>HeteroStreamsLibrary-1.3.0</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
@@ -14,7 +14,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <OutputPath>$(SolutionDir)bin\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Version=1.2.0;RefCodesDir=$(SolutionDir)\ref_code;IncludeDir=$(SolutionDir)\include;DocsDir=$(SolutionDir)\doc</DefineConstants>
+    <DefineConstants>Version=1.3.0;RefCodesDir=$(SolutionDir)\ref_code;IncludeDir=$(SolutionDir)\include;DocsDir=$(SolutionDir)\doc</DefineConstants>
     <LinkerAdditionalOptions>-ext WixUIExtension</LinkerAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
@@ -22,7 +22,7 @@
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <WixVariables>
     </WixVariables>
-    <DefineConstants>Version=1.2.0;RefCodesDir=$(SolutionDir)\ref_code;IncludeDir=$(SolutionDir)\include;DocsDir=$(SolutionDir)\doc</DefineConstants>
+    <DefineConstants>Version=1.3.0;RefCodesDir=$(SolutionDir)\ref_code;IncludeDir=$(SolutionDir)\include;DocsDir=$(SolutionDir)\doc</DefineConstants>
     <LinkerAdditionalOptions>-ext WixUIExtension</LinkerAdditionalOptions>
     <Cultures>
     </Cultures>

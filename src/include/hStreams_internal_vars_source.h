@@ -82,7 +82,7 @@ extern HSTR_LOG_STR app_init_next_log_str_ID;
 extern std::vector<HSTR_LOG_DOM> app_init_log_doms_IDs;
 
 extern std::string interface_version;
-extern const std::array<const std::string, 4> supported_interface_versions;
+extern const std::array<const std::string, 5> supported_interface_versions;
 
 extern hStreams_Atomic_HSTR_STATE hStreamsState;
 
